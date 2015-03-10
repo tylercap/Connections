@@ -33,6 +33,8 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
                                                nil];
     [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
     */
+    self.model = [[Model alloc]init];
+    [self.model loadNewGame];
      
     _headerSections = 1;
     _footerSections = 0;
@@ -134,7 +136,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 10 + _headerSections + _footerSections;
+    return [self.model getSections] + _headerSections + _footerSections;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView
@@ -145,7 +147,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         return 1;
     }
     
-    return 9;
+    return [self.model getItems];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
@@ -167,7 +169,8 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     NSMutableArray *rowArray = [self.tiles objectAtIndex:row];
     [rowArray insertObject:myCell atIndex:column];
     
-    NSInteger value = 1;
+    //NSString *value = [self.model getValueAt:row column:column];
+    NSInteger value = [self.model getIntValueAt:row column:column];
     
     [myCell setLabel:value parent:self];
     

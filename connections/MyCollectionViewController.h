@@ -12,12 +12,14 @@
 #import "MyButtonCell.h"
 #import "MyLabelCell.h"
 #import "MyBannerCell.h"
+#import "Model.h"
 
 @interface MyCollectionViewController : UICollectionViewController
 <UICollectionViewDataSource, GADInterstitialDelegate>
 
 @property (nonatomic, weak) IBOutlet MyCollectionViewLayout *layout;
 @property (strong, nonatomic) NSMutableArray *tiles;
+@property (strong, nonatomic) Model *model;
 
 @property (strong, nonatomic) GADInterstitial *interstitial;
 @property (nonatomic) Boolean signedIn;

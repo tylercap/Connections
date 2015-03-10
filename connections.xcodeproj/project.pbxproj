@@ -20,6 +20,7 @@
 		D4E3CDA31AAF8199007025A6 /* MyLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD9E1AAF8199007025A6 /* MyLabelCell.m */; };
 		D4E3CDA41AAF8199007025A6 /* MyBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CDA01AAF8199007025A6 /* MyBannerCell.m */; };
 		D4E3CDA71AAF81CF007025A6 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E3CDA61AAF81CF007025A6 /* GoogleMobileAds.framework */; };
+		D4E3CDAA1AAF9018007025A6 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CDA91AAF9018007025A6 /* Model.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		D4E3CD9F1AAF8199007025A6 /* MyBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBannerCell.h; sourceTree = "<group>"; };
 		D4E3CDA01AAF8199007025A6 /* MyBannerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBannerCell.m; sourceTree = "<group>"; };
 		D4E3CDA61AAF81CF007025A6 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = ../../Libs/jsfree/GoogleMobileAds.framework; sourceTree = "<group>"; };
+		D4E3CDA81AAF9018007025A6 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		D4E3CDA91AAF9018007025A6 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,7 +104,7 @@
 			children = (
 				D4E3CDA51AAF81B7007025A6 /* Libs */,
 				D4E3CD981AAF8188007025A6 /* Cells */,
-				D4E3CD911AAF8178007025A6 /* View */,
+				D4E3CD911AAF8178007025A6 /* MVC */,
 				D4E3CD6F1AAF80DE007025A6 /* AppDelegate.h */,
 				D4E3CD701AAF80DE007025A6 /* AppDelegate.m */,
 				D4E3CD781AAF80DE007025A6 /* Images.xcassets */,
@@ -137,7 +140,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D4E3CD911AAF8178007025A6 /* View */ = {
+		D4E3CD911AAF8178007025A6 /* MVC */ = {
 			isa = PBXGroup;
 			children = (
 				D4E3CD751AAF80DE007025A6 /* Main.storyboard */,
@@ -145,8 +148,10 @@
 				D4E3CD931AAF8184007025A6 /* MyCollectionViewController.m */,
 				D4E3CD941AAF8184007025A6 /* MyCollectionViewLayout.h */,
 				D4E3CD951AAF8184007025A6 /* MyCollectionViewLayout.m */,
+				D4E3CDA81AAF9018007025A6 /* Model.h */,
+				D4E3CDA91AAF9018007025A6 /* Model.m */,
 			);
-			name = View;
+			name = MVC;
 			sourceTree = "<group>";
 		};
 		D4E3CD981AAF8188007025A6 /* Cells */ = {
@@ -278,6 +283,7 @@
 				D4E3CDA31AAF8199007025A6 /* MyLabelCell.m in Sources */,
 				D4E3CD971AAF8184007025A6 /* MyCollectionViewLayout.m in Sources */,
 				D4E3CDA41AAF8199007025A6 /* MyBannerCell.m in Sources */,
+				D4E3CDAA1AAF9018007025A6 /* Model.m in Sources */,
 				D4E3CD961AAF8184007025A6 /* MyCollectionViewController.m in Sources */,
 				D4E3CDA11AAF8199007025A6 /* MyCollectionViewCell.m in Sources */,
 			);
