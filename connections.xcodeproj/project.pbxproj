@@ -9,11 +9,17 @@
 /* Begin PBXBuildFile section */
 		D4E3CD6E1AAF80DE007025A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD6D1AAF80DE007025A6 /* main.m */; };
 		D4E3CD711AAF80DE007025A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD701AAF80DE007025A6 /* AppDelegate.m */; };
-		D4E3CD741AAF80DE007025A6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD731AAF80DE007025A6 /* ViewController.m */; };
 		D4E3CD771AAF80DE007025A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD751AAF80DE007025A6 /* Main.storyboard */; };
 		D4E3CD791AAF80DE007025A6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD781AAF80DE007025A6 /* Images.xcassets */; };
 		D4E3CD7C1AAF80DE007025A6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD7A1AAF80DE007025A6 /* LaunchScreen.xib */; };
 		D4E3CD881AAF80DE007025A6 /* connectionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD871AAF80DE007025A6 /* connectionsTests.m */; };
+		D4E3CD961AAF8184007025A6 /* MyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD931AAF8184007025A6 /* MyCollectionViewController.m */; };
+		D4E3CD971AAF8184007025A6 /* MyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD951AAF8184007025A6 /* MyCollectionViewLayout.m */; };
+		D4E3CDA11AAF8199007025A6 /* MyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD9A1AAF8199007025A6 /* MyCollectionViewCell.m */; };
+		D4E3CDA21AAF8199007025A6 /* MyButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD9C1AAF8199007025A6 /* MyButtonCell.m */; };
+		D4E3CDA31AAF8199007025A6 /* MyLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD9E1AAF8199007025A6 /* MyLabelCell.m */; };
+		D4E3CDA41AAF8199007025A6 /* MyBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CDA01AAF8199007025A6 /* MyBannerCell.m */; };
+		D4E3CDA71AAF81CF007025A6 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E3CDA61AAF81CF007025A6 /* GoogleMobileAds.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,14 +38,25 @@
 		D4E3CD6D1AAF80DE007025A6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D4E3CD6F1AAF80DE007025A6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D4E3CD701AAF80DE007025A6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D4E3CD721AAF80DE007025A6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		D4E3CD731AAF80DE007025A6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D4E3CD761AAF80DE007025A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D4E3CD781AAF80DE007025A6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D4E3CD7B1AAF80DE007025A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		D4E3CD811AAF80DE007025A6 /* connectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = connectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E3CD861AAF80DE007025A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4E3CD871AAF80DE007025A6 /* connectionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = connectionsTests.m; sourceTree = "<group>"; };
+		D4E3CD921AAF8184007025A6 /* MyCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionViewController.h; sourceTree = "<group>"; };
+		D4E3CD931AAF8184007025A6 /* MyCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewController.m; sourceTree = "<group>"; };
+		D4E3CD941AAF8184007025A6 /* MyCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionViewLayout.h; sourceTree = "<group>"; };
+		D4E3CD951AAF8184007025A6 /* MyCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewLayout.m; sourceTree = "<group>"; };
+		D4E3CD991AAF8199007025A6 /* MyCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionViewCell.h; sourceTree = "<group>"; };
+		D4E3CD9A1AAF8199007025A6 /* MyCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewCell.m; sourceTree = "<group>"; };
+		D4E3CD9B1AAF8199007025A6 /* MyButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyButtonCell.h; sourceTree = "<group>"; };
+		D4E3CD9C1AAF8199007025A6 /* MyButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyButtonCell.m; sourceTree = "<group>"; };
+		D4E3CD9D1AAF8199007025A6 /* MyLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLabelCell.h; sourceTree = "<group>"; };
+		D4E3CD9E1AAF8199007025A6 /* MyLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLabelCell.m; sourceTree = "<group>"; };
+		D4E3CD9F1AAF8199007025A6 /* MyBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBannerCell.h; sourceTree = "<group>"; };
+		D4E3CDA01AAF8199007025A6 /* MyBannerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBannerCell.m; sourceTree = "<group>"; };
+		D4E3CDA61AAF81CF007025A6 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = ../../Libs/jsfree/GoogleMobileAds.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4E3CDA71AAF81CF007025A6 /* GoogleMobileAds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,11 +99,11 @@
 		D4E3CD6A1AAF80DE007025A6 /* connections */ = {
 			isa = PBXGroup;
 			children = (
+				D4E3CDA51AAF81B7007025A6 /* Libs */,
+				D4E3CD981AAF8188007025A6 /* Cells */,
+				D4E3CD911AAF8178007025A6 /* View */,
 				D4E3CD6F1AAF80DE007025A6 /* AppDelegate.h */,
 				D4E3CD701AAF80DE007025A6 /* AppDelegate.m */,
-				D4E3CD721AAF80DE007025A6 /* ViewController.h */,
-				D4E3CD731AAF80DE007025A6 /* ViewController.m */,
-				D4E3CD751AAF80DE007025A6 /* Main.storyboard */,
 				D4E3CD781AAF80DE007025A6 /* Images.xcassets */,
 				D4E3CD7A1AAF80DE007025A6 /* LaunchScreen.xib */,
 				D4E3CD6B1AAF80DE007025A6 /* Supporting Files */,
@@ -117,6 +135,41 @@
 				D4E3CD861AAF80DE007025A6 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D4E3CD911AAF8178007025A6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D4E3CD751AAF80DE007025A6 /* Main.storyboard */,
+				D4E3CD921AAF8184007025A6 /* MyCollectionViewController.h */,
+				D4E3CD931AAF8184007025A6 /* MyCollectionViewController.m */,
+				D4E3CD941AAF8184007025A6 /* MyCollectionViewLayout.h */,
+				D4E3CD951AAF8184007025A6 /* MyCollectionViewLayout.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		D4E3CD981AAF8188007025A6 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D4E3CD991AAF8199007025A6 /* MyCollectionViewCell.h */,
+				D4E3CD9A1AAF8199007025A6 /* MyCollectionViewCell.m */,
+				D4E3CD9B1AAF8199007025A6 /* MyButtonCell.h */,
+				D4E3CD9C1AAF8199007025A6 /* MyButtonCell.m */,
+				D4E3CD9D1AAF8199007025A6 /* MyLabelCell.h */,
+				D4E3CD9E1AAF8199007025A6 /* MyLabelCell.m */,
+				D4E3CD9F1AAF8199007025A6 /* MyBannerCell.h */,
+				D4E3CDA01AAF8199007025A6 /* MyBannerCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		D4E3CDA51AAF81B7007025A6 /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				D4E3CDA61AAF81CF007025A6 /* GoogleMobileAds.framework */,
+			);
+			name = Libs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,9 +272,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E3CD741AAF80DE007025A6 /* ViewController.m in Sources */,
 				D4E3CD711AAF80DE007025A6 /* AppDelegate.m in Sources */,
+				D4E3CDA21AAF8199007025A6 /* MyButtonCell.m in Sources */,
 				D4E3CD6E1AAF80DE007025A6 /* main.m in Sources */,
+				D4E3CDA31AAF8199007025A6 /* MyLabelCell.m in Sources */,
+				D4E3CD971AAF8184007025A6 /* MyCollectionViewLayout.m in Sources */,
+				D4E3CDA41AAF8199007025A6 /* MyBannerCell.m in Sources */,
+				D4E3CD961AAF8184007025A6 /* MyCollectionViewController.m in Sources */,
+				D4E3CDA11AAF8199007025A6 /* MyCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,7 +401,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/tcap/Documents/iOSProjects/Libs/jsfree,
+				);
 				INFOPLIST_FILE = connections/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -353,7 +416,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/tcap/Documents/iOSProjects/Libs/jsfree,
+				);
 				INFOPLIST_FILE = connections/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -412,6 +480,7 @@
 				D4E3CD8D1AAF80DE007025A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D4E3CD8E1AAF80DE007025A6 /* Build configuration list for PBXNativeTarget "connectionsTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +489,7 @@
 				D4E3CD901AAF80DE007025A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
