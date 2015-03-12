@@ -10,11 +10,14 @@
 
 @interface Model : NSObject
 
+@property (strong, nonatomic)NSMutableArray *deck;
+
 -(NSInteger)getSections;
 -(NSInteger)getItems;
 
 -(void)loadNewGame;
 -(NSInteger)getIntValueAt:(NSInteger)row
                    column:(NSInteger)column;
+-(NSInteger)getPlayerOption:(NSInteger)num;
 
 @end

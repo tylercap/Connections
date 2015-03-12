@@ -33,7 +33,7 @@
     self.button.backgroundColor = back;
     self.button.titleLabel.textColor = text;
     self.button.layer.borderColor = text.CGColor;
-    self.button.layer.borderWidth = 1.0;
+    self.button.layer.borderWidth = 1.4;
     
     if( round )
         self.button.layer.cornerRadius = 6.0f;

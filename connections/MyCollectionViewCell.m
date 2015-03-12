@@ -26,7 +26,7 @@
     self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     self.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:1.0].CGColor;
     self.layer.borderWidth = 1.2;
-    self.layer.cornerRadius = 6.0f;
+    self.layer.cornerRadius = 5.0f;
     self.layer.masksToBounds = YES;
 }
 
@@ -45,6 +45,8 @@
     }
 }
 
+// set up with 45 for a 10 x 9
+// instead will only need 38 for a 9 x 8 with 2 extra "wild" and "remove" characters
 - (NSString*)getEmoji:(NSInteger)value
 {
     NSString *str;

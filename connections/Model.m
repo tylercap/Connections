@@ -8,7 +8,7 @@
 
 #import "Model.h"
 
-int values[10][9];
+int values[9][8];
 
 @implementation Model
 
@@ -19,27 +19,38 @@ int values[10][9];
     return self;
 }
 
--(NSInteger)getSections
-{
-    return 10;
-}
+// at least one of sections or items must be even
 
--(NSInteger)getItems
+-(NSInteger)getSections
 {
     return 9;
 }
 
+-(NSInteger)getItems
+{
+    return 8;
+}
+
 -(void)loadNewGame
 {
-    NSMutableArray *values= [[NSMutableArray alloc]init];
-    // randomly fill an array with 2 of each value from 0 to 44
-    for( int i=0; i<45; i++ ){
+    NSMutableArray *values = [[NSMutableArray alloc]init];
+    NSMutableArray *unshuffled = [[NSMutableArray alloc]init];
+
+    int remaining = [self getSections] * [self getItems];
+    for( int i=0; i<(remaining / 2); i++ ){
         for( int j=0; j<2; j++ ){
             [values addObject:[NSString stringWithFormat:@"%d",i]];
+            [unshuffled addObject:[NSString stringWithFormat:@"%d",i]];
         }
     }
     
-    int remaining = 90;
+    // two extra cards in the deck for "remove" and "wild"
+    for( int i = (remaining / 2); i < ((remaining / 2) + 2); i++ ){
+        for( int j=0; j<2; j++ ){
+            [unshuffled addObject:[NSString stringWithFormat:@"%d",i]];
+        }
+    }
+    
     NSMutableArray* array = [[NSMutableArray alloc] init];
     for( int i=0; i<[self getSections]; i++ ){
         NSMutableArray* row = [[NSMutableArray alloc] init];
@@ -54,7 +65,18 @@ int values[10][9];
         }
     }
     
-    [self loadFromArray:array];
+    [self loadFromArray:array deck:unshuffled];
+}
+
+-(NSInteger)getPlayerOption:(NSInteger)num
+{
+    int remaining = [self.deck count];
+    NSUInteger index = arc4random_uniform(remaining);
+    NSInteger value = [[self.deck objectAtIndex:index] integerValue];
+    
+    [self.deck removeObjectAtIndex:index];
+    
+    return value;
 }
 
 -(NSInteger)getIntValueAt:(NSInteger)row
@@ -78,6 +100,7 @@ int values[10][9];
 }
 
 -(void)loadFromArray:(NSArray *)gameboard
+                deck:(NSMutableArray *)unshuffled
 {
     for( int i=0; i<gameboard.count; i++ ){
         NSArray *row = gameboard[i];
@@ -86,6 +109,8 @@ int values[10][9];
             [self setValueAt:((int)[row[j] integerValue]) row:i column:j];
         }
     }
+    
+    _deck = unshuffled;
 }
 
 -(NSMutableArray *)storeToArray

@@ -17,20 +17,20 @@ static NSString * const BannerIdentifier = @"BannerCell";
 
 - (void)setup
 {
-    float spacing = 4.0f;
+    float spacing = 2.0f;
     self.itemInsets = UIEdgeInsetsMake(0, spacing, spacing, spacing);
     
     self.numberOfRows = [self.collectionView numberOfSections];
-    self.numberOfColumns = [self.collectionView numberOfItemsInSection:3];
+    self.numberOfColumns = [self.collectionView numberOfItemsInSection:2];
     
     CGSize size = [UIScreen mainScreen].bounds.size;
     CGFloat availableWidth  = size.width - (spacing * (self.numberOfColumns + 1));
-    CGFloat availableHeight = size.height - (spacing * (self.numberOfRows + 1));
+    CGFloat availableHeight = size.height - (spacing * (self.numberOfRows + 2));
     
     CGFloat navHeight = 20;//64.0f;
     availableHeight -= (50 + navHeight);
     CGFloat width = availableWidth / self.numberOfColumns;
-    CGFloat height = availableHeight / (self.numberOfRows - 1);
+    CGFloat height = availableHeight / (self.numberOfRows - 0.8); // bottom row height is 1.2
     self.itemSize = CGSizeMake(width, height);
     
     self.headerButtonWidth = (size.width - (spacing * 4)) * 0.275;
@@ -90,6 +90,23 @@ static NSString * const BannerIdentifier = @"BannerCell";
         CGSize size = [UIScreen mainScreen].bounds.size;
         width = size.width - (self.itemInsets.left + self.itemInsets.right);
         height = 50;
+    }
+    else if( row == ([self.collectionView numberOfSections] - 1) ){
+        height = self.itemSize.height * 1.2;
+        width = self.itemSize.width * 1.13;
+        
+        originY = floorf(self.itemInsets.top + (self.itemSize.height + self.interItemSpacingY) * (row - 1));
+        
+        originY += 70 + (self.interItemSpacingY * 2);
+        
+        if( column == ([self.collectionView numberOfItemsInSection:row] - 1) ){
+            CGSize size = [UIScreen mainScreen].bounds.size;
+            originX = size.width - (self.interItemSpacingX + width);
+        }
+        else{
+            originX = floorf(self.itemInsets.left + (width + self.interItemSpacingX) * column);
+            originX += self.interItemSpacingX;
+        }
     }
     else{
         originX = floorf(self.itemInsets.left + (self.itemSize.width + self.interItemSpacingX) * column);

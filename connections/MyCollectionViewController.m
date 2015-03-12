@@ -37,7 +37,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     [self.model loadNewGame];
      
     _headerSections = 1;
-    _footerSections = 0;
+    _footerSections = 1;
     _signedIn = NO;
     
     
@@ -146,6 +146,9 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         // banner ad
         return 1;
     }
+    else if(section == (_headerSections + [self.model getSections])){
+        return 7; // 6 "cards" and submit/resign button
+    }
     
     return [self.model getItems];
 }
@@ -181,7 +184,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
                  cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = [indexPath section];
-    //NSInteger item = [indexPath item];
+    NSInteger item = [indexPath item];
     
     UICollectionViewCell *cell = nil;
     if( section == 0 ){
@@ -201,6 +204,31 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
             _bannerAdCell = bannerCell;
             cell = bannerCell;
         //}
+    }
+    else if(section == (_headerSections + [self.model getSections])){
+        if( item == 6 ){
+            MyButtonCell *buttonCell = [collectionView
+                                        dequeueReusableCellWithReuseIdentifier:ButtonIdentifier
+                                        forIndexPath:indexPath];
+            
+            UIColor *backColor = [UIColor colorWithRed:0.0 green:0.9 blue:0.01 alpha:1.0];
+            UIColor *textColor = [UIColor colorWithWhite:0.0 alpha:1.0];
+            [buttonCell setLabel:@"Resign"
+                       backColor:backColor
+                       textColor:textColor
+                         rounded:YES];
+            cell = buttonCell;
+        }
+        else{
+            MyCollectionViewCell *myCell = [collectionView
+                                            dequeueReusableCellWithReuseIdentifier:CellIdentifier
+                                            forIndexPath:indexPath];
+            
+            NSInteger value = [self.model getPlayerOption:item];
+            
+            [myCell setLabel:value parent:self];
+            cell = myCell;
+        }
     }
     
     return cell;
