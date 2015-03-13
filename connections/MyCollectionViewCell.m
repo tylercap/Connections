@@ -52,7 +52,7 @@
     NSString *str;
     switch( value ){
         case 1:
-            str = @"\U0001F64F";
+            str = @"\U0001F3C8";
             break;
         case 2:
             str = @"\U0001F4A9";
@@ -64,16 +64,16 @@
             str = @"\U0001F680";
             break;
         case 5:
-            str = @"\U0001F6B6";
+            str = @"\U0001F3C0";
             break;
         case 6:
             str = @"\U0001F64A";
             break;
         case 7:
-            str = @"\U0001F691";
+            str = @"\U0001F3AF";
             break;
         case 8:
-            str = @"\U0001F6B2";
+            str = @"\U0001F385";
             break;
         case 9:
             str = @"\U0000231B";
@@ -91,22 +91,22 @@
             str = @"\U00002615";
             break;
         case 14:
-            str = @"\U000026A1";
+            str = @"\U0001F364";
             break;
         case 15:
             str = @"\U000026BD";
             break;
         case 16:
-            str = @"\U000026C4";
+            str = @"\U0001F383";
             break;
         case 17:
             str = @"\U000026F3";
             break;
         case 18:
-            str = @"\U0001F308";
+            str = @"\U0001F37B";
             break;
         case 19:
-            str = @"\U0001F30F";
+            str = @"\U0001F36A";
             break;
         case 20:
             str = @"\U0001F335";
@@ -121,7 +121,7 @@
             str = @"\U0001F33D";
             break;
         case 24:
-            str = @"\U0001F340";
+            str = @"\U0001F369";
             break;
         case 25:
             str = @"\U0001F344";
@@ -157,32 +157,32 @@
             str = @"\U0001F35F";
             break;
         case 36:
-            str = @"\U0001F364";
+            str = @"\U000026A1"; // lightning
             break;
         case 37:
-            str = @"\U0001F369";
+            str = @"\U0001F340"; // four leaf clover
             break;
-        case 38:
-            str = @"\U0001F36A";
-            break;
-        case 39:
-            str = @"\U0001F37B";
-            break;
-        case 40:
-            str = @"\U0001F383";
-            break;
-        case 41:
-            str = @"\U0001F385";
-            break;
-        case 42:
-            str = @"\U0001F3AF";
-            break;
-        case 43:
-            str = @"\U0001F3C0";
-            break;
-        case 44:
-            str = @"\U0001F3C8";
-            break;
+//        case 38:
+//            str = @"\U0001F30F";
+//            break;
+//        case 39:
+//            str = @"\U0001F308";
+//            break;
+//        case 40:
+//            str = @"\U000026C4";
+//            break;
+//        case 41:
+//            str = @"\U0001F6B2";
+//            break;
+//        case 42:
+//            str = @"\U0001F691";
+//            break;
+//        case 43:
+//            str = @"\U0001F6B6";
+//            break;
+//        case 44:
+//            str = @"\U0001F64F";
+//            break;
         default:
             str = @"\U0001F603";
     }
