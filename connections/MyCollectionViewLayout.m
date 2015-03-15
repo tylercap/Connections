@@ -27,7 +27,7 @@ static NSString * const BannerIdentifier = @"BannerCell";
     CGFloat availableWidth  = size.width - (spacing * (self.numberOfColumns + 1));
     CGFloat availableHeight = size.height - (spacing * (self.numberOfRows + 2));
     
-    CGFloat navHeight = 20;//64.0f;
+    CGFloat navHeight = 64.0f;
     availableHeight -= (50 + navHeight);
     CGFloat width = availableWidth / self.numberOfColumns;
     CGFloat height = availableHeight / (self.numberOfRows - 0.8); // bottom row height is 1.2
@@ -85,7 +85,7 @@ static NSString * const BannerIdentifier = @"BannerCell";
     if( row == 0 ){
         // banner ad
         originX = floorf(self.itemInsets.left);
-        originY = 20 + floorf(self.itemInsets.top);
+        originY = floorf(self.itemInsets.top);
         
         CGSize size = [UIScreen mainScreen].bounds.size;
         width = size.width - (self.itemInsets.left + self.itemInsets.right);
@@ -97,7 +97,7 @@ static NSString * const BannerIdentifier = @"BannerCell";
         
         originY = floorf(self.itemInsets.top + (self.itemSize.height + self.interItemSpacingY) * (row - 1));
         
-        originY += 70 + (self.interItemSpacingY * 2);
+        originY += 50 + self.interItemSpacingY;
         
         if( column == ([self.collectionView numberOfItemsInSection:row] - 1) ){
             CGSize size = [UIScreen mainScreen].bounds.size;
@@ -113,7 +113,7 @@ static NSString * const BannerIdentifier = @"BannerCell";
         
         originY = floorf(self.itemInsets.top + (self.itemSize.height + self.interItemSpacingY) * (row - 1));
         
-        originY += 70 + self.interItemSpacingY;
+        originY += 50;// + self.interItemSpacingY;
         
         height = self.itemSize.height;
         width = self.itemSize.width;

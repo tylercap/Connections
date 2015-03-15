@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D41602141AB604F800CC905F /* MyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41602111AB604F800CC905F /* MyTableViewController.m */; };
+		D41602151AB604F800CC905F /* MyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D41602131AB604F800CC905F /* MyTableViewCell.m */; };
+		D416021B1AB6050F00CC905F /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = D41602181AB6050F00CC905F /* Application.m */; };
+		D416021C1AB6050F00CC905F /* MyWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D416021A1AB6050F00CC905F /* MyWebViewController.m */; };
 		D4E3CD6E1AAF80DE007025A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD6D1AAF80DE007025A6 /* main.m */; };
 		D4E3CD711AAF80DE007025A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD701AAF80DE007025A6 /* AppDelegate.m */; };
 		D4E3CD771AAF80DE007025A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD751AAF80DE007025A6 /* Main.storyboard */; };
@@ -34,6 +38,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D41602101AB604F800CC905F /* MyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewController.h; sourceTree = "<group>"; };
+		D41602111AB604F800CC905F /* MyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewController.m; sourceTree = "<group>"; };
+		D41602121AB604F800CC905F /* MyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewCell.h; sourceTree = "<group>"; };
+		D41602131AB604F800CC905F /* MyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewCell.m; sourceTree = "<group>"; };
+		D41602171AB6050F00CC905F /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		D41602181AB6050F00CC905F /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
+		D41602191AB6050F00CC905F /* MyWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWebViewController.h; sourceTree = "<group>"; };
+		D416021A1AB6050F00CC905F /* MyWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyWebViewController.m; sourceTree = "<group>"; };
 		D4E3CD681AAF80DE007025A6 /* connections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = connections.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E3CD6C1AAF80DE007025A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4E3CD6D1AAF80DE007025A6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -81,6 +93,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D41602161AB6050300CC905F /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				D41602171AB6050F00CC905F /* Application.h */,
+				D41602181AB6050F00CC905F /* Application.m */,
+				D41602191AB6050F00CC905F /* MyWebViewController.h */,
+				D416021A1AB6050F00CC905F /* MyWebViewController.m */,
+			);
+			name = WebView;
+			sourceTree = "<group>";
+		};
 		D4E3CD5F1AAF80DE007025A6 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +125,7 @@
 		D4E3CD6A1AAF80DE007025A6 /* connections */ = {
 			isa = PBXGroup;
 			children = (
+				D41602161AB6050300CC905F /* WebView */,
 				D4E3CDA51AAF81B7007025A6 /* Libs */,
 				D4E3CD981AAF8188007025A6 /* Cells */,
 				D4E3CD911AAF8178007025A6 /* MVC */,
@@ -144,6 +168,10 @@
 			isa = PBXGroup;
 			children = (
 				D4E3CD751AAF80DE007025A6 /* Main.storyboard */,
+				D41602101AB604F800CC905F /* MyTableViewController.h */,
+				D41602111AB604F800CC905F /* MyTableViewController.m */,
+				D41602121AB604F800CC905F /* MyTableViewCell.h */,
+				D41602131AB604F800CC905F /* MyTableViewCell.m */,
 				D4E3CD921AAF8184007025A6 /* MyCollectionViewController.h */,
 				D4E3CD931AAF8184007025A6 /* MyCollectionViewController.m */,
 				D4E3CD941AAF8184007025A6 /* MyCollectionViewLayout.h */,
@@ -277,10 +305,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D416021B1AB6050F00CC905F /* Application.m in Sources */,
+				D41602151AB604F800CC905F /* MyTableViewCell.m in Sources */,
 				D4E3CD711AAF80DE007025A6 /* AppDelegate.m in Sources */,
+				D41602141AB604F800CC905F /* MyTableViewController.m in Sources */,
 				D4E3CDA21AAF8199007025A6 /* MyButtonCell.m in Sources */,
 				D4E3CD6E1AAF80DE007025A6 /* main.m in Sources */,
 				D4E3CDA31AAF8199007025A6 /* MyLabelCell.m in Sources */,
+				D416021C1AB6050F00CC905F /* MyWebViewController.m in Sources */,
 				D4E3CD971AAF8184007025A6 /* MyCollectionViewLayout.m in Sources */,
 				D4E3CDA41AAF8199007025A6 /* MyBannerCell.m in Sources */,
 				D4E3CDAA1AAF9018007025A6 /* Model.m in Sources */,

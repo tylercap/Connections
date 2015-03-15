@@ -33,6 +33,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
                                                nil];
     [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
     */
+    
     self.model = [[Model alloc]init];
     [self.model loadNewGame];
      
