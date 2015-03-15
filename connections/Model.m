@@ -36,7 +36,7 @@ int values[9][8];
     NSMutableArray *values = [[NSMutableArray alloc]init];
     NSMutableArray *unshuffled = [[NSMutableArray alloc]init];
 
-    int remaining = [self getSections] * [self getItems];
+    int remaining = (int) ([self getSections] * [self getItems]);
     for( int i=0; i<(remaining / 2); i++ ){
         for( int j=0; j<2; j++ ){
             [values addObject:[NSString stringWithFormat:@"%d",i]];
@@ -45,7 +45,7 @@ int values[9][8];
     }
     
     // two extra cards in the deck for "remove" and "wild"
-    for( int i = (remaining / 2); i < ((remaining / 2) + 2); i++ ){
+    for( int i = -2; i < 0; i++ ){
         for( int j=0; j<2; j++ ){
             [unshuffled addObject:[NSString stringWithFormat:@"%d",i]];
         }
@@ -70,7 +70,7 @@ int values[9][8];
 
 -(NSInteger)getPlayerOption:(NSInteger)num
 {
-    int remaining = [self.deck count];
+    int remaining = (int)[self.deck count];
     NSUInteger index = arc4random_uniform(remaining);
     NSInteger value = [[self.deck objectAtIndex:index] integerValue];
     

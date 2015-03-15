@@ -51,6 +51,12 @@
 {
     NSString *str;
     switch( value ){
+        case -2:
+            str = @"\U000026A1"; // lightning
+            break;
+        case -1:
+            str = @"\U0001F340"; // four leaf clover
+            break;
         case 1:
             str = @"\U0001F3C8";
             break;
@@ -156,12 +162,12 @@
         case 35:
             str = @"\U0001F35F";
             break;
-        case 36:
-            str = @"\U000026A1"; // lightning
-            break;
-        case 37:
-            str = @"\U0001F340"; // four leaf clover
-            break;
+//        case 36:
+//            str = @"\U0001F6B6";
+//            break;
+//        case 37:
+//            str = @"\U0001F64F";
+//            break;
 //        case 38:
 //            str = @"\U0001F30F";
 //            break;
@@ -176,12 +182,6 @@
 //            break;
 //        case 42:
 //            str = @"\U0001F691";
-//            break;
-//        case 43:
-//            str = @"\U0001F6B6";
-//            break;
-//        case 44:
-//            str = @"\U0001F64F";
 //            break;
         default:
             str = @"\U0001F603";
