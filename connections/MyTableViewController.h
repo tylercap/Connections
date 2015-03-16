@@ -12,6 +12,7 @@
 
 @interface MyTableViewController : UITableViewController
 
+@property (nonatomic, strong) UIBarButtonItem *signInItem;
 @property (nonatomic, strong) NSArray *openGames;
 
 @end

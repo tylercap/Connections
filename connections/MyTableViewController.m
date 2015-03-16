@@ -13,24 +13,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _openGames = @[@"You must be signed in to access your games"];
+    _openGames = @[@"Sign in to access your games"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    /*self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.85 green:0.9 blue:1.0 alpha:0.1];
-    self.navigationController.navigationBar.backgroundColor = [UIColor orangeColor];
-    
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:1 green:0.68 blue:0.25 alpha:0.2];
+    self.navigationController.navigationBar.backgroundColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:0.1];
     
     NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               [UIColor colorWithRed:0.0 green:0.0 blue:0.44 alpha:1.0],
+                                               [UIColor colorWithRed:0.05 green:0.478 blue:1.0 alpha:1.0],
                                                NSForegroundColorAttributeName,
                                                nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];*/
+    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
+    
     self.navigationController.navigationBar.translucent = NO;
+    
+    if( _signInItem == nil ){
+        _signInItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStylePlain target:self action:@selector(signInOrOut)];
+    }
+    self.navigationItem.rightBarButtonItem = _signInItem;
+}
+
+- (void)signInOrOut
+{
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,6 +69,7 @@
     MyTableViewCell *cell = (MyTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OpenGame" forIndexPath:indexPath];
 
     cell.title.text = [_openGames objectAtIndex:indexPath.row];
+    cell.title.lineBreakMode = NSLineBreakByWordWrapping;
     
     return cell;
 }

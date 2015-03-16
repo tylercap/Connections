@@ -26,14 +26,6 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
 {
     [super viewDidLoad];    
     
-    /*
-    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               [UIColor colorWithRed:0.05 green:0.478 blue:1.0 alpha:1.0],
-                                               NSForegroundColorAttributeName,
-                                               nil];
-    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
-    */
-    
     self.model = [[Model alloc]init];
     [self.model loadNewGame];
      
