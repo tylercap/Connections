@@ -95,7 +95,7 @@ int owners[9][8];
 -(NSInteger)getOwnerAt:(NSInteger)row
                 column:(NSInteger)column
 {
-    return values[row][column];
+    return owners[row][column];
 }
 
 -(void)setValueAt:(NSInteger)value
