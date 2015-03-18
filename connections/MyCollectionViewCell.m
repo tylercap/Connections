@@ -31,10 +31,10 @@
     
     switch( owner ){
         case 1:
-            self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
+            self.backgroundColor = [UIColor colorWithRed:0.3 green:0.5 blue:1 alpha:0.5];
             break;
         case 2:
-            self.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
+            self.backgroundColor = [UIColor colorWithRed:1 green:0.35 blue:0.3 alpha:0.5];
             break;
         default:
             self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
