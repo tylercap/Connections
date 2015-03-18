@@ -19,6 +19,7 @@
 
 @property (nonatomic, weak) IBOutlet MyCollectionViewLayout *layout;
 @property (strong, nonatomic) NSMutableArray *tiles;
+@property (strong, nonatomic) NSMutableArray *playerCards;
 @property (strong, nonatomic) Model *model;
 
 @property (strong, nonatomic) GADInterstitial *interstitial;
@@ -28,6 +29,9 @@
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;
 @property (weak, nonatomic) MyBannerCell *bannerAdCell;
+
+-(void)highlightOptions:(Boolean)highlight
+               forValue:(NSInteger)value;
 
 @end
 

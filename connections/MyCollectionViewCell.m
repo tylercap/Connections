@@ -12,10 +12,13 @@
 
 - (void)setLabel:(NSInteger)value
            owner:(NSInteger)owner
+         players:(Boolean)playerCard
           parent:(UIViewController *)parent
 {
     self.value = value;
     self.parentController = parent;
+    self.owner = owner;
+    self.playerCard = playerCard;
     
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
@@ -29,7 +32,18 @@
     self.layer.cornerRadius = 5.0f;
     self.layer.masksToBounds = YES;
     
-    switch( owner ){
+    [self setBackground];
+    
+    if( playerCard ){
+        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(highlightPlayerCard)];
+        
+        [self addGestureRecognizer:singleTapGestureRecognizer];
+    }
+}
+
+- (void)setBackground
+{
+    switch( _owner ){
         case 1:
             self.backgroundColor = [UIColor colorWithRed:0.3 green:0.5 blue:1 alpha:0.5];
             break;
@@ -42,19 +56,34 @@
     }
 }
 
-- (void)highlight:(Boolean)highlight
+- (void)highlightTile:(Boolean)highlight
 {
-    if( _normalBack == nil ){
-        _normalBack = [UIColor colorWithWhite:1.0 alpha:1.0];
-        _highlightBack = [UIColor colorWithRed:0.5 green:0.5 blue:1.0 alpha:1.0];
-    }
-    
     if(highlight){
-        self.backgroundColor = _highlightBack;
+        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
     }
     else{
-        self.backgroundColor = _normalBack;
+        [self setBackground];
     }
+}
+
+- (void)highlightPlayerCard
+{
+    [self highlightPlayerCard:!_isHighlighted];
+}
+
+- (void)highlightPlayerCard:(Boolean)highlight
+{
+    MyCollectionViewController *mcvc = (MyCollectionViewController*)_parentController;
+    
+    if(highlight){
+        [mcvc highlightOptions:YES forValue:_value];
+        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
+    }
+    else{
+        [mcvc highlightOptions:NO forValue:_value];
+        [self setBackground];
+    }
+    _isHighlighted = highlight;
 }
 
 // set up with 45 for a 10 x 9

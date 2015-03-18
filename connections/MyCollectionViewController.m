@@ -33,10 +33,10 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     _footerSections = 2;
     _signedIn = NO;
     
-    
-    self.tiles = [[NSMutableArray alloc] initWithCapacity:10];
-    for( int i = 0; i < 10; i++ ){
-        NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:9];
+    self.playerCards = [[NSMutableArray alloc] initWithCapacity:6];
+    self.tiles = [[NSMutableArray alloc] initWithCapacity:9];
+    for( int i = 0; i < 9; i++ ){
+        NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:8];
         [self.tiles addObject:items];
     }
     
@@ -125,6 +125,27 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
 }
  */
 
+-(void)highlightOptions:(Boolean)highlight
+               forValue:(NSInteger)value
+{
+    if( highlight ){
+        for( int col = 0; col < _playerCards.count; col++ ){
+            MyCollectionViewCell *cell = [_playerCards objectAtIndex:col];
+            [cell highlightPlayerCard:NO];
+        }
+    }
+    
+    for( int row = 0; row < _tiles.count; row++ ){
+        NSMutableArray *rowArr = [_tiles objectAtIndex:row];
+        for( int col = 0; col < rowArr.count; col++ ){
+            MyCollectionViewCell *cell = [rowArr objectAtIndex:col];
+            
+            if( cell.value == value )
+                [cell highlightTile:highlight];
+        }
+    }
+}
+
 #pragma mark UICollectionViewDataSource
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -173,7 +194,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     NSInteger value = [self.model getValueAt:row column:column];
     NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value owner:owner parent:self];
+    [myCell setLabel:value owner:owner players:NO parent:self];
     
     return myCell;
 }
@@ -233,8 +254,10 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
             
             NSInteger value = [self.model getPlayerOption:item];
             
-            [myCell setLabel:value owner:1 parent:self];
+            [myCell setLabel:value owner:1 players:YES parent:self];
             cell = myCell;
+            
+            [_playerCards insertObject:myCell atIndex:item];
         }
     }
     
