@@ -11,6 +11,6 @@
 @interface MyLabelCell : UICollectionViewCell
 @property (nonatomic, weak) IBOutlet UILabel *label;
 
--(void) setLabel:(NSString *) value
-       textColor:(UIColor *) text;
+-(void) showHowTo;
+
 @end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4TS-mj-b6c">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4TS-mj-b6c">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
@@ -84,9 +84,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hh6-Yb-lqS">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                            <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="15"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hh6-Yb-lqS">
+                                            <rect key="frame" x="5" y="15" width="40" height="21"/>
+                                            <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="10"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -94,10 +94,8 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="Hh6-Yb-lqS" firstAttribute="trailing" secondItem="H5w-Tc-M8c" secondAttribute="trailingMargin" constant="8" id="5cM-ty-FPB"/>
-                                    <constraint firstItem="Hh6-Yb-lqS" firstAttribute="leading" secondItem="H5w-Tc-M8c" secondAttribute="leadingMargin" constant="-8" id="8gk-5W-Ylc"/>
-                                    <constraint firstItem="Hh6-Yb-lqS" firstAttribute="top" secondItem="H5w-Tc-M8c" secondAttribute="topMargin" constant="-8" id="Qdl-WF-swZ"/>
-                                    <constraint firstItem="Hh6-Yb-lqS" firstAttribute="bottom" secondItem="H5w-Tc-M8c" secondAttribute="bottomMargin" constant="8" id="WDP-UV-x6z"/>
+                                    <constraint firstAttribute="centerX" secondItem="Hh6-Yb-lqS" secondAttribute="centerX" id="Pcu-AT-4Ty"/>
+                                    <constraint firstAttribute="centerY" secondItem="Hh6-Yb-lqS" secondAttribute="centerY" id="olC-Zi-GyE"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="label" destination="Hh6-Yb-lqS" id="TYw-bF-BkC"/>

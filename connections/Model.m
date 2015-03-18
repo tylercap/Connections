@@ -9,6 +9,7 @@
 #import "Model.h"
 
 int values[9][8];
+int owners[9][8];
 
 @implementation Model
 
@@ -52,9 +53,13 @@ int values[9][8];
     }
     
     NSMutableArray* array = [[NSMutableArray alloc] init];
+    NSMutableArray* owners = [[NSMutableArray alloc] init];
     for( int i=0; i<[self getSections]; i++ ){
         NSMutableArray* row = [[NSMutableArray alloc] init];
         [array addObject:row];
+        
+        NSMutableArray* oRow = [[NSMutableArray alloc] init];
+        [owners addObject:oRow];
         
         for( int j=0; j<[self getItems]; j++ ){
             NSUInteger index = arc4random_uniform(remaining);
@@ -62,10 +67,12 @@ int values[9][8];
             
             [values removeObjectAtIndex:index];
             remaining--;
+            
+            [oRow addObject:@"0"];
         }
     }
     
-    [self loadFromArray:array deck:unshuffled];
+    [self loadFromArray:array owners:owners deck:unshuffled];
 }
 
 -(NSInteger)getPlayerOption:(NSInteger)num
@@ -79,8 +86,14 @@ int values[9][8];
     return value;
 }
 
--(NSInteger)getIntValueAt:(NSInteger)row
-                   column:(NSInteger)column
+-(NSInteger)getValueAt:(NSInteger)row
+                column:(NSInteger)column
+{
+    return values[row][column];
+}
+
+-(NSInteger)getOwnerAt:(NSInteger)row
+                column:(NSInteger)column
 {
     return values[row][column];
 }
@@ -92,21 +105,30 @@ int values[9][8];
     values[row][column] = (int)value;
 }
 
--(NSString *)getValueAt:(NSInteger)row
-                 column:(NSInteger)column
+-(void)setOwnerAt:(NSInteger)value
+              row:(NSInteger)row
+           column:(NSInteger)column
 {
-    NSInteger val = [self getIntValueAt:row column:column];
-    return [NSString stringWithFormat:@"%ld",(long)val];
+    owners[row][column] = (int)value;
 }
 
 -(void)loadFromArray:(NSArray *)gameboard
+              owners:(NSArray *)owners
                 deck:(NSMutableArray *)unshuffled
 {
     for( int i=0; i<gameboard.count; i++ ){
         NSArray *row = gameboard[i];
         
         for( int j=0; j<row.count; j++ ){
-            [self setValueAt:((int)[row[j] integerValue]) row:i column:j];
+            [self setValueAt:[row[j] integerValue] row:i column:j];
+        }
+    }
+    
+    for( int i=0; i<owners.count; i++ ){
+        NSArray *row = owners[i];
+        
+        for( int j=0; j<row.count; j++ ){
+            [self setOwnerAt:[row[j] integerValue] row:i column:j];
         }
     }
     
@@ -121,7 +143,9 @@ int values[9][8];
         [array addObject:row];
         
         for( int j=0; j<[self getItems]; j++ ){
-            [row addObject:[self getValueAt:i column:j]];
+            NSInteger val = [self getValueAt:i column:j];
+            NSString *str_val = [NSString stringWithFormat:@"%ld",(long)val];
+            [row addObject:str_val];
         }
     }
     

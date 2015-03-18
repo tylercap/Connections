@@ -16,8 +16,10 @@
 -(NSInteger)getItems;
 
 -(void)loadNewGame;
--(NSInteger)getIntValueAt:(NSInteger)row
-                   column:(NSInteger)column;
+-(NSInteger)getValueAt:(NSInteger)row
+                column:(NSInteger)column;
+-(NSInteger)getOwnerAt:(NSInteger)row
+                column:(NSInteger)column;
 -(NSInteger)getPlayerOption:(NSInteger)num;
 
 @end

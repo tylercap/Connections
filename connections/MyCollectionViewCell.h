@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIColor *highlightBack;
 
 -(void)setLabel:(NSInteger)value
+          owner:(NSInteger)owner
          parent:(UIViewController *)parent;
 -(void)highlight:(Boolean)highlight;
 

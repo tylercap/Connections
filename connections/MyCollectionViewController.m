@@ -30,7 +30,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     [self.model loadNewGame];
      
     _headerSections = 1;
-    _footerSections = 1;
+    _footerSections = 2;
     _signedIn = NO;
     
     
@@ -140,7 +140,12 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         return 1;
     }
     else if(section == (_headerSections + [self.model getSections])){
-        return 7; // 6 "cards" and submit/resign button
+        // game description
+        return 1;
+    }
+    else if(section == (_headerSections + [self.model getSections] + 1)){
+        // 6 "cards" and submit/resign button
+        return 7;
     }
     
     return [self.model getItems];
@@ -165,10 +170,10 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     NSMutableArray *rowArray = [self.tiles objectAtIndex:row];
     [rowArray insertObject:myCell atIndex:column];
     
-    //NSString *value = [self.model getValueAt:row column:column];
-    NSInteger value = [self.model getIntValueAt:row column:column];
+    NSInteger value = [self.model getValueAt:row column:column];
+    NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value parent:self];
+    [myCell setLabel:value owner:owner parent:self];
     
     return myCell;
 }
@@ -199,6 +204,15 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         //}
     }
     else if(section == (_headerSections + [self.model getSections])){
+        MyLabelCell *labelCell = [collectionView
+                                  dequeueReusableCellWithReuseIdentifier:LabelIdentifier
+                                  forIndexPath:indexPath];
+        
+        [labelCell showHowTo];
+        
+        cell = labelCell;
+    }
+    else if(section == (_headerSections + [self.model getSections] + 1)){
         if( item == 6 ){
             MyButtonCell *buttonCell = [collectionView
                                         dequeueReusableCellWithReuseIdentifier:ButtonIdentifier
@@ -219,7 +233,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
             
             NSInteger value = [self.model getPlayerOption:item];
             
-            [myCell setLabel:value parent:self];
+            [myCell setLabel:value owner:1 parent:self];
             cell = myCell;
         }
     }

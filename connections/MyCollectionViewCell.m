@@ -11,6 +11,7 @@
 @implementation MyCollectionViewCell
 
 - (void)setLabel:(NSInteger)value
+           owner:(NSInteger)owner
           parent:(UIViewController *)parent
 {
     self.value = value;
@@ -23,11 +24,22 @@
         
     self.title.text = [self getEmoji:value];
     
-    self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     self.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:1.0].CGColor;
     self.layer.borderWidth = 1.2;
     self.layer.cornerRadius = 5.0f;
     self.layer.masksToBounds = YES;
+    
+    switch( owner ){
+        case 1:
+            self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
+            break;
+        case 2:
+            self.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
+            break;
+        default:
+            self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+            break;
+    }
 }
 
 - (void)highlight:(Boolean)highlight

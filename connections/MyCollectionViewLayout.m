@@ -30,7 +30,7 @@ static NSString * const BannerIdentifier = @"BannerCell";
     CGFloat navHeight = 64.0f;
     availableHeight -= (50 + navHeight);
     CGFloat width = availableWidth / self.numberOfColumns;
-    CGFloat height = availableHeight / (self.numberOfRows - 0.8); // bottom row height is 1.2
+    CGFloat height = availableHeight / (self.numberOfRows - 0.5); // bottom row height is 1.2 and second to last row is 1.3
     self.itemSize = CGSizeMake(width, height);
     
     self.headerButtonWidth = (size.width - (spacing * 4)) * 0.275;
@@ -91,11 +91,21 @@ static NSString * const BannerIdentifier = @"BannerCell";
         width = size.width - (self.itemInsets.left + self.itemInsets.right);
         height = 50;
     }
+    else if( row == ([self.collectionView numberOfSections] - 2) ){
+        originX = floorf(self.itemInsets.left);
+        originY = floorf(self.itemInsets.top + (self.itemSize.height + self.interItemSpacingY) * (row - 1));
+        
+        originY += 50;// + self.interItemSpacingY;
+        
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        width = size.width - (self.itemInsets.left + self.itemInsets.right);
+        height = self.itemSize.height * 1.3;
+    }
     else if( row == ([self.collectionView numberOfSections] - 1) ){
         height = self.itemSize.height * 1.2;
         width = self.itemSize.width * 1.13;
         
-        originY = floorf(self.itemInsets.top + (self.itemSize.height + self.interItemSpacingY) * (row - 1));
+        originY = floorf(self.itemInsets.top + (self.itemSize.height + self.interItemSpacingY) * (row - 0.7));
         
         originY += 50 + self.interItemSpacingY;
         
