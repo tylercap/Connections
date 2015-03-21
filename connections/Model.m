@@ -10,6 +10,8 @@
 
 int values[9][8];
 int owners[9][8];
+int owner1Cards[6];
+int owner2Cards[6];
 
 @implementation Model
 
@@ -30,6 +32,11 @@ int owners[9][8];
 -(NSInteger)getItems
 {
     return 8;
+}
+
+-(NSInteger)getPlayerCards
+{
+    return 6;
 }
 
 -(void)loadNewGame
@@ -71,17 +78,56 @@ int owners[9][8];
             [oRow addObject:@"0"];
         }
     }
+
+    NSMutableArray* p1 = [[NSMutableArray alloc] init];
+    NSMutableArray* p2 = [[NSMutableArray alloc] init];
+    for( int i=0; i<[self getPlayerCards]; i++ ){
+        //TODO: deck not set yet
+        [p1 addObject:[NSString stringWithFormat:@"%d",[self getNextPlayerOption:unshuffled]]];
+        [p2 addObject:[NSString stringWithFormat:@"%d",[self getNextPlayerOption:unshuffled]]];
+    }
     
-    [self loadFromArray:array owners:owners deck:unshuffled];
+    [self loadFromArray:array owners:owners player1:p1 player2:p2 deck:unshuffled];
 }
 
--(NSInteger)getPlayerOption:(NSInteger)num
+-(NSInteger)getNextPlayerOption
 {
-    int remaining = (int)[self.deck count];
+    return [self getNextPlayerOption:_deck];
+}
+
+-(NSInteger)getNextPlayerOption:(NSMutableArray*)deck
+{
+    int remaining = (int)[deck count];
     NSUInteger index = arc4random_uniform(remaining);
-    NSInteger value = [[self.deck objectAtIndex:index] integerValue];
+    NSInteger value = [[deck objectAtIndex:index] integerValue];
     
-    [self.deck removeObjectAtIndex:index];
+    [deck removeObjectAtIndex:index];
+    
+    return value;
+}
+
+-(NSInteger)getPlayerOption:(NSInteger)column
+                      owner:(NSInteger)owner
+{
+    if( owner == 2 ){
+        return owner2Cards[column];
+    }
+    else{
+        return owner1Cards[column];
+    }
+}
+
+-(NSInteger)newPlayerOption:(NSInteger)column
+                      owner:(NSInteger)owner
+{
+    NSInteger value = [self getNextPlayerOption];
+    
+    if( owner == 2 ){
+        owner2Cards[column] = value;
+    }
+    else{
+        owner1Cards[column] = value;
+    }
     
     return value;
 }
@@ -105,6 +151,18 @@ int owners[9][8];
     values[row][column] = (int)value;
 }
 
+-(void)setP1At:(NSInteger)value
+        column:(NSInteger)column
+{
+    owner1Cards[column] = (int)value;
+}
+
+-(void)setP2At:(NSInteger)value
+        column:(NSInteger)column
+{
+    owner2Cards[column] = (int)value;
+}
+
 -(void)setOwnerAt:(NSInteger)value
               row:(NSInteger)row
            column:(NSInteger)column
@@ -114,6 +172,8 @@ int owners[9][8];
 
 -(void)loadFromArray:(NSArray *)gameboard
               owners:(NSArray *)owners
+             player1:(NSMutableArray *)p1
+             player2:(NSMutableArray *)p2
                 deck:(NSMutableArray *)unshuffled
 {
     for( int i=0; i<gameboard.count; i++ ){
@@ -130,6 +190,13 @@ int owners[9][8];
         for( int j=0; j<row.count; j++ ){
             [self setOwnerAt:[row[j] integerValue] row:i column:j];
         }
+    }
+    
+    for( int j=0; j<p1.count; j++ ){
+        [self setP1At:[p1[j] integerValue] column:j];
+    }
+    for( int j=0; j<p2.count; j++ ){
+        [self setP2At:[p2[j] integerValue] column:j];
     }
     
     _deck = unshuffled;

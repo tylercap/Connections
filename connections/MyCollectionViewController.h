@@ -32,6 +32,9 @@
 
 -(void)highlightOptions:(Boolean)highlight
                forValue:(NSInteger)value;
+-(NSInteger)highlightedTileClicked:(NSInteger)value
+                               row:(NSInteger)row
+                            column:(NSInteger)column;
 
 @end
 

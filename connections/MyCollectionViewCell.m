@@ -10,12 +10,24 @@
 
 @implementation MyCollectionViewCell
 
+-(void)updateValue:(NSInteger)value
+{
+    [self highlightPlayerCard];
+    
+    self.value = value;
+    self.title.text = [self getEmoji:value];
+}
+
 - (void)setLabel:(NSInteger)value
+             row:(NSInteger)row
+          column:(NSInteger)column
            owner:(NSInteger)owner
          players:(Boolean)playerCard
           parent:(UIViewController *)parent
 {
     self.value = value;
+    self.row = row;
+    self.column = column;
     self.parentController = parent;
     self.owner = owner;
     self.playerCard = playerCard;
@@ -39,6 +51,11 @@
         
         [self addGestureRecognizer:singleTapGestureRecognizer];
     }
+    else{
+        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tileClicked)];
+        
+        [self addGestureRecognizer:singleTapGestureRecognizer];
+    }
 }
 
 - (void)setBackground
@@ -51,19 +68,31 @@
             self.backgroundColor = [UIColor colorWithRed:1 green:0.35 blue:0.3 alpha:0.5];
             break;
         default:
-            self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+            if( _isHighlighted ){
+                self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
+            }
+            else{
+                self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+            }
             break;
+    }
+}
+
+- (void)tileClicked
+{
+    if(_isHighlighted){
+        MyCollectionViewController *mcvc = (MyCollectionViewController*)_parentController;
+        
+        _owner = [mcvc highlightedTileClicked:_value row:_row column:_column];
+
+        [self setBackground];
     }
 }
 
 - (void)highlightTile:(Boolean)highlight
 {
-    if(highlight){
-        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
-    }
-    else{
-        [self setBackground];
-    }
+    _isHighlighted = highlight;
+    [self setBackground];
 }
 
 - (void)highlightPlayerCard

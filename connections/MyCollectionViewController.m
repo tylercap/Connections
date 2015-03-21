@@ -125,6 +125,28 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
 }
  */
 
+-(NSInteger)highlightedTileClicked:(NSInteger)value
+                               row:(NSInteger)row
+                            column:(NSInteger)column
+{
+    NSInteger owner = 1;
+    
+    // remove all highlighting before setting the owner
+    for( int i = 0; i < _playerCards.count; i++ ){
+        MyCollectionViewCell *card = [_playerCards objectAtIndex:i];
+        if(card.isHighlighted){
+            NSInteger value = [_model newPlayerOption:i owner:owner];
+            [card updateValue:value];
+            
+            // update model
+            [_model setOwnerAt:owner row:row column:column];
+        }
+    }
+    
+    //returns the owner int
+    return owner;
+}
+
 -(void)highlightOptions:(Boolean)highlight
                forValue:(NSInteger)value
 {
@@ -194,7 +216,7 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     NSInteger value = [self.model getValueAt:row column:column];
     NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value owner:owner players:NO parent:self];
+    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self];
     
     return myCell;
 }
@@ -252,9 +274,10 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
                                             dequeueReusableCellWithReuseIdentifier:CellIdentifier
                                             forIndexPath:indexPath];
             
-            NSInteger value = [self.model getPlayerOption:item];
+            NSInteger owner = 1;
+            NSInteger value = [self.model getPlayerOption:item owner:owner];
             
-            [myCell setLabel:value owner:1 players:YES parent:self];
+            [myCell setLabel:value row:-1 column:item owner:owner players:YES parent:self];
             cell = myCell;
             
             [_playerCards insertObject:myCell atIndex:item];

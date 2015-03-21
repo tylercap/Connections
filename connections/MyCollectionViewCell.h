@@ -13,15 +13,21 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *title;
 @property (nonatomic) NSInteger value;
+@property (nonatomic) NSInteger row;
+@property (nonatomic) NSInteger column;
 @property (nonatomic, weak) UIViewController *parentController;
 @property (atomic) NSInteger owner;
 @property (atomic) Boolean playerCard;
 @property (atomic) Boolean isHighlighted;
 
 -(void)setLabel:(NSInteger)value
+            row:(NSInteger)row
+         column:(NSInteger)column
           owner:(NSInteger)owner
         players:(Boolean)playerCard
          parent:(UIViewController *)parent;
+-(void)updateValue:(NSInteger)value;
+
 - (void)highlightTile:(Boolean)highlight;
 - (void)highlightPlayerCard:(Boolean)highlight;
 

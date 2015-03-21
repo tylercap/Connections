@@ -20,6 +20,13 @@
                 column:(NSInteger)column;
 -(NSInteger)getOwnerAt:(NSInteger)row
                 column:(NSInteger)column;
--(NSInteger)getPlayerOption:(NSInteger)num;
+-(void)setOwnerAt:(NSInteger)owner
+              row:(NSInteger)row
+           column:(NSInteger)column;
+
+-(NSInteger)getPlayerOption:(NSInteger)column
+                      owner:(NSInteger)owner;
+-(NSInteger)newPlayerOption:(NSInteger)column
+                      owner:(NSInteger)owner;
 
 @end
