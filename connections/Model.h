@@ -16,6 +16,9 @@
 -(NSInteger)getItems;
 
 -(void)loadNewGame;
+-(Boolean)checkForWinner:(NSInteger)owner
+                     row:(NSInteger)row
+                  column:(NSInteger)column;
 -(NSInteger)getValueAt:(NSInteger)row
                 column:(NSInteger)column;
 -(NSInteger)getOwnerAt:(NSInteger)row

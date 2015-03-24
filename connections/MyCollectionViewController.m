@@ -140,11 +140,31 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
             
             // update model
             [_model setOwnerAt:owner row:row column:column];
+            Boolean winner = [_model checkForWinner:owner row:row column:column];
+            
+            if( winner ){
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Win!"
+                                                                message:@"Would you like to challenge your opponent to a rematch?"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Close"
+                                                      otherButtonTitles:@"Rematch", nil];
+                [alert show];
+            }
         }
     }
     
     //returns the owner int
     return owner;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if( buttonIndex == 0 ){
+        // go back to home screen
+    }
+    if( buttonIndex == 1 ){
+        // start a rematch
+    }
 }
 
 -(void)highlightOptions:(Boolean)highlight

@@ -219,4 +219,139 @@ int owner2Cards[6];
     return array;
 }
 
+-(Boolean)checkForWinner:(NSInteger)owner
+                     row:(NSInteger)row
+                  column:(NSInteger)column
+{
+    // check horizontal
+    int connections = 0;
+    for( int i = 0; i < [self getItems]; i++ ){
+        if( owners[row][i] == owner ){
+            connections++;
+        }
+        else{
+            connections = 0;
+        }
+        
+        if( connections == 5 ){
+            return YES;
+        }
+    }
+    
+    // check vertical
+    connections = 0;
+    for( int i = 0; i < [self getSections]; i++ ){
+        if( owners[i][column] == owner ){
+            connections++;
+        }
+        else{
+            connections = 0;
+        }
+        
+        if( connections == 5 ){
+            return YES;
+        }
+    }
+    
+    // check diagonal
+    return [self checkDiagonal:owner row:row column:column];
+}
+
+-(Boolean)checkDiagonal:(NSInteger)owner
+                    row:(NSInteger)row
+                 column:(NSInteger)column
+{
+    return [self checkDiagonal1:owner row:row column:column] || [self checkDiagonal2:owner row:row column:column];
+}
+
+-(Boolean)checkDiagonal1:(NSInteger)owner
+                     row:(NSInteger)row
+                  column:(NSInteger)column
+{
+    // top left to bottom right (column and row increase together)
+    int connections = 0;
+    if( column <= row ){
+        for( int i = 0; i < [self getItems]; i++ ){
+            if( owners[(row - column) + i][i] == owner ){
+                connections++;
+            }
+            else{
+                connections = 0;
+            }
+            
+            if( connections == 5 ){
+                return YES;
+            }
+        }
+    }
+    else{ //column > row
+        for( int i = 0; i < [self getSections]; i++ ){
+            if( owners[i][(column - row) + i] == owner ){
+                connections++;
+            }
+            else{
+                connections = 0;
+            }
+            
+            if( connections == 5 ){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+-(Boolean)checkDiagonal2:(NSInteger)owner
+                     row:(NSInteger)row
+                  column:(NSInteger)column
+{
+    // bottom left to top right (column increases while row decreases)
+    int connections = 0;
+    if( column < ([self getSections] - 1 - row) ){
+        // we will start at column 0 and move until row 0
+        int currCol = 0;
+        int currRow = row + column;
+        
+        while( currRow >= 0 ){
+            if( owners[currRow][currCol] == owner ){
+                connections++;
+            }
+            else{
+                connections = 0;
+            }
+            
+            if( connections == 5 ){
+                return YES;
+            }
+            
+            currRow--;
+            currCol++;
+        }
+    }
+    else{ //column >= ([self getSections] - 1 - row)
+        // we will start at last row and end at last column
+        int currRow = [self getSections] - 1;
+        int currCol = column - ([self getSections] - 1 - row);
+        
+        while( currCol < [self getItems] ){
+            if( owners[currRow][currCol] == owner ){
+                connections++;
+            }
+            else{
+                connections = 0;
+            }
+            
+            if( connections == 5 ){
+                return YES;
+            }
+            
+            currRow--;
+            currCol++;
+        }
+    }
+    
+    return NO;
+}
+
 @end
