@@ -16,8 +16,7 @@ static NSString * const LabelIdentifier = @"LabelCell";
 static NSString * const BannerIdentifier = @"BannerCell";
 
 static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
-static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/8955584856";
-static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeutg8relg25.apps.googleusercontent.com";
+//static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/8955584856";
 
 @implementation MyCollectionViewController
 
@@ -27,11 +26,10 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     [super viewDidLoad];    
     
     self.model = [[Model alloc]init];
-    [self.model loadNewGame];
+    [self loadGame];
      
     _headerSections = 1;
     _footerSections = 2;
-    _signedIn = NO;
     
     self.playerCards = [[NSMutableArray alloc] initWithCapacity:6];
     self.tiles = [[NSMutableArray alloc] initWithCapacity:9];
@@ -40,21 +38,14 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         [self.tiles addObject:items];
     }
     
-    [self loadInterstitial];
+//    [self loadInterstitial];
 }
 
-- (void)loadInterstitial
+- (void)viewWillAppear:(BOOL)animated
 {
-    self.interstitial = [[GADInterstitial alloc] init];
-    self.interstitial.adUnitID = InterstitialAdId;
+    [super viewWillAppear:animated];
     
-    GADRequest *request = [GADRequest request];
-    self.interstitial.delegate = self;
-    [self.interstitial loadRequest:request];
-}
-
-- (void)interstitialDidDismissScreen:(GADInterstitial *)interstitial {
-    [self loadInterstitial];
+    self.navigationItem.title = _game;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -67,80 +58,38 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
     [super viewWillDisappear:animated];
 }
 
+- (void)loadGame
+{
+    //TODO: load the game from google play
+    [self.model loadNewGame];
+    self.owner = 1;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-- (void)signInOrOut
-{
-    if( _signedIn ){
-        [[GPGManager sharedInstance] signOut];
-    }
-    else{
-        [[GPGManager sharedInstance] signInWithClientID:GoogleClientId silently:NO];
-    }
-}
- 
-- (void)refreshInterfaceBasedOnSignIn {
-    if( _silentlySigningIn ){
-        [self.signInOut setHidden:YES];
-    }
-    else{
-        [self.signInOut setHidden:NO];
-    }
-    
-    _signedIn = [GPGManager sharedInstance].isSignedIn;
-    [self.leaderboard.button setHidden:!_signedIn];
-    
-    if( _signedIn ){
-        [self.signInOut setLabel:SignOut];
-    }
-    else{
-        [self.signInOut setLabel:SignIn];
-    }
-}
-
-- (void)didFinishGamesSignInWithError:(NSError *)error {
-    if (error) {
-        //NSLog(@"Received an error while signing in %@", [error localizedDescription]);
-    } else {
-        //NSLog(@"Signed in!");
-    }
-    
-    _silentlySigningIn = NO;
-    [self refreshInterfaceBasedOnSignIn];
-}
-
-- (void)didFinishGamesSignOutWithError:(NSError *)error {
-    if (error) {
-        //NSLog(@"Received an error while signing out %@", [error localizedDescription]);
-    } else {
-        //NSLog(@"Signed out!");
-    }
-    
-    _silentlySigningIn = NO;
-    [self refreshInterfaceBasedOnSignIn];
-}
- */
-
 -(NSInteger)highlightedTileClicked:(NSInteger)value
                                row:(NSInteger)row
                             column:(NSInteger)column
 {
-    NSInteger owner = 1;
-    
     // remove all highlighting before setting the owner
     for( int i = 0; i < _playerCards.count; i++ ){
         MyCollectionViewCell *card = [_playerCards objectAtIndex:i];
         if(card.isHighlighted){
-            NSInteger value = [_model newPlayerOption:i owner:owner];
+            NSInteger value = [_model newPlayerOption:i owner:self.owner];
             [card updateValue:value];
             
             // update model
-            [_model setOwnerAt:owner row:row column:column];
-            Boolean winner = [_model checkForWinner:owner row:row column:column];
+            if( value == -2 ){
+                // just removing the previous owner
+                [_model setOwnerAt:0 row:row column:column];
+            }
+            else{
+                [_model setOwnerAt:self.owner row:row column:column];
+            }
+            Boolean winner = [_model checkForWinner:self.owner row:row column:column];
             
             if( winner ){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Win!"
@@ -153,8 +102,24 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         }
     }
     
+    NSInteger currentOwner = self.owner;
+    [self submitMove];
+    
     //returns the owner int
-    return owner;
+    return currentOwner;
+}
+
+- (void)submitMove
+{
+    //TODO: submit the updated model to google play and set it to the other player's turn
+    if( self.owner == 1 ){
+        self.owner = 2;
+    }
+    else if( self.owner == 2 ){
+        self.owner = 1;
+    }
+    
+    [self.collectionView reloadData];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -182,11 +147,34 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
         for( int col = 0; col < rowArr.count; col++ ){
             MyCollectionViewCell *cell = [rowArr objectAtIndex:col];
             
-            if( cell.value == value )
+            if( value >= 0 && cell.value == value && cell.owner == 0 ){
                 [cell highlightTile:highlight];
+            }
+            else if( value == -2 && cell.owner != 0 && cell.owner != self.owner ){
+                // can remove other players card
+                [cell highlightTile:highlight];
+            }
+            else if( value == -1 && cell.owner == 0 ){
+                // can be played in any open space
+                [cell highlightTile:highlight];
+            }
         }
     }
 }
+
+//- (void)loadInterstitial
+//{
+//    self.interstitial = [[GADInterstitial alloc] init];
+//    self.interstitial.adUnitID = InterstitialAdId;
+//
+//    GADRequest *request = [GADRequest request];
+//    self.interstitial.delegate = self;
+//    [self.interstitial loadRequest:request];
+//}
+
+//- (void)interstitialDidDismissScreen:(GADInterstitial *)interstitial {
+//    [self loadInterstitial];
+//}
 
 #pragma mark UICollectionViewDataSource
 
@@ -294,10 +282,9 @@ static NSString * const GoogleClientId = @"320198239668-quml3u6s5mch28jvq0vpdeut
                                             dequeueReusableCellWithReuseIdentifier:CellIdentifier
                                             forIndexPath:indexPath];
             
-            NSInteger owner = 1;
-            NSInteger value = [self.model getPlayerOption:item owner:owner];
+            NSInteger value = [self.model getPlayerOption:item owner:self.owner];
             
-            [myCell setLabel:value row:-1 column:item owner:owner players:YES parent:self];
+            [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self];
             cell = myCell;
             
             [_playerCards insertObject:myCell atIndex:item];

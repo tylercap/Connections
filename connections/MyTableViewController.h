@@ -7,12 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GooglePlayGames/GooglePlayGames.h>
 #import "MyTableViewCell.h"
 #import "MyCollectionViewController.h"
+#import "MyWebViewController.h"
+#import "Application.h"
 
-@interface MyTableViewController : UITableViewController
+@interface MyTableViewController : UITableViewController <GPGStatusDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *signInItem;
 @property (nonatomic, strong) NSArray *openGames;
+
+@property (nonatomic) Boolean signedIn;
+@property (nonatomic) Boolean silentlySigningIn;
 
 @end

@@ -206,37 +206,50 @@
             <point key="canvasLocation" x="-601" y="329"/>
         </scene>
         <!--My Web View Controller-->
-        <scene sceneID="eOi-LO-9Gu">
+        <scene sceneID="AGP-pH-m5M">
             <objects>
-                <viewController storyboardIdentifier="WebViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="udC-l4-FAy" customClass="MyWebViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gVW-bB-7wQ" customClass="MyWebViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="b1a-pK-gba"/>
-                        <viewControllerLayoutGuide type="bottom" id="aE8-ML-aYN"/>
+                        <viewControllerLayoutGuide type="top" id="fCu-ag-iJX"/>
+                        <viewControllerLayoutGuide type="bottom" id="QBc-Aq-ic8"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="N5O-JZ-4E9">
+                    <view key="view" contentMode="scaleToFill" id="sYW-nf-YhH">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tEO-6C-053">
-                                <rect key="frame" x="16" y="0.0" width="568" height="600"/>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g3j-rz-IdN">
+                                <rect key="frame" x="0.0" y="0.0" width="594" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </webView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfl-cC-oyl">
+                                <rect key="frame" x="508" y="30" width="66" height="42"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" red="0.0" green="0.0024741522299999998" blue="0.70247708610000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="close" destination="gVW-bB-7wQ" eventType="touchUpInside" id="mbO-2F-3Q7"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="tEO-6C-053" firstAttribute="top" secondItem="N5O-JZ-4E9" secondAttribute="topMargin" id="IVZ-xO-Dc3"/>
-                            <constraint firstItem="aE8-ML-aYN" firstAttribute="top" secondItem="tEO-6C-053" secondAttribute="bottom" id="Wyh-xJ-gFj"/>
-                            <constraint firstItem="tEO-6C-053" firstAttribute="leading" secondItem="N5O-JZ-4E9" secondAttribute="leadingMargin" id="rFz-Np-qUC"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="tEO-6C-053" secondAttribute="trailing" id="t5p-sR-9Tt"/>
+                            <constraint firstItem="mfl-cC-oyl" firstAttribute="top" secondItem="fCu-ag-iJX" secondAttribute="bottom" constant="10" id="4XY-Xh-JMY"/>
+                            <constraint firstItem="g3j-rz-IdN" firstAttribute="leading" secondItem="sYW-nf-YhH" secondAttribute="leading" id="AgC-tl-T3W"/>
+                            <constraint firstItem="g3j-rz-IdN" firstAttribute="top" secondItem="sYW-nf-YhH" secondAttribute="topMargin" id="e63-vK-We8"/>
+                            <constraint firstItem="QBc-Aq-ic8" firstAttribute="top" secondItem="g3j-rz-IdN" secondAttribute="bottom" id="r9t-6R-BFa"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="g3j-rz-IdN" secondAttribute="trailing" constant="-10" id="xB1-Mm-HLt"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mfl-cC-oyl" secondAttribute="trailing" constant="10" id="zOY-zp-EBW"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="webView" destination="tEO-6C-053" id="tbe-v5-5Ma"/>
+                        <outlet property="webView" destination="g3j-rz-IdN" id="Ur3-aH-VBG"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Riv-UN-W42" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Si5-TS-6Be" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-601" y="1063"/>
+            <point key="canvasLocation" x="-601" y="1007"/>
         </scene>
     </scenes>
 </document>

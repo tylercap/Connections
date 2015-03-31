@@ -14,17 +14,14 @@
 #import "MyBannerCell.h"
 #import "Model.h"
 
-@interface MyCollectionViewController : UICollectionViewController
-<UICollectionViewDataSource, GADInterstitialDelegate>
+@interface MyCollectionViewController : UICollectionViewController <UICollectionViewDataSource>
 
 @property (nonatomic, weak) IBOutlet MyCollectionViewLayout *layout;
 @property (strong, nonatomic) NSMutableArray *tiles;
 @property (strong, nonatomic) NSMutableArray *playerCards;
 @property (strong, nonatomic) Model *model;
-
-@property (strong, nonatomic) GADInterstitial *interstitial;
-@property (nonatomic) Boolean signedIn;
-@property (nonatomic) Boolean silentlySigningIn;
+@property (nonatomic) NSInteger owner;
+@property (strong, nonatomic) NSString *game;
 
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;

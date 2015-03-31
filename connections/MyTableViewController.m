@@ -8,12 +8,30 @@
 
 #import "MyTableViewController.h"
 
+static NSString * const GoogleClientId = @"317322985582-t01dgsg9toha0l71e18udc6nu9ae1b73.apps.googleusercontent.com";
+static NSString * const noGames = @"Sign in to access your games";
+static NSString * const newGame = @"New Game";
+
+
 @implementation MyTableViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _openGames = @[@"Sign in to access your games"];
+    _openGames = @[noGames];
+    
+    [GPGManager sharedInstance].statusDelegate = self;
+    _silentlySigningIn = [[GPGManager sharedInstance] signInWithClientID:GoogleClientId silently:YES];
+    [self refreshInterfaceBasedOnSignIn];
+    _signedIn = NO;
+    
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserverForName:AppOpenGoogleNotification
+                              object:nil
+                               queue:nil
+                          usingBlock:^(NSNotification *notification){
+                              [self handleNotification:notification];
+                          }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -36,9 +54,67 @@
     self.navigationItem.rightBarButtonItem = _signInItem;
 }
 
+- (void)handleNotification:(NSNotification*)notification
+{
+    MyWebViewController *mwvc =[self.storyboard instantiateViewControllerWithIdentifier:@"WebViewController"];
+    [mwvc setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+    [self presentViewController:mwvc animated:YES completion:nil];
+    
+    NSURL *request = [notification object];
+    [mwvc loadRequest:request];
+}
+
 - (void)signInOrOut
 {
+    if( _signedIn ){
+        [[GPGManager sharedInstance] signOut];
+    }
+    else{
+        [[GPGManager sharedInstance] signInWithClientID:GoogleClientId silently:NO];
+    }
+}
+
+- (void)refreshInterfaceBasedOnSignIn {
+    _signedIn = [GPGManager sharedInstance].isSignedIn;
     
+    if( _signedIn ){
+        [self.signInItem setTitle:@"Sign Out"];
+        [self loadOpenGames];
+    }
+    else{
+        [self.signInItem setTitle:@"Sign In"];
+        _openGames = @[noGames];
+        [self.tableView reloadData];
+    }
+}
+
+- (void)loadOpenGames
+{
+    _openGames = @[newGame];
+    
+    [self.tableView reloadData];
+}
+
+- (void)didFinishGamesSignInWithError:(NSError *)error {
+    if (error) {
+        //NSLog(@"Received an error while signing in %@", [error localizedDescription]);
+    } else {
+        //NSLog(@"Signed in!");
+    }
+    
+    _silentlySigningIn = NO;
+    [self refreshInterfaceBasedOnSignIn];
+}
+
+- (void)didFinishGamesSignOutWithError:(NSError *)error {
+    if (error) {
+        //NSLog(@"Received an error while signing out %@", [error localizedDescription]);
+    } else {
+        //NSLog(@"Signed out!");
+    }
+    
+    _silentlySigningIn = NO;
+    [self refreshInterfaceBasedOnSignIn];
 }
 
 - (void)didReceiveMemoryWarning
@@ -70,14 +146,28 @@
 
     cell.title.text = [_openGames objectAtIndex:indexPath.row];
     cell.title.lineBreakMode = NSLineBreakByWordWrapping;
+    if( [noGames isEqualToString:cell.title.text] ){
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.userInteractionEnabled = NO;
+    }
+    else{
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+        cell.userInteractionEnabled = YES;
+    }
     
     return cell;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-//    MyCollectionViewController *destViewController = segue.destinationViewController;
-//    destViewController.game = indexPath.row + 1;
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    MyCollectionViewController *destViewController = segue.destinationViewController;
+    NSString *gameSelected = [_openGames objectAtIndex:indexPath.row];
+    
+    if( [noGames isEqualToString:newGame] ){
+        gameSelected = @"Test Game";
+    }
+    
+    destViewController.game = gameSelected;
 }
 
 @end
