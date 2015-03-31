@@ -10,7 +10,8 @@
 
 static NSString * const GoogleClientId = @"317322985582-t01dgsg9toha0l71e18udc6nu9ae1b73.apps.googleusercontent.com";
 static NSString * const noGames = @"Sign in to access your games";
-static NSString * const newGame = @"New Game";
+static NSString * const quickMatch = @"Quick Match";
+static NSString * const chooseOpponent = @"Choose Opponent";
 
 
 @implementation MyTableViewController
@@ -90,7 +91,7 @@ static NSString * const newGame = @"New Game";
 
 - (void)loadOpenGames
 {
-    _openGames = @[newGame];
+    _openGames = @[quickMatch, chooseOpponent];
     
     [self.tableView reloadData];
 }
@@ -163,8 +164,13 @@ static NSString * const newGame = @"New Game";
     MyCollectionViewController *destViewController = segue.destinationViewController;
     NSString *gameSelected = [_openGames objectAtIndex:indexPath.row];
     
-    if( [noGames isEqualToString:newGame] ){
+    if( [gameSelected isEqualToString:quickMatch] ){
+        //TODO: set up quick match
         gameSelected = @"Test Game";
+    }
+    else if( [gameSelected isEqualToString:chooseOpponent] ){
+        //TODO: allow the user to choose their opponent
+        gameSelected = @"Test 2";
     }
     
     destViewController.game = gameSelected;

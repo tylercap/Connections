@@ -78,11 +78,11 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     for( int i = 0; i < _playerCards.count; i++ ){
         MyCollectionViewCell *card = [_playerCards objectAtIndex:i];
         if(card.isHighlighted){
-            NSInteger value = [_model newPlayerOption:i owner:self.owner];
-            [card updateValue:value];
+            NSInteger newValue = [_model newPlayerOption:i owner:self.owner];
+            [card updateValue:newValue];
             
             // update model
-            if( value == -2 ){
+            if( _removeClicked ){
                 // just removing the previous owner
                 [_model setOwnerAt:0 row:row column:column];
             }
@@ -148,14 +148,17 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
             MyCollectionViewCell *cell = [rowArr objectAtIndex:col];
             
             if( value >= 0 && cell.value == value && cell.owner == 0 ){
+                _removeClicked = NO;
                 [cell highlightTile:highlight];
             }
             else if( value == -2 && cell.owner != 0 && cell.owner != self.owner ){
                 // can remove other players card
+                _removeClicked = YES;
                 [cell highlightTile:highlight];
             }
             else if( value == -1 && cell.owner == 0 ){
                 // can be played in any open space
+                _removeClicked = NO;
                 [cell highlightTile:highlight];
             }
         }

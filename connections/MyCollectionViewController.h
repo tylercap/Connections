@@ -22,6 +22,7 @@
 @property (strong, nonatomic) Model *model;
 @property (nonatomic) NSInteger owner;
 @property (strong, nonatomic) NSString *game;
+@property (nonatomic) Boolean removeClicked;
 
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;
