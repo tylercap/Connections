@@ -14,15 +14,45 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    for (UIViewController *nextVc in
+         [(UINavigationController *)self.window.rootViewController childViewControllers])
+    {
+        if ([nextVc class] == [MyTableViewController class]) {
+            NSLog(@"Found our lobby view controller!");
+            [GPGManager sharedInstance].turnBasedMatchDelegate = (MyTableViewController *)nextVc;
+            break;
+        }
+        
+    }
+
+    // Look to see if our application was launched from a notification
+    NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     
-    UIPageControl *pageControl = [UIPageControl appearance];
-    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-    pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
-    pageControl.backgroundColor = [UIColor whiteColor];
+    // If one exists, see if it's a game invitation
+    if (remoteNotification) {
+        if ([[GPGManager sharedInstance] tryHandleRemoteNotification:remoteNotification]) {
+            // didReceiveRealTimeInviteForRoom is being called in your app delegate.
+        } else {
+            // You probably want to do other notification checking here.
+        }
+    }
     
     return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"Received remote notification! %@", userInfo);
+    if ([[GPGManager sharedInstance] tryHandleRemoteNotification:userInfo]) {
+        // The payload looks like it's from Google Play Games. A
+        // didReceiveTurnBasedInviteForMatch method is being
+        // called in our delegate.
+    } else {
+        // Call other methods that might want to handle this
+        // remote notification
+    }
 }
 
 - (BOOL)application:(UIApplication *)application

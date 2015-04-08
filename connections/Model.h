@@ -10,7 +10,8 @@
 
 @interface Model : NSObject
 
-@property (strong, nonatomic)NSMutableArray *deck;
+@property (strong, nonatomic) NSMutableArray *deck;
+@property (nonatomic) NSInteger ownersTurn;
 
 -(NSInteger)getSections;
 -(NSInteger)getItems;
@@ -31,5 +32,8 @@
                       owner:(NSInteger)owner;
 -(NSInteger)newPlayerOption:(NSInteger)column
                       owner:(NSInteger)owner;
+
+-(NSData*)storeToData;
+-(void)loadFromData:(NSData*)data;
 
 @end

@@ -19,7 +19,8 @@ static NSString * const chooseOpponent = @"Choose Opponent";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _openGames = @[noGames];
+    _openGames = [[NSMutableArray alloc] init];
+    [_openGames addObject:noGames];
     
     [GPGManager sharedInstance].statusDelegate = self;
     _silentlySigningIn = [[GPGManager sharedInstance] signInWithClientID:GoogleClientId silently:YES];
@@ -33,6 +34,9 @@ static NSString * const chooseOpponent = @"Choose Opponent";
                           usingBlock:^(NSNotification *notification){
                               [self handleNotification:notification];
                           }];
+    
+    [GPGManager sharedInstance].turnBasedMatchDelegate = self;
+    [GPGLauncherController sharedInstance].turnBasedMatchListLauncherDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -53,6 +57,11 @@ static NSString * const chooseOpponent = @"Choose Opponent";
         _signInItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStylePlain target:self action:@selector(signInOrOut)];
     }
     self.navigationItem.rightBarButtonItem = _signInItem;
+    
+    if( _signedIn ){
+        [self.signInItem setTitle:@"Sign Out"];
+        [self loadOpenGames];
+    }
 }
 
 - (void)handleNotification:(NSNotification*)notification
@@ -84,14 +93,40 @@ static NSString * const chooseOpponent = @"Choose Opponent";
     }
     else{
         [self.signInItem setTitle:@"Sign In"];
-        _openGames = @[noGames];
+        _openGames = [[NSMutableArray alloc] init];
+        [_openGames addObject:noGames];
         [self.tableView reloadData];
     }
 }
 
 - (void)loadOpenGames
 {
-    _openGames = @[quickMatch, chooseOpponent];
+    _openGames = [[NSMutableArray alloc] init];
+    [_openGames addObject:quickMatch];
+    [_openGames addObject:chooseOpponent];
+    
+//    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
+    [GPGTurnBasedMatch allMatchesWithCompletionHandler:^(NSArray *matches, NSError *error)
+    {
+        for (GPGTurnBasedMatch* match in matches )
+        {
+            if (match.status == GPGTurnBasedUserMatchStatusInvited )
+            {
+                [_openGames addObject:match];
+                [self.tableView reloadData];
+            }
+            else if( match.status == GPGTurnBasedUserMatchStatusTurn )
+            {
+                [_openGames addObject:match];
+                [self.tableView reloadData];
+            }
+            else if( match.status == GPGTurnBasedUserMatchStatusAwaitingTurn )
+            {
+                [_openGames addObject:match];
+                [self.tableView reloadData];
+            }
+        }
+    }];
     
     [self.tableView reloadData];
 }
@@ -145,35 +180,228 @@ static NSString * const chooseOpponent = @"Choose Opponent";
 {
     MyTableViewCell *cell = (MyTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OpenGame" forIndexPath:indexPath];
 
-    cell.title.text = [_openGames objectAtIndex:indexPath.row];
+    NSObject *object = [_openGames objectAtIndex:indexPath.row];
+    if( [object isKindOfClass:[GPGTurnBasedMatch class]] ){
+        GPGTurnBasedMatch *match = (GPGTurnBasedMatch *)object;
+        cell.title.text = match.pendingPlayer.displayName;
+    }
+    else{
+        cell.title.text = (NSString *)object;
+    }
+    
     cell.title.lineBreakMode = NSLineBreakByWordWrapping;
     if( [noGames isEqualToString:cell.title.text] ){
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.userInteractionEnabled = NO;
     }
     else{
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.userInteractionEnabled = YES;
     }
     
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSObject *object = [_openGames objectAtIndex:indexPath.row];
+    if( [object isKindOfClass:[GPGTurnBasedMatch class]] ){
+        GPGTurnBasedMatch *match = (GPGTurnBasedMatch *)object;
+        [self performSegueWithIdentifier:@"openGame" sender:match];
+    }
+    else{
+        NSString *gameSelected = (NSString *)object;
+        
+        if( [gameSelected isEqualToString:quickMatch] ){
+            // set up quick match
+            [self startQuickMatchGame];
+        }
+        else if( [gameSelected isEqualToString:chooseOpponent] ){
+            // allow the user to choose their opponent
+            [self inviteMyFriends];
+        }
+    }
+}
+
+#pragma mark - GPGTurnBasedMatchListLauncherDelegate methods
+
+- (void)matchEnded:(GPGTurnBasedMatch *)match
+       participant:(GPGTurnBasedParticipant *)participant
+fromPushNotification:(BOOL)fromPushNotification
+{
+    // Only show an alert if you received this from a push notification
+    if (fromPushNotification) {
+        NSString *messageToShow = [NSString
+                                   stringWithFormat:@"%@ just finished a match. "
+                                   @"Would you like view the results now?",
+                                   participant.displayName];
+        [[[UIAlertView alloc] initWithTitle:@"Match has ended!"
+                                    message:messageToShow
+                                   delegate:self
+                          cancelButtonTitle:@"No"
+                          otherButtonTitles:@"Sure!",
+          nil] show];
+//        self.matchToTrackFromNotification = match;
+    }
+    [self loadOpenGames];
+}
+
+- (void)didReceiveTurnBasedInviteForMatch:(GPGTurnBasedMatch *)match
+                     fromPushNotification:(BOOL)fromPushNotification {
+    // Only show an alert if you received this from a push notification
+    if (fromPushNotification) {
+        GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
+        // This should always be true
+        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+            NSString *messageToShow =
+            [NSString stringWithFormat:@"%@ just invited you to a game. Would you like to play now?",
+             invitingParticipant.displayName];
+            [[[UIAlertView alloc] initWithTitle:@"You've been invited!"
+                                        message:messageToShow
+                                       delegate:self
+                              cancelButtonTitle:@"Not now"
+                              otherButtonTitles:@"Sure!",
+              nil] show];
+//            self.matchToTrackFromNotification = match;
+        }
+    }
+    // Tell users they have matches that might need their attention,
+    // no matter how your app reaches this method.
+    [self loadOpenGames];
+}
+
+- (void)didReceiveTurnEventForMatch:(GPGTurnBasedMatch *)match
+                        participant:(GPGTurnBasedParticipant *)participant
+               fromPushNotification:(BOOL)fromPushNotification {
+    // Only show an alert if you received this from a push notification
+    if (fromPushNotification) {
+        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+            NSString *messageToShow = [NSString stringWithFormat:
+                                       @"%@ just took their turn in a match. "
+                                       @"Would you like to jump to that game now?",
+                                       participant.displayName];
+            [[[UIAlertView alloc] initWithTitle:@"It's your turn!"
+                                        message:messageToShow
+                                       delegate:self
+                              cancelButtonTitle:@"No"
+                              otherButtonTitles:@"Sure!",
+              nil] show];
+//            self.matchToTrackFromNotification = match;
+        }
+    }
+    [self loadOpenGames];
+}
+
+- (void) turnBasedMatchListLauncherDidJoinMatch:(GPGTurnBasedMatch *) match
+{
+    NSLog( @"DID JOIN" );
+}
+
+- (void)turnBasedMatchListLauncherDidSelectMatch:(GPGTurnBasedMatch *) match
+{
+    NSLog( @"DID SELECT" );
+    
+    NSString *matchInfo;
+    switch (match.userMatchStatus)
+    {
+        case GPGTurnBasedUserMatchStatusTurn:         //My turn
+//            [self takeTurnInMatch:match];
+            break;
+        case GPGTurnBasedUserMatchStatusAwaitingTurn: //Their turn
+//            [self viewMatchNotMyTurn:match];
+            break;
+        case GPGTurnBasedUserMatchStatusInvited:
+            // the game brings up a UIAlert about the match
+            matchInfo = [NSString stringWithFormat:@"Created by %@. Last turn by %@ on %@",
+                         match.creationParticipant.player.displayName,
+                         match.lastUpdateParticipant.player.displayName,
+                         [NSDate dateWithTimeIntervalSince1970:match.lastUpdateTimestamp / 1000]];
+            
+            [[[UIAlertView alloc] initWithTitle:@"Match info"
+                                        message:matchInfo
+                                       delegate:nil
+                              cancelButtonTitle:@"Okay"
+                              otherButtonTitles:nil] show];
+            break;
+        case GPGTurnBasedUserMatchStatusMatchCompleted: //Completed match
+//            [self viewMatchNotMyTurn:match];
+            break;
+    }
+}
+
+- (void) turnBasedMatchListLauncherDidDeclineMatch:(GPGTurnBasedMatch *) match
+{
+    NSLog( @"DID DECLINE" );
+}
+
+- (void) turnBasedMatchListLauncherDidRematch:(GPGTurnBasedMatch *) match
+{
+    NSLog( @"DID REMATCH" );
+}
+
+#pragma mark - GPGPlayerPickerLauncherDelegate methods
+
+- (int)minPlayersForPlayerPickerLauncher {
+    return 1;
+}
+
+- (int)maxPlayersForPlayerPickerLauncher {
+    return 1;
+}
+
+- (void)inviteMyFriends{
+    // Must be a 2 player game
+    [GPGLauncherController sharedInstance].playerPickerLauncherDelegate = self;
+    // This assumes your class has been declared a GPGPlayerPickerLauncherDelegate
+    [[GPGLauncherController sharedInstance] presentPlayerPicker];
+}
+
+- (void)playerPickerLauncherDidPickPlayers:(NSArray *) players
+                        autoPickPlayerCount:(int) autoPickPlayerCount
+{
+    GPGMultiplayerConfig *matchConfigForCreation = [[GPGMultiplayerConfig alloc] init];
+    matchConfigForCreation.invitedPlayerIds = players; // here I have to set The PlayerId of the user
+    if( autoPickPlayerCount == 1 ){
+        [GPGTurnBasedMatch createMatchWithConfig:matchConfigForCreation
+                               completionHandler:^(GPGTurnBasedMatch *match, NSError *error)
+                               {
+                                   if (error) {
+                                       NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
+                                   } else {
+                                       [self performSegueWithIdentifier:@"openGame" sender:match];
+                                   }
+                               }];
+    }
+}
+
+- (void)startQuickMatchGame
+{
+    GPGMultiplayerConfig *gameConfigForAutoMatch = [[GPGMultiplayerConfig alloc] init];
+    // We will automatically match with one other player
+    gameConfigForAutoMatch.minAutoMatchingPlayers = 1;
+    gameConfigForAutoMatch.maxAutoMatchingPlayers = 1;
+    
+    [GPGTurnBasedMatch createMatchWithConfig:gameConfigForAutoMatch
+                           completionHandler:^(GPGTurnBasedMatch *match, NSError *error)
+                           {
+                               if (error) {
+                                   NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
+                               } else {
+                                   [self performSegueWithIdentifier:@"openGame" sender:match];
+                               }
+                           }];
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    return [sender isKindOfClass:[GPGTurnBasedMatch class]];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     MyCollectionViewController *destViewController = segue.destinationViewController;
-    NSString *gameSelected = [_openGames objectAtIndex:indexPath.row];
     
-    if( [gameSelected isEqualToString:quickMatch] ){
-        //TODO: set up quick match
-        gameSelected = @"Test Game";
-    }
-    else if( [gameSelected isEqualToString:chooseOpponent] ){
-        //TODO: allow the user to choose their opponent
-        gameSelected = @"Test 2";
-    }
-    
-    destViewController.game = gameSelected;
+    destViewController.match = (GPGTurnBasedMatch*)sender;
+    [self turnBasedMatchListLauncherDidSelectMatch:destViewController.match];
 }
 
 @end

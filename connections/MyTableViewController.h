@@ -13,10 +13,10 @@
 #import "MyWebViewController.h"
 #import "Application.h"
 
-@interface MyTableViewController : UITableViewController <GPGStatusDelegate>
+@interface MyTableViewController : UITableViewController <GPGStatusDelegate, GPGTurnBasedMatchDelegate, GPGTurnBasedMatchListLauncherDelegate, GPGPlayerPickerLauncherDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *signInItem;
-@property (nonatomic, strong) NSArray *openGames;
+@property (nonatomic, strong) NSMutableArray *openGames;
 
 @property (nonatomic) Boolean signedIn;
 @property (nonatomic) Boolean silentlySigningIn;

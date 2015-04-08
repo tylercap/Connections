@@ -24,6 +24,7 @@
            owner:(NSInteger)owner
          players:(Boolean)playerCard
           parent:(UIViewController *)parent
+          myTurn:(Boolean)myTurn
 {
     self.value = value;
     self.row = row;
@@ -31,6 +32,7 @@
     self.parentController = parent;
     self.owner = owner;
     self.playerCard = playerCard;
+    self.myTurn = myTurn;
     
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
@@ -46,15 +48,20 @@
     
     [self setBackground];
     
-    if( playerCard ){
-        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(highlightPlayerCard)];
-        
-        [self addGestureRecognizer:singleTapGestureRecognizer];
+    if( myTurn ){
+        if( playerCard ){
+            UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(highlightPlayerCard)];
+            
+            [self addGestureRecognizer:singleTapGestureRecognizer];
+        }
+        else{
+            UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tileClicked)];
+            
+            [self addGestureRecognizer:singleTapGestureRecognizer];
+        }
     }
     else{
-        UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tileClicked)];
-        
-        [self addGestureRecognizer:singleTapGestureRecognizer];
+        self.userInteractionEnabled = NO;
     }
 }
 
@@ -107,13 +114,13 @@
     
     if(highlight){
         [mcvc highlightOptions:YES forValue:_value];
-        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
+//        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
     }
     else{
         [mcvc highlightOptions:NO forValue:_value];
-        [self setBackground];
     }
     _isHighlighted = highlight;
+    [self setBackground];
 }
 
 // set up with 45 for a 10 x 9
@@ -127,6 +134,9 @@
             break;
         case -1:
             str = @"\U0001F340"; // four leaf clover
+            break;
+        case 0:
+            str = @"\U0001F603";
             break;
         case 1:
             str = @"\U0001F3C8";
@@ -255,7 +265,7 @@
 //            str = @"\U0001F691";
 //            break;
         default:
-            str = @"\U0001F603";
+            str = @"";
     }
     
     NSData *data = [str dataUsingEncoding:NSNonLossyASCIIStringEncoding];

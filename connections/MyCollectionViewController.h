@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GooglePlayGames/GooglePlayGames.h>
 #import "MyCollectionViewCell.h"
 #import "MyCollectionViewLayout.h"
 #import "MyButtonCell.h"
@@ -21,8 +22,10 @@
 @property (strong, nonatomic) NSMutableArray *playerCards;
 @property (strong, nonatomic) Model *model;
 @property (nonatomic) NSInteger owner;
-@property (strong, nonatomic) NSString *game;
+@property (nonatomic) Boolean myTurn;
 @property (nonatomic) Boolean removeClicked;
+
+@property (strong, nonatomic) GPGTurnBasedMatch *match;
 
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;

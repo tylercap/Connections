@@ -188,7 +188,7 @@
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="title" destination="pPz-wP-VsC" id="fW8-Qz-pQ7"/>
-                                    <segue destination="uBa-YO-yG1" kind="show" id="pt9-4U-B8J"/>
+                                    <segue destination="uBa-YO-yG1" kind="show" identifier="openGame" id="pt9-4U-B8J"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

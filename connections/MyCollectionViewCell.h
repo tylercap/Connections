@@ -17,6 +17,7 @@
 @property (nonatomic) NSInteger column;
 @property (nonatomic, weak) UIViewController *parentController;
 @property (atomic) NSInteger owner;
+@property (atomic) Boolean myTurn;
 @property (atomic) Boolean playerCard;
 @property (atomic) Boolean isHighlighted;
 
@@ -25,7 +26,8 @@
          column:(NSInteger)column
           owner:(NSInteger)owner
         players:(Boolean)playerCard
-         parent:(UIViewController *)parent;
+         parent:(UIViewController *)parent
+         myTurn:(Boolean)myTurn;
 -(void)updateValue:(NSInteger)value;
 
 - (void)highlightTile:(Boolean)highlight;

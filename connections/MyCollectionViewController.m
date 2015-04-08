@@ -45,7 +45,10 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
 {
     [super viewWillAppear:animated];
     
-    self.navigationItem.title = _game;
+    //TODO: display the opponent
+    NSArray *participants = _match.participants;
+    GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
+    self.navigationItem.title = opponent.displayName;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -60,9 +63,26 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
 
 - (void)loadGame
 {
-    //TODO: load the game from google play
-    [self.model loadNewGame];
-    self.owner = 1;
+    // load the game from google play
+    if( _match.data != nil ){
+        [self.model loadFromData:_match.data];
+    }
+    else{
+        [self.model loadNewGame];
+    }
+    
+    self.myTurn = self.match.myTurn;
+    if( self.myTurn ){
+        self.owner = self.model.ownersTurn;
+    }
+    else{
+        if( self.model.ownersTurn == 1 ){
+            self.owner = 2;
+        }
+        else{
+            self.owner = 1;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -112,23 +132,31 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
 - (void)submitMove
 {
     //TODO: submit the updated model to google play and set it to the other player's turn
-    if( self.owner == 1 ){
-        self.owner = 2;
+    if( self.model.ownersTurn == 1 ){
+        self.model.ownersTurn = 2;
     }
-    else if( self.owner == 2 ){
-        self.owner = 1;
+    else{
+        self.model.ownersTurn = 1;
     }
+    NSData *data = [self.model storeToData];
+    NSString *id = self.match.pendingParticipant.participantId;
+    GPGTurnBasedParticipantResult *results = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:id];
+    NSMutableArray *resultsArr = [[NSMutableArray alloc] init];
+    [resultsArr addObject:results];
     
+    [self.match takeTurnWithNextParticipantId:id data:data results:resultsArr completionHandler:nil];
+    
+    self.myTurn = NO;
     [self.collectionView reloadData];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if( buttonIndex == 0 ){
-        // go back to home screen
+        //TODO: go back to home screen
     }
     if( buttonIndex == 1 ){
-        // start a rematch
+        //TODO: start a rematch
     }
 }
 
@@ -227,7 +255,7 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     NSInteger value = [self.model getValueAt:row column:column];
     NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self];
+    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self myTurn:self.myTurn];
     
     return myCell;
 }
@@ -287,7 +315,7 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
             
             NSInteger value = [self.model getPlayerOption:item owner:self.owner];
             
-            [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self];
+            [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self myTurn:self.myTurn];
             cell = myCell;
             
             [_playerCards insertObject:myCell atIndex:item];
