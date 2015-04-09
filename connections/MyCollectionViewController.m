@@ -46,12 +46,7 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     [super viewWillAppear:animated];
     
     // display the opponent
-    NSArray *participants = _match.participants;
-    GPGTurnBasedParticipant *me = _match.localParticipant;
-    GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
-    if( [me isEqual:opponent] ){
-        opponent = [participants objectAtIndex:1];
-    }
+    GPGTurnBasedParticipant *opponent = [MyCollectionViewController getOpponent:_match];
     
     self.navigationItem.title = opponent.displayName;
 }
@@ -134,9 +129,23 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     return currentOwner;
 }
 
++(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match
+{
+    NSArray *participants = match.participants;
+    GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
+    
+    NSString *myName = match.localParticipant.displayName;
+    
+    if([myName isEqualToString:opponent.displayName] && [participants count] > 1){
+        opponent = [participants objectAtIndex:1];
+    }
+    
+    return opponent;
+}
+
 - (void)submitMove
 {
-    //TODO: submit the updated model to google play and set it to the other player's turn
+    // submit the updated model to google play and set it to the other player's turn
     if( self.model.ownersTurn == 1 ){
         self.model.ownersTurn = 2;
     }
@@ -145,14 +154,11 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     }
     NSData *data = [self.model storeToData];
     
-    NSString *myId = _match.localParticipantId;
-    GPGTurnBasedParticipant *opponent = [_match.participants objectAtIndex:0];
-    if( [myId isEqualToString:opponent.participantId] ){
-        opponent = [_match.participants objectAtIndex:1];
-    }
+    GPGTurnBasedParticipant *opponent = [MyCollectionViewController getOpponent:_match];
     
     NSMutableArray *resultsArr = [[NSMutableArray alloc] init];
     
+    NSString *myId = _match.localParticipant.participantId;
     GPGTurnBasedParticipantResult *result = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:myId];
     [resultsArr addObject:result];
     

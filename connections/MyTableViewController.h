@@ -17,6 +17,7 @@
 
 @property (nonatomic, strong) UIBarButtonItem *signInItem;
 @property (nonatomic, strong) NSMutableArray *openGames;
+@property (nonatomic, strong) GPGTurnBasedMatch *matchToTrack;
 
 @property (nonatomic) Boolean signedIn;
 @property (nonatomic) Boolean silentlySigningIn;
