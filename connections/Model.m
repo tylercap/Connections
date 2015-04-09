@@ -62,7 +62,7 @@ int owner2Cards[6];
     [array addObject:[self storeP1CardsToArray]];
     [array addObject:[self storeP2CardsToArray]];
     [array addObject:_deck];
-    NSString *ownersTurnString = [NSString stringWithFormat:@"%d", _ownersTurn];
+    NSString *ownersTurnString = [NSString stringWithFormat:@"%ld", (long)_ownersTurn];
     [array addObject:ownersTurnString];
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];

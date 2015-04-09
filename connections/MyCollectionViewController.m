@@ -45,9 +45,14 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
 {
     [super viewWillAppear:animated];
     
-    //TODO: display the opponent
+    // display the opponent
     NSArray *participants = _match.participants;
+    GPGTurnBasedParticipant *me = _match.localParticipant;
     GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
+    if( [me isEqual:opponent] ){
+        opponent = [participants objectAtIndex:1];
+    }
+    
     self.navigationItem.title = opponent.displayName;
 }
 
@@ -139,12 +144,22 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
         self.model.ownersTurn = 1;
     }
     NSData *data = [self.model storeToData];
-    NSString *id = self.match.pendingParticipant.participantId;
-    GPGTurnBasedParticipantResult *results = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:id];
-    NSMutableArray *resultsArr = [[NSMutableArray alloc] init];
-    [resultsArr addObject:results];
     
-    [self.match takeTurnWithNextParticipantId:id data:data results:resultsArr completionHandler:nil];
+    NSString *myId = _match.localParticipantId;
+    GPGTurnBasedParticipant *opponent = [_match.participants objectAtIndex:0];
+    if( [myId isEqualToString:opponent.participantId] ){
+        opponent = [_match.participants objectAtIndex:1];
+    }
+    
+    NSMutableArray *resultsArr = [[NSMutableArray alloc] init];
+    
+    GPGTurnBasedParticipantResult *result = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:myId];
+    [resultsArr addObject:result];
+    
+    result = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:opponent.participantId];
+    [resultsArr addObject:result];
+    
+    [self.match takeTurnWithNextParticipantId:opponent.participantId data:data results:resultsArr completionHandler:nil];
     
     self.myTurn = NO;
     [self.collectionView reloadData];

@@ -16,16 +16,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    for (UIViewController *nextVc in
-         [(UINavigationController *)self.window.rootViewController childViewControllers])
-    {
-        if ([nextVc class] == [MyTableViewController class]) {
-            NSLog(@"Found our lobby view controller!");
-            [GPGManager sharedInstance].turnBasedMatchDelegate = (MyTableViewController *)nextVc;
-            break;
-        }
-        
-    }
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 
     // Look to see if our application was launched from a notification
     NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -42,7 +34,16 @@
     return YES;
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken
+                   :(NSData *)deviceToken {
+    NSLog(@"Got deviceToken from APNS! %@", deviceToken);
+    [[GPGManager sharedInstance] registerDeviceToken:deviceToken
+                                      forEnvironment:GPGPushNotificationEnvironmentSandbox];
+}
+
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     NSLog(@"Received remote notification! %@", userInfo);
     if ([[GPGManager sharedInstance] tryHandleRemoteNotification:userInfo]) {
