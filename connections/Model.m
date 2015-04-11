@@ -39,6 +39,78 @@ int owner2Cards[6];
     return 6;
 }
 
+-(GPGTurnBasedParticipant*)getOpponentFromMatch:(GPGTurnBasedMatch*)match
+{
+    NSArray *participants = match.participants;
+    GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
+    
+    NSString *myName = match.localParticipant.displayName;
+    if([myName isEqualToString:opponent.displayName] && [participants count] > 1){
+        opponent = [participants objectAtIndex:1];
+    }
+    
+    return opponent;
+}
+
++(NSString*)getOpponentDisplayName:(GPGTurnBasedMatch*)match
+{
+    NSString *myName = match.localParticipant.displayName;
+    if( myName != nil ){
+        NSArray *participants = match.participants;
+        GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
+        
+        if([myName isEqualToString:opponent.displayName] && [participants count] > 1){
+            opponent = [participants objectAtIndex:1];
+            return opponent.displayName;
+        }
+    }
+    
+    return [Model getOpponent:match].displayName;
+}
+
++(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match
+{
+    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:match.data];
+    
+    NSString *ownersTurnString = [array objectAtIndex:5];
+    NSInteger ownersTurn = [ownersTurnString integerValue];
+    NSArray *participants = [array objectAtIndex:6];
+    
+    GPGTurnBasedParticipant *participant = nil;
+    if( match.myTurn || match.userMatchStatus == GPGTurnBasedUserMatchStatusTurn )
+    {
+        switch ( ownersTurn ) {
+            case 1:
+                participant = [participants objectAtIndex:1];
+                
+                return participant;
+                break;
+            case 2:
+                participant = [participants objectAtIndex:0];
+                
+                return participant;
+                break;
+        }
+    }
+    else
+    {
+        switch ( ownersTurn ) {
+            case 1:
+                participant = [participants objectAtIndex:0];
+                
+                return participant;
+                break;
+            case 2:
+                participant = [participants objectAtIndex:1];
+                
+                return participant;
+                break;
+        }
+    }
+    
+    return participant;
+}
+
 -(void)loadFromData:(NSData *)data
 {
     NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -50,6 +122,7 @@ int owner2Cards[6];
     NSArray *unshuffled = [array objectAtIndex:4];
     NSString *ownersTurnString = [array objectAtIndex:5];
     _ownersTurn = [ownersTurnString integerValue];
+    _participants = [array objectAtIndex:6];
     
     [self loadFromArray:gameboard owners:owners player1:p1 player2:p2 deck:unshuffled];
 }
@@ -64,15 +137,21 @@ int owner2Cards[6];
     [array addObject:_deck];
     NSString *ownersTurnString = [NSString stringWithFormat:@"%ld", (long)_ownersTurn];
     [array addObject:ownersTurnString];
+    [array addObject:_participants];
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
     
     return data;
 }
 
--(void)loadNewGame
+-(void)loadNewGame:(GPGTurnBasedMatch*)match
+  localParticipant:(GPGTurnBasedParticipant*)me
 {
     _ownersTurn = 1;
+    
+    _participants = [[NSMutableArray alloc]init];
+    [_participants addObject:me];
+    [_participants addObject:[self getOpponentFromMatch:match]];
     
     NSMutableArray *values = [[NSMutableArray alloc]init];
     NSMutableArray *unshuffled = [[NSMutableArray alloc]init];
@@ -115,8 +194,8 @@ int owner2Cards[6];
     NSMutableArray* p1 = [[NSMutableArray alloc] init];
     NSMutableArray* p2 = [[NSMutableArray alloc] init];
     for( int i=0; i<[self getPlayerCards]; i++ ){
-        [p1 addObject:[NSString stringWithFormat:@"%d",[self getNextPlayerOption:unshuffled]]];
-        [p2 addObject:[NSString stringWithFormat:@"%d",[self getNextPlayerOption:unshuffled]]];
+        [p1 addObject:[NSString stringWithFormat:@"%ld",(long)[self getNextPlayerOption:unshuffled]]];
+        [p2 addObject:[NSString stringWithFormat:@"%ld",(long)[self getNextPlayerOption:unshuffled]]];
     }
     
     [self loadFromArray:array owners:owners player1:p1 player2:p2 deck:unshuffled];
@@ -159,10 +238,10 @@ int owner2Cards[6];
     NSInteger value = [self getNextPlayerOption];
     
     if( owner == 2 ){
-        owner2Cards[column] = value;
+        owner2Cards[column] = (int)value;
     }
     else{
-        owner1Cards[column] = value;
+        owner1Cards[column] = (int)value;
     }
     
     return value;
@@ -398,8 +477,8 @@ int owner2Cards[6];
     int connections = 0;
     if( column < ([self getSections] - 1 - row) ){
         // we will start at column 0 and move until row 0
-        int currCol = 0;
-        int currRow = row + column;
+        NSInteger currCol = 0;
+        NSInteger currRow = row + column;
         
         while( currRow >= 0 ){
             if( owners[currRow][currCol] == owner ){
@@ -419,8 +498,8 @@ int owner2Cards[6];
     }
     else{ //column >= ([self getSections] - 1 - row)
         // we will start at last row and end at last column
-        int currRow = [self getSections] - 1;
-        int currCol = column - ([self getSections] - 1 - row);
+        NSInteger currRow = [self getSections] - 1;
+        NSInteger currCol = column - ([self getSections] - 1 - row);
         
         while( currCol < [self getItems] ){
             if( owners[currRow][currCol] == owner ){

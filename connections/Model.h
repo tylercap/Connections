@@ -7,16 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GooglePlayGames/GooglePlayGames.h>
 
 @interface Model : NSObject
 
 @property (strong, nonatomic) NSMutableArray *deck;
+@property (strong, nonatomic) NSMutableArray *participants;
 @property (nonatomic) NSInteger ownersTurn;
 
 -(NSInteger)getSections;
 -(NSInteger)getItems;
 
--(void)loadNewGame;
++(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match;
++(NSString*)getOpponentDisplayName:(GPGTurnBasedMatch*)match;
+
+-(void)loadNewGame:(GPGTurnBasedMatch*)match
+  localParticipant:(GPGTurnBasedParticipant*)me;
+
 -(Boolean)checkForWinner:(NSInteger)owner
                      row:(NSInteger)row
                   column:(NSInteger)column;

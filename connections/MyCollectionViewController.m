@@ -20,7 +20,6 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
 
 @implementation MyCollectionViewController
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
@@ -46,9 +45,7 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     [super viewWillAppear:animated];
     
     // display the opponent
-    GPGTurnBasedParticipant *opponent = [MyCollectionViewController getOpponent:_match];
-    
-    self.navigationItem.title = opponent.displayName;
+    self.navigationItem.title = [Model getOpponentDisplayName:_match];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -61,16 +58,61 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     [super viewWillDisappear:animated];
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (NSString *)determineWhoGoesNext:(GPGTurnBasedMatch *)match {
+    if (!match) {
+        // This isn't really a state I should be in.
+        // Probably raise an exception here.
+        return nil;
+    }
+    
+    // First, we can look at where I am in the
+    // deterministically-ordered participants array.
+    NSUInteger myIndex = [match.participants indexOfObject:match.localParticipant];
+    if (myIndex == NSNotFound) {
+        return nil;
+    }
+    
+    // Next, let's look at how many people in total are in the
+    // round-robin match. This includes participants as well as
+    // players for auto-match.
+    NSInteger totalPlayers = match.participants.count + match.matchConfig.minAutoMatchingPlayers;
+    
+    if (totalPlayers == 1) {
+        // You're the only one left! You shouldn't really get to
+        // this state normally because the
+        // match should switch to a completed state.
+        // Probably the safest thing to do now is just return
+        // the current player again.
+        return match.localParticipantId;
+    }
+    
+    NSUInteger playerToGoNext = (myIndex + 1) % totalPlayers;
+    
+    // Remember, this number might be larger than the participant
+    // array. If it is, that means we're
+    // ready to invite our next automatch player
+    NSString *nextParticipantId;
+    if (playerToGoNext < match.participants.count) {
+        nextParticipantId =
+        ((GPGTurnBasedParticipant *)match.participants[playerToGoNext]).participantId;
+    } else {
+        // Setting our participantID to nil is our way of
+        // telling the system, "Please add the next auto-match player"
+        nextParticipantId = nil;
+    }
+    return nextParticipantId;
+}
+
 - (void)loadGame
 {
     // load the game from google play
-    if( _match.data != nil ){
-        [self.model loadFromData:_match.data];
-    }
-    else{
-        [self.model loadNewGame];
-    }
-    
+    [self.model loadFromData:_match.data];
+        
     self.myTurn = self.match.myTurn;
     if( self.myTurn ){
         self.owner = self.model.ownersTurn;
@@ -85,16 +127,12 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 -(NSInteger)highlightedTileClicked:(NSInteger)value
                                row:(NSInteger)row
                             column:(NSInteger)column
 {
     // remove all highlighting before setting the owner
+    Boolean winner = NO;
     for( int i = 0; i < _playerCards.count; i++ ){
         MyCollectionViewCell *card = [_playerCards objectAtIndex:i];
         if(card.isHighlighted){
@@ -109,7 +147,7 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
             else{
                 [_model setOwnerAt:self.owner row:row column:column];
             }
-            Boolean winner = [_model checkForWinner:self.owner row:row column:column];
+            winner = [_model checkForWinner:self.owner row:row column:column];
             
             if( winner ){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Win!"
@@ -123,27 +161,13 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     }
     
     NSInteger currentOwner = self.owner;
-    [self submitMove];
+    [self submitMove:winner];
     
     //returns the owner int
     return currentOwner;
 }
 
-+(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match
-{
-    NSArray *participants = match.participants;
-    GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
-    
-    NSString *myName = match.localParticipant.displayName;
-    
-    if([myName isEqualToString:opponent.displayName] && [participants count] > 1){
-        opponent = [participants objectAtIndex:1];
-    }
-    
-    return opponent;
-}
-
-- (void)submitMove
+- (void)submitMove:(Boolean)winner
 {
     // submit the updated model to google play and set it to the other player's turn
     if( self.model.ownersTurn == 1 ){
@@ -154,18 +178,36 @@ static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
     }
     NSData *data = [self.model storeToData];
     
-    GPGTurnBasedParticipant *opponent = [MyCollectionViewController getOpponent:_match];
+    NSString *nextPlayer = [self determineWhoGoesNext:_match];
     
-    NSMutableArray *resultsArr = [[NSMutableArray alloc] init];
-    
-    NSString *myId = _match.localParticipant.participantId;
-    GPGTurnBasedParticipantResult *result = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:myId];
-    [resultsArr addObject:result];
-    
-    result = [[GPGTurnBasedParticipantResult alloc] initWithParticipantId:opponent.participantId];
-    [resultsArr addObject:result];
-    
-    [self.match takeTurnWithNextParticipantId:opponent.participantId data:data results:resultsArr completionHandler:nil];
+    if( winner ){
+        [self.match finishWithData:data results:_match.results completionHandler:^(NSError *error)
+         {
+             if (error) {
+                 [[[UIAlertView alloc] initWithTitle:@"Unable To Submit Move"
+                                             message:@"Check you internet connection, or try again later."
+                                            delegate:self
+                                   cancelButtonTitle:@"Okay"
+                                   otherButtonTitles:nil] show];
+             } else {
+                 NSLog(@"Successfully submitted move!");
+             }
+         }];
+    }
+    else{
+        [self.match takeTurnWithNextParticipantId:nextPlayer data:data results:_match.results completionHandler:^(NSError *error)
+         {
+             if (error) {
+                 [[[UIAlertView alloc] initWithTitle:@"Unable To Submit Move"
+                                             message:@"Check you internet connection, or try again later."
+                                            delegate:self
+                                   cancelButtonTitle:@"Okay"
+                                   otherButtonTitles:nil] show];
+             } else {
+                 NSLog(@"Successfully submitted move!");
+             }
+         }];
+    }
     
     self.myTurn = NO;
     [self.collectionView reloadData];

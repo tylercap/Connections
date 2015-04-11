@@ -31,8 +31,6 @@
 @property (nonatomic) NSInteger footerSections;
 @property (weak, nonatomic) MyBannerCell *bannerAdCell;
 
-+(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match;
-
 -(void)highlightOptions:(Boolean)highlight
                forValue:(NSInteger)value;
 -(NSInteger)highlightedTileClicked:(NSInteger)value

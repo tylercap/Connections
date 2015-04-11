@@ -21,6 +21,10 @@ static NSString * const chooseOpponent = @"Choose Opponent";
     _openGames = [[NSMutableArray alloc] init];
     [_openGames addObject:noGames];
     
+    [GPGManager sharedInstance].statusDelegate = self;
+    [GPGManager sharedInstance].turnBasedMatchDelegate = self;
+    [GPGLauncherController sharedInstance].turnBasedMatchListLauncherDelegate = self;
+    
     _silentlySigningIn = [[GPGManager sharedInstance] signInWithClientID:GoogleClientId silently:YES];
     [self refreshInterfaceBasedOnSignIn];
     _signedIn = NO;
@@ -32,10 +36,6 @@ static NSString * const chooseOpponent = @"Choose Opponent";
                           usingBlock:^(NSNotification *notification){
                               [self handleNotification:notification];
                           }];
-    
-    [GPGManager sharedInstance].statusDelegate = self;
-    [GPGManager sharedInstance].turnBasedMatchDelegate = self;
-    [GPGLauncherController sharedInstance].turnBasedMatchListLauncherDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -61,6 +61,12 @@ static NSString * const chooseOpponent = @"Choose Opponent";
         [self.signInItem setTitle:@"Sign Out"];
         [self loadOpenGames];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self refreshInterfaceBasedOnSignIn];
 }
 
 - (void)handleNotification:(NSNotification*)notification
@@ -107,7 +113,7 @@ static NSString * const chooseOpponent = @"Choose Opponent";
 //    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
     [GPGTurnBasedMatch allMatchesWithCompletionHandler:^(NSArray *matches, NSError *error)
     {
-        for (GPGTurnBasedMatch* match in matches )
+        for (GPGTurnBasedMatch* match in matches)
         {
             if (match.status == GPGTurnBasedUserMatchStatusInvited )
             {
@@ -121,6 +127,10 @@ static NSString * const chooseOpponent = @"Choose Opponent";
             {
                 [_openGames addObject:match];
             }
+            else if( match.status == GPGTurnBasedUserMatchStatusMatchCompleted )
+            {
+                [_openGames addObject:match];
+            }
         }
         [self.tableView reloadData];
     }];
@@ -130,9 +140,9 @@ static NSString * const chooseOpponent = @"Choose Opponent";
 
 - (void)didFinishGamesSignInWithError:(NSError *)error {
     if (error) {
-        //NSLog(@"Received an error while signing in %@", [error localizedDescription]);
+        NSLog(@"Received an error while signing in %@", [error localizedDescription]);
     } else {
-        //NSLog(@"Signed in!");
+        NSLog(@"Signed in!");
     }
     
     _silentlySigningIn = NO;
@@ -141,9 +151,9 @@ static NSString * const chooseOpponent = @"Choose Opponent";
 
 - (void)didFinishGamesSignOutWithError:(NSError *)error {
     if (error) {
-        //NSLog(@"Received an error while signing out %@", [error localizedDescription]);
+        NSLog(@"Received an error while signing out %@", [error localizedDescription]);
     } else {
-        //NSLog(@"Signed out!");
+        NSLog(@"Signed out!");
     }
     
     _silentlySigningIn = NO;
@@ -171,7 +181,6 @@ static NSString * const chooseOpponent = @"Choose Opponent";
     return [_openGames count];
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MyTableViewCell *cell = (MyTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OpenGame" forIndexPath:indexPath];
@@ -180,24 +189,47 @@ static NSString * const chooseOpponent = @"Choose Opponent";
     if( [object isKindOfClass:[GPGTurnBasedMatch class]] ){
         GPGTurnBasedMatch *match = (GPGTurnBasedMatch *)object;
         
-        GPGTurnBasedParticipant *opponent = [MyCollectionViewController getOpponent:match];
+        NSString *opponentName = [Model getOpponentDisplayName:match];
         
+        NSString *resultStr = @"Match Expired";
         switch (match.userMatchStatus)
         {
             case GPGTurnBasedUserMatchStatusTurn:         //My turn
-                cell.title.text = [NSString stringWithFormat:@"%@: Your Turn", opponent.displayName];
+                cell.title.text = [NSString stringWithFormat:@"%@: Your Turn", opponentName];
                 break;
             case GPGTurnBasedUserMatchStatusAwaitingTurn: //Their turn
-                cell.title.text = [NSString stringWithFormat:@"%@: Their Turn", opponent.displayName];
+                cell.title.text = [NSString stringWithFormat:@"%@: Their Turn", opponentName];
                 break;
             case GPGTurnBasedUserMatchStatusInvited:
-                cell.title.text = [NSString stringWithFormat:@"%@: You're Invited", opponent.displayName];
+                cell.title.text = [NSString stringWithFormat:@"%@: You're Invited", opponentName];
                 break;
             case GPGTurnBasedUserMatchStatusMatchCompleted: //Completed match
-                cell.title.text = [NSString stringWithFormat:@"%@: Completed", opponent.displayName];
+                for (GPGTurnBasedParticipantResult *result in match.results)
+                {
+                    if( [result.participantId isEqualToString:[Model getOpponent:match].participantId] ){
+                        // opponent result
+                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                            resultStr = @"You Lost";
+                        }
+                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                            resultStr = @"You Won!";
+                        }
+                    }
+                    else{
+                        // my result
+                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                            resultStr = @"You Won!";
+                        }
+                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                            resultStr = @"You Lost";
+                        }
+                    }
+                }
+                
+                cell.title.text = [NSString stringWithFormat:@"%@: %@", opponentName, resultStr];
                 break;
             default:
-                cell.title.text = opponent.displayName;
+                cell.title.text = opponentName;
                 break;
         }
     }
@@ -223,6 +255,7 @@ static NSString * const chooseOpponent = @"Choose Opponent";
     NSObject *object = [_openGames objectAtIndex:indexPath.row];
     if( [object isKindOfClass:[GPGTurnBasedMatch class]] ){
         GPGTurnBasedMatch *match = (GPGTurnBasedMatch *)object;
+        
         [self turnBasedMatchListLauncherDidSelectMatch:match];
     }
     else{
@@ -241,7 +274,9 @@ static NSString * const chooseOpponent = @"Choose Opponent";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if( [alertView.title isEqualToString:@"You've been invited!"] ){
+    if( [alertView.title isEqualToString:@"Match has ended!"] ){
+    }
+    else if( [alertView.title isEqualToString:@"You've been invited!"] ){
         if( buttonIndex == 0 ){
             // cancel match
             [self.matchToTrack declineWithCompletionHandler:nil];
@@ -251,6 +286,9 @@ static NSString * const chooseOpponent = @"Choose Opponent";
             [self.matchToTrack joinWithCompletionHandler:nil];
             [self performSegueWithIdentifier:@"openGame" sender:self.matchToTrack];
         }
+    }
+    else if( [alertView.title isEqualToString:@"It's your turn!"] ){
+        
     }
 }
 
@@ -264,21 +302,21 @@ fromPushNotification:(BOOL)fromPushNotification
     if (fromPushNotification) {
         NSString *messageToShow = [NSString
                                    stringWithFormat:@"%@ just finished a match. "
-                                   @"Would you like view the results now?",
+                                   @"Would you like to view the results now?",
                                    participant.displayName];
         [[[UIAlertView alloc] initWithTitle:@"Match has ended!"
                                     message:messageToShow
                                    delegate:self
                           cancelButtonTitle:@"No"
-                          otherButtonTitles:@"Sure!",
-          nil] show];
-//        self.matchToTrackFromNotification = match;
+                          otherButtonTitles:@"Sure!",  nil] show];
+        self.matchToTrack = match;
     }
     [self loadOpenGames];
 }
 
 - (void)didReceiveTurnBasedInviteForMatch:(GPGTurnBasedMatch *)match
-                     fromPushNotification:(BOOL)fromPushNotification {
+                     fromPushNotification:(BOOL)fromPushNotification
+{
     // Only show an alert if you received this from a push notification
 //    if (fromPushNotification) {
         GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
@@ -303,7 +341,8 @@ fromPushNotification:(BOOL)fromPushNotification
 
 - (void)didReceiveTurnEventForMatch:(GPGTurnBasedMatch *)match
                         participant:(GPGTurnBasedParticipant *)participant
-               fromPushNotification:(BOOL)fromPushNotification {
+               fromPushNotification:(BOOL)fromPushNotification
+{
     // Only show an alert if you received this from a push notification
 //    if (fromPushNotification) {
         if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
@@ -317,15 +356,10 @@ fromPushNotification:(BOOL)fromPushNotification
                               cancelButtonTitle:@"No"
                               otherButtonTitles:@"Sure!",
               nil] show];
-//            self.matchToTrackFromNotification = match;
+            self.matchToTrack = match;
         }
 //    }
     [self loadOpenGames];
-}
-
-- (void) turnBasedMatchListLauncherDidJoinMatch:(GPGTurnBasedMatch *) match
-{
-    NSLog( @"DID JOIN" );
 }
 
 - (void)turnBasedMatchListLauncherDidSelectMatch:(GPGTurnBasedMatch *) match
@@ -349,6 +383,11 @@ fromPushNotification:(BOOL)fromPushNotification
             break;
     }
 }
+              
+- (void) turnBasedMatchListLauncherDidJoinMatch:(GPGTurnBasedMatch *) match
+{
+    NSLog( @"DID JOIN" );
+}
 
 - (void) turnBasedMatchListLauncherDidDeclineMatch:(GPGTurnBasedMatch *) match
 {
@@ -370,7 +409,8 @@ fromPushNotification:(BOOL)fromPushNotification
     return 1;
 }
 
-- (void)inviteMyFriends{
+- (void)inviteMyFriends
+{
     // Must be a 2 player game
     [GPGLauncherController sharedInstance].playerPickerLauncherDelegate = self;
     // This assumes your class has been declared a GPGPlayerPickerLauncherDelegate
@@ -391,7 +431,7 @@ fromPushNotification:(BOOL)fromPushNotification
                                    } else {
                                        GPGTurnBasedMatchStatus status = match.status;
                                        if( status == GPGTurnBasedMatchStatusActive ){
-                                           [self performSegueWithIdentifier:@"openGame" sender:match];
+                                           [self submitNewMatch:match];
                                        }
                                        else{
                                            [self loadOpenGames];
@@ -429,7 +469,7 @@ fromPushNotification:(BOOL)fromPushNotification
                                                          otherButtonTitles:nil] show];
                                    }
                                    else if( status == GPGTurnBasedMatchStatusActive ){
-                                       [self performSegueWithIdentifier:@"openGame" sender:match];
+                                       [self submitNewMatch:match];
                                    }
                                    else{
                                        [self loadOpenGames];
@@ -438,12 +478,56 @@ fromPushNotification:(BOOL)fromPushNotification
                            }];
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+- (void)submitNewMatch:(GPGTurnBasedMatch*)match
 {
-    return [sender isKindOfClass:[GPGTurnBasedMatch class]];
+    GPGTurnBasedParticipant *me = match.localParticipant;
+    if( me == nil ){
+        [[[UIAlertView alloc] initWithTitle:@"Unable To Create New Game"
+                                    message:@"Check you internet connection, or try again later."
+                                   delegate:self
+                          cancelButtonTitle:@"Okay"
+                          otherButtonTitles:nil] show];
+        
+        [match dismissWithCompletionHandler:nil];
+        [match cancelWithCompletionHandler:nil];
+        return;
+    }
+    
+    Model *model = [[Model alloc]init];
+    [model loadNewGame:match localParticipant:me];
+    
+    NSData *data = [model storeToData];
+    [match takeTurnWithNextParticipantId:me.participantId data:data results:match.results completionHandler:^(NSError *error)
+     {
+         if (error) {
+             [[[UIAlertView alloc] initWithTitle:@"Unable To Create New Game"
+                                         message:@"Check you internet connection, or try again later."
+                                        delegate:self
+                               cancelButtonTitle:@"Okay"
+                               otherButtonTitles:nil] show];
+             
+             [match dismissWithCompletionHandler:nil];
+             [match cancelWithCompletionHandler:nil];
+             return;
+         } else {
+             [self performSegueWithIdentifier:@"openGame" sender:match];
+         }
+     }];
+    
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if( ![sender isKindOfClass:[GPGTurnBasedMatch class]] ){
+        return NO;
+    }
+    
+    GPGTurnBasedMatch *match = (GPGTurnBasedMatch*)sender;
+    return (match.data != nil);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     MyCollectionViewController *destViewController = segue.destinationViewController;
     
     destViewController.match = (GPGTurnBasedMatch*)sender;
