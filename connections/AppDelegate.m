@@ -16,7 +16,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        // use registerUserNotificationSettings
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+    } else {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
+    }
     [[UIApplication sharedApplication] registerForRemoteNotifications];
 
     // Look to see if our application was launched from a notification
@@ -36,7 +41,8 @@
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken
-                   :(NSData *)deviceToken {
+                   :(NSData *)deviceToken
+{
     NSLog(@"Got deviceToken from APNS! %@", deviceToken);
     [[GPGManager sharedInstance] registerDeviceToken:deviceToken
                                       forEnvironment:GPGPushNotificationEnvironmentSandbox];

@@ -44,49 +44,64 @@ int owner2Cards[6];
     NSArray *participants = match.participants;
     GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
     
-    NSString *myName = match.localParticipant.displayName;
-    if([myName isEqualToString:opponent.displayName] && [participants count] > 1){
+    NSString *myId = match.localParticipantId;
+    if([myId isEqualToString:opponent.participantId] && [participants count] > 1){
         opponent = [participants objectAtIndex:1];
     }
     
     return opponent;
 }
 
-+(NSString*)getOpponentDisplayName:(GPGTurnBasedMatch*)match
+-(NSString*)getOpponentDisplayName
 {
-    NSString *myName = match.localParticipant.displayName;
+    NSString *myName = _match.localParticipant.displayName;
     if( myName != nil ){
-        NSArray *participants = match.participants;
+        NSArray *participants = _match.participants;
         GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
         
-        if([myName isEqualToString:opponent.displayName] && [participants count] > 1){
-            opponent = [participants objectAtIndex:1];
-            return opponent.displayName;
+        if([myName isEqualToString:opponent.displayName]){
+            if( [participants count] > 1 ){
+                opponent = [participants objectAtIndex:1];
+                return opponent.displayName;
+            }
+        }
+        else{
+            
         }
     }
     
-    return [Model getOpponent:match].displayName;
+    return [self getOpponent].displayName;
 }
 
-+(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match
+-(GPGTurnBasedParticipant*)getOpponent
 {
-    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:match.data];
-    
-    NSString *ownersTurnString = [array objectAtIndex:5];
-    NSInteger ownersTurn = [ownersTurnString integerValue];
-    NSArray *participants = [array objectAtIndex:6];
+    NSString *myId = _match.localParticipantId;
+    if( myId != nil ){
+        NSArray *participants = _match.participants;
+        GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
+        
+        if([myId isEqualToString:opponent.participantId]){
+            if( [participants count] > 1 ){
+                opponent = [participants objectAtIndex:1];
+                return opponent;
+            }
+        }
+        else{
+            return opponent;
+        }
+    }
     
     GPGTurnBasedParticipant *participant = nil;
-    if( match.myTurn || match.userMatchStatus == GPGTurnBasedUserMatchStatusTurn )
+    if( _match.myTurn || _match.userMatchStatus == GPGTurnBasedUserMatchStatusTurn )
     {
-        switch ( ownersTurn ) {
+        switch ( _ownersTurn ) {
             case 1:
-                participant = [participants objectAtIndex:1];
+                participant = [_participants objectAtIndex:1];
                 
                 return participant;
                 break;
             case 2:
-                participant = [participants objectAtIndex:0];
+                participant = [_participants objectAtIndex:0];
                 
                 return participant;
                 break;
@@ -94,14 +109,14 @@ int owner2Cards[6];
     }
     else
     {
-        switch ( ownersTurn ) {
+        switch ( _ownersTurn ) {
             case 1:
-                participant = [participants objectAtIndex:0];
+                participant = [_participants objectAtIndex:0];
                 
                 return participant;
                 break;
             case 2:
-                participant = [participants objectAtIndex:1];
+                participant = [_participants objectAtIndex:1];
                 
                 return participant;
                 break;
@@ -111,9 +126,10 @@ int owner2Cards[6];
     return participant;
 }
 
--(void)loadFromData:(NSData *)data
+-(void)loadFromData:(GPGTurnBasedMatch*)match
 {
-    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    _match = match;
+    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:match.data];
     
     NSArray *gameboard = [array objectAtIndex:0];
     NSArray *owners = [array objectAtIndex:1];
@@ -148,6 +164,8 @@ int owner2Cards[6];
   localParticipant:(GPGTurnBasedParticipant*)me
 {
     _ownersTurn = 1;
+    
+    _match = match;
     
     _participants = [[NSMutableArray alloc]init];
     [_participants addObject:me];

@@ -14,12 +14,13 @@
 @property (strong, nonatomic) NSMutableArray *deck;
 @property (strong, nonatomic) NSMutableArray *participants;
 @property (nonatomic) NSInteger ownersTurn;
+@property (strong, nonatomic) GPGTurnBasedMatch* match;
 
 -(NSInteger)getSections;
 -(NSInteger)getItems;
 
-+(GPGTurnBasedParticipant*)getOpponent:(GPGTurnBasedMatch*)match;
-+(NSString*)getOpponentDisplayName:(GPGTurnBasedMatch*)match;
+-(GPGTurnBasedParticipant*)getOpponent;
+-(NSString*)getOpponentDisplayName;
 
 -(void)loadNewGame:(GPGTurnBasedMatch*)match
   localParticipant:(GPGTurnBasedParticipant*)me;
@@ -41,6 +42,6 @@
                       owner:(NSInteger)owner;
 
 -(NSData*)storeToData;
--(void)loadFromData:(NSData*)data;
+-(void)loadFromData:(GPGTurnBasedMatch*)match;
 
 @end

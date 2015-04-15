@@ -1,6 +1,6 @@
 //
 //  MyTableViewController.h
-//  jumpsumfree
+//  connections
 //
 //  Created by Tyler Cap on 2/23/15.
 //  Copyright (c) 2015 Tyler Cap. All rights reserved.
@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <GooglePlayGames/GooglePlayGames.h>
 #import "MyTableViewCell.h"
-#import "MyCollectionViewController.h"
 #import "MyWebViewController.h"
 #import "Application.h"
 
@@ -18,8 +17,11 @@
 @property (nonatomic, strong) UIBarButtonItem *signInItem;
 @property (nonatomic, strong) NSMutableArray *openGames;
 @property (nonatomic, strong) GPGTurnBasedMatch *matchToTrack;
+@property (nonatomic) Boolean shouldDeclineMatch;
 
 @property (nonatomic) Boolean signedIn;
 @property (nonatomic) Boolean silentlySigningIn;
+
+- (void)submitNewMatch:(GPGTurnBasedMatch*)match;
 
 @end

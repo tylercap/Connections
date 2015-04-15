@@ -1,6 +1,6 @@
 //
 //  MyCollectionViewController.h
-//  jumpsum
+//  connections
 //
 //  Created by Tyler Cap on 2/5/15.
 //  Copyright (c) 2015 Tyler Cap. All rights reserved.
@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <GooglePlayGames/GooglePlayGames.h>
+#import "MyTableViewController.h"
 #import "MyCollectionViewCell.h"
 #import "MyCollectionViewLayout.h"
 #import "MyButtonCell.h"
@@ -17,7 +18,8 @@
 
 @interface MyCollectionViewController : UICollectionViewController <UICollectionViewDataSource>
 
-@property (nonatomic, weak) IBOutlet MyCollectionViewLayout *layout;
+@property (strong, nonatomic) MyTableViewController *lobby;
+
 @property (strong, nonatomic) NSMutableArray *tiles;
 @property (strong, nonatomic) NSMutableArray *playerCards;
 @property (strong, nonatomic) Model *model;
@@ -29,7 +31,8 @@
 
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;
-@property (weak, nonatomic) MyBannerCell *bannerAdCell;
+@property (strong, nonatomic) MyBannerCell *bannerAdCell;
+@property (strong, nonatomic) MyButtonCell *resignButton;
 
 -(void)highlightOptions:(Boolean)highlight
                forValue:(NSInteger)value;

@@ -1,6 +1,6 @@
 //
 //  MyButtonCell.m
-//  jumpsum
+//  connections
 //
 //  Created by Tyler Cap on 2/6/15.
 //  Copyright (c) 2015 Tyler Cap. All rights reserved.
@@ -17,6 +17,7 @@
 }
 
 - (void)setLabel:(NSString *)value
+   disabledLabel:(NSString *)disabled
        backColor:(UIColor *) back
        textColor:(UIColor *) text
          rounded:(Boolean)round
@@ -27,9 +28,11 @@
     }
     
     [self.button setTitle:value forState:UIControlStateNormal];
-    
+    //[self.button setTitle:disabled forState:UIControlStateDisabled];
     [self.button setTitleColor:text forState:UIControlStateNormal];
+    [self.button setTitleColor:[UIColor colorWithWhite:0.35 alpha:1.0] forState:UIControlStateDisabled];
     
+    self.backColor = back;
     self.button.backgroundColor = back;
     self.button.titleLabel.textColor = text;
     self.button.layer.borderColor = text.CGColor;
@@ -39,6 +42,18 @@
         self.button.layer.cornerRadius = 6.0f;
     
     self.button.layer.masksToBounds = YES;
+}
+
+- (void)setEnabled:(Boolean)enabled
+{
+    [self.button setEnabled:enabled];
+    
+    if( enabled ){
+        self.button.backgroundColor = self.backColor;
+    }
+    else{
+        self.button.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    }
 }
 
 - (void)setLabel:(NSString *)value
