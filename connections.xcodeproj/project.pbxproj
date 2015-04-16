@@ -517,10 +517,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/tcap/Documents/iOSProjects/Libs/jsfree,
-					/Users/tcap/Documents/iOSProjects/Libs/js,
 					"/Users/tcap/Downloads/GooglePlayGames-iOS-SDK.v3.1.1",
-					"/Users/tcap/Downloads/GooglePlayGames-iOS-SDK.v3.1.1",
-					2,
 				);
 				INFOPLIST_FILE = connections/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -540,14 +537,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/tcap/Documents/iOSProjects/Libs/jsfree,
-					/Users/tcap/Documents/iOSProjects/Libs/js,
 					"/Users/tcap/Downloads/GooglePlayGames-iOS-SDK.v3.1.1",
-					"/Users/tcap/Downloads/GooglePlayGames-iOS-SDK.v3.1.1",
-					2,
 				);
 				INFOPLIST_FILE = connections/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";

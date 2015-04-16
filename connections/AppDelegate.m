@@ -62,6 +62,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     }
 }
 
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo
+fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    [self application:application didReceiveRemoteNotification:userInfo];
+}
+
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication

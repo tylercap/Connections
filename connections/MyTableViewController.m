@@ -346,6 +346,8 @@ fromPushNotification:(BOOL)fromPushNotification
 {
     // Only show an alert if you received this from a push notification
     if (fromPushNotification) {
+        self.matchToTrack = match;
+
         NSString *messageToShow = [NSString
                                    stringWithFormat:@"%@ just finished a match. "
                                    @"Would you like to view the results now?",
@@ -355,7 +357,6 @@ fromPushNotification:(BOOL)fromPushNotification
                                    delegate:self
                           cancelButtonTitle:@"No"
                           otherButtonTitles:@"Sure!",  nil] show];
-        self.matchToTrack = match;
     }
     [self loadOpenGames];
 }
@@ -378,7 +379,9 @@ fromPushNotification:(BOOL)fromPushNotification
 //    if (fromPushNotification) {
         GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
         // This should always be true
-        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+    //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+            self.matchToTrack = match;
+            self.shouldDeclineMatch = decline;
             NSString *messageToShow =
             [NSString stringWithFormat:@"%@ just invited you to a game. Would you like to play now?",
              invitingParticipant.displayName];
@@ -388,9 +391,7 @@ fromPushNotification:(BOOL)fromPushNotification
                               cancelButtonTitle:cancelTitle
                               otherButtonTitles:@"Sure!",
               nil] show];
-            self.matchToTrack = match;
-            self.shouldDeclineMatch = decline;
-        }
+//        }
 //    }
     // Tell users they have matches that might need their attention,
     // no matter how your app reaches this method.
@@ -403,7 +404,8 @@ fromPushNotification:(BOOL)fromPushNotification
 {
     // Only show an alert if you received this from a push notification
 //    if (fromPushNotification) {
-        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+    //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+            self.matchToTrack = match;
             NSString *messageToShow = [NSString stringWithFormat:
                                        @"%@ just took their turn in a match. "
                                        @"Would you like to jump to that game now?",
@@ -414,8 +416,7 @@ fromPushNotification:(BOOL)fromPushNotification
                               cancelButtonTitle:@"No"
                               otherButtonTitles:@"Sure!",
               nil] show];
-            self.matchToTrack = match;
-        }
+//        }
 //    }
     [self loadOpenGames];
 }
@@ -535,6 +536,14 @@ fromPushNotification:(BOOL)fromPushNotification
 //                                   }
 //                               }
 //                           }];
+}
+
+- (void)submitRematch:(GPGTurnBasedMatch*)match
+{
+    [match rematchWithCompletionHandler:^(GPGTurnBasedMatch *rematch, NSError *error) {
+        // submitNewMatch in MyTableViewController
+        [self submitNewMatch:rematch];
+    }];
 }
 
 - (void)submitNewMatch:(GPGTurnBasedMatch*)match

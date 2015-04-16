@@ -129,7 +129,12 @@ int owner2Cards[6];
 -(void)loadFromData:(GPGTurnBasedMatch*)match
 {
     _match = match;
+    
     NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:match.data];
+    
+    if( array.count < 7 ){
+        return;
+    }
     
     NSArray *gameboard = [array objectAtIndex:0];
     NSArray *owners = [array objectAtIndex:1];

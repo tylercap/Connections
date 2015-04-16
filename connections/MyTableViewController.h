@@ -22,6 +22,6 @@
 @property (nonatomic) Boolean signedIn;
 @property (nonatomic) Boolean silentlySigningIn;
 
-- (void)submitNewMatch:(GPGTurnBasedMatch*)match;
+- (void)submitRematch:(GPGTurnBasedMatch*)match;
 
 @end

@@ -281,11 +281,8 @@ static NSString * const youWon = @"You Win!";
         }
         if( buttonIndex == 1 ){
             // start a rematch
-            [self.match rematchWithCompletionHandler:^(GPGTurnBasedMatch *rematch, NSError *error) {
-                // submitNewMatch in MyTableViewController
-                [self.lobby submitNewMatch:rematch];
-                [self.navigationController popToRootViewControllerAnimated:TRUE];
-            }];
+            [self.lobby submitRematch:self.match];
+            [self.navigationController popToRootViewControllerAnimated:TRUE];
         }
     }
 }
