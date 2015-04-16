@@ -184,7 +184,6 @@ static NSString * const youWon = @"You Win!";
     NSData *data = [self.model storeToData];
 
     GPGTurnBasedParticipant *opponent = [_model getOpponent];
-    NSLog(opponent.displayName);
     
 //    NSString *nextPlayer = [self determineWhoGoesNext:_match];
     

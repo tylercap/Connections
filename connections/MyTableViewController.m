@@ -505,37 +505,45 @@ fromPushNotification:(BOOL)fromPushNotification
 
 - (void)startQuickMatchGame
 {
-    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
-//    GPGMultiplayerConfig *gameConfigForAutoMatch = [[GPGMultiplayerConfig alloc] init];
-//    // We will automatically match with one other player
-//    gameConfigForAutoMatch.minAutoMatchingPlayers = 1;
-//    gameConfigForAutoMatch.maxAutoMatchingPlayers = 1;
-//    
-//    [GPGTurnBasedMatch createMatchWithConfig:gameConfigForAutoMatch
-//                           completionHandler:^(GPGTurnBasedMatch *match, NSError *error)
-//                           {
-//                               if (error) {
-//                                   NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
-//                               } else {
-//                                   GPGTurnBasedMatchStatus status = match.status;
-//                                   NSInteger count = match.participants.count;
-//                                   if( status == GPGTurnBasedMatchStatusAutoMatching ||
-//                                       count == 1 )
-//                                   {
-//                                       [[[UIAlertView alloc] initWithTitle:@"No Opponent Found"
-//                                                                   message:@"Did not find an opponent at this time. Try again Later."
-//                                                                  delegate:nil
-//                                                         cancelButtonTitle:@"Okay"
-//                                                         otherButtonTitles:nil] show];
-//                                   }
-//                                   else if( status == GPGTurnBasedMatchStatusActive ){
-//                                       [self submitNewMatch:match];
-//                                   }
-//                                   else{
-//                                       [self loadOpenGames];
-//                                   }
-//                               }
-//                           }];
+//    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
+    GPGMultiplayerConfig *gameConfigForAutoMatch = [[GPGMultiplayerConfig alloc] init];
+    // We will automatically match with one other player
+    gameConfigForAutoMatch.minAutoMatchingPlayers = 1;
+    gameConfigForAutoMatch.maxAutoMatchingPlayers = 1;
+    
+    [GPGTurnBasedMatch createMatchWithConfig:gameConfigForAutoMatch
+                           completionHandler:^(GPGTurnBasedMatch *match, NSError *error)
+                           {
+                               if (error) {
+                                   NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
+                                   
+                                   [match dismissWithCompletionHandler:nil];
+                                   [match cancelWithCompletionHandler:nil];
+                               } else {
+                                   GPGTurnBasedMatchStatus status = match.status;
+                                   NSInteger count = match.participants.count;
+                                   if( status == GPGTurnBasedMatchStatusAutoMatching ||
+                                       count == 1 )
+                                   {
+                                       [[[UIAlertView alloc] initWithTitle:@"No Opponent Found"
+                                                                   message:@"Did not find an opponent at this time. Try again Later."
+                                                                  delegate:nil
+                                                         cancelButtonTitle:@"Okay"
+                                                         otherButtonTitles:nil] show];
+                                       
+                                       [match dismissWithCompletionHandler:nil];
+                                       [match cancelWithCompletionHandler:nil];
+                                   }
+                                   else if( status == GPGTurnBasedMatchStatusActive ){
+                                       [self submitNewMatch:match];
+                                   }
+                                   else{
+                                       [match dismissWithCompletionHandler:nil];
+                                       [match cancelWithCompletionHandler:nil];
+                                       [self loadOpenGames];
+                                   }
+                               }
+                           }];
 }
 
 - (void)submitRematch:(GPGTurnBasedMatch*)match
