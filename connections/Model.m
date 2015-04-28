@@ -151,13 +151,35 @@ int owner2Cards[6];
 -(NSData*)storeToData
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    [array addObject:[self storeGameboardToArray]];
-    [array addObject:[self storeOwnersToArray]];
-    [array addObject:[self storeP1CardsToArray]];
-    [array addObject:[self storeP2CardsToArray]];
+    NSArray *temp = [self storeGameboardToArray];
+    if( temp == nil )
+        return nil;
+    [array addObject:temp];
+    
+    temp = [self storeOwnersToArray];
+    if( temp == nil )
+        return nil;
+    [array addObject:temp];
+    
+    temp = [self storeP1CardsToArray];
+    if( temp == nil )
+        return nil;
+    [array addObject:temp];
+    
+    temp = [self storeP2CardsToArray];
+    if( temp == nil )
+        return nil;
+    [array addObject:temp];
+
+    if( _deck == nil)
+        return nil;
     [array addObject:_deck];
+    
     NSString *ownersTurnString = [NSString stringWithFormat:@"%ld", (long)_ownersTurn];
     [array addObject:ownersTurnString];
+    
+    if( _participants == nil )
+        return nil;
     [array addObject:_participants];
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
