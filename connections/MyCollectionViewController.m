@@ -209,7 +209,7 @@ static NSString * const youWon = @"You Win!";
                                    cancelButtonTitle:@"Okay"
                                    otherButtonTitles:nil] show];
              } else {
-                 NSLog(@"Successfully submitted move!");
+//                 NSLog(@"Successfully submitted move!");
              }
          }];
     }
@@ -223,7 +223,7 @@ static NSString * const youWon = @"You Win!";
                                    cancelButtonTitle:@"Okay"
                                    otherButtonTitles:nil] show];
              } else {
-                 NSLog(@"Successfully submitted move!");
+//                 NSLog(@"Successfully submitted move!");
              }
          }];
     }

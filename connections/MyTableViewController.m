@@ -165,9 +165,9 @@ static NSString * const matchEnded = @"Match has ended!";
 
 - (void)didFinishGamesSignInWithError:(NSError *)error {
     if (error) {
-        NSLog(@"Received an error while signing in %@", [error localizedDescription]);
+//        NSLog(@"Received an error while signing in %@", [error localizedDescription]);
     } else {
-        NSLog(@"Signed in!");
+//        NSLog(@"Signed in!");
     }
     
     _silentlySigningIn = NO;
@@ -176,9 +176,9 @@ static NSString * const matchEnded = @"Match has ended!";
 
 - (void)didFinishGamesSignOutWithError:(NSError *)error {
     if (error) {
-        NSLog(@"Received an error while signing out %@", [error localizedDescription]);
+//        NSLog(@"Received an error while signing out %@", [error localizedDescription]);
     } else {
-        NSLog(@"Signed out!");
+//        NSLog(@"Signed out!");
     }
     
     _silentlySigningIn = NO;
@@ -423,7 +423,7 @@ fromPushNotification:(BOOL)fromPushNotification
 
 - (void)turnBasedMatchListLauncherDidSelectMatch:(GPGTurnBasedMatch *) match
 {
-    NSLog( @"DID SELECT" );
+//    NSLog( @"DID SELECT" );
     
     switch (match.userMatchStatus)
     {
@@ -445,17 +445,17 @@ fromPushNotification:(BOOL)fromPushNotification
               
 - (void) turnBasedMatchListLauncherDidJoinMatch:(GPGTurnBasedMatch *) match
 {
-    NSLog( @"DID JOIN" );
+//    NSLog( @"DID JOIN" );
 }
 
 - (void) turnBasedMatchListLauncherDidDeclineMatch:(GPGTurnBasedMatch *) match
 {
-    NSLog( @"DID DECLINE" );
+//    NSLog( @"DID DECLINE" );
 }
 
 - (void) turnBasedMatchListLauncherDidRematch:(GPGTurnBasedMatch *) match
 {
-    NSLog( @"DID REMATCH" );
+//    NSLog( @"DID REMATCH" );
 }
 
 #pragma mark - GPGPlayerPickerLauncherDelegate methods
@@ -486,7 +486,7 @@ fromPushNotification:(BOOL)fromPushNotification
                                completionHandler:^(GPGTurnBasedMatch *match, NSError *error)
                                {
                                    if (error) {
-                                       NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
+//                                       NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
                                    } else {
                                        GPGTurnBasedMatchStatus status = match.status;
                                        if( status == GPGTurnBasedMatchStatusActive ){
@@ -515,7 +515,7 @@ fromPushNotification:(BOOL)fromPushNotification
                            completionHandler:^(GPGTurnBasedMatch *match, NSError *error)
                            {
                                if (error) {
-                                   NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
+//                                   NSLog(@"Received an error trying to create a match %@", [error localizedDescription]);
                                    
                                    [match dismissWithCompletionHandler:nil];
                                    [match cancelWithCompletionHandler:nil];

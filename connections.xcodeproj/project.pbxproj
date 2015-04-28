@@ -91,7 +91,6 @@
 		D4E3CD701AAF80DE007025A6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		D4E3CD761AAF80DE007025A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D4E3CD781AAF80DE007025A6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		D4E3CD7B1AAF80DE007025A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		D4E3CD811AAF80DE007025A6 /* connectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = connectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E3CD861AAF80DE007025A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4E3CD871AAF80DE007025A6 /* connectionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = connectionsTests.m; sourceTree = "<group>"; };
@@ -186,7 +185,6 @@
 				D4E3CD6F1AAF80DE007025A6 /* AppDelegate.h */,
 				D4E3CD701AAF80DE007025A6 /* AppDelegate.m */,
 				D4E3CD781AAF80DE007025A6 /* Images.xcassets */,
-				D4E3CD7A1AAF80DE007025A6 /* LaunchScreen.xib */,
 				D4E3CD6B1AAF80DE007025A6 /* Supporting Files */,
 			);
 			path = connections;
@@ -422,14 +420,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		D4E3CD7A1AAF80DE007025A6 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4E3CD7B1AAF80DE007025A6 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -513,6 +503,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -533,6 +524,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

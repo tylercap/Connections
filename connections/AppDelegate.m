@@ -43,7 +43,7 @@
 didRegisterForRemoteNotificationsWithDeviceToken
                    :(NSData *)deviceToken
 {
-    NSLog(@"Got deviceToken from APNS! %@", deviceToken);
+//    NSLog(@"Got deviceToken from APNS! %@", deviceToken);
     [[GPGManager sharedInstance] registerDeviceToken:deviceToken
                                       forEnvironment:GPGPushNotificationEnvironmentSandbox];
 }
@@ -51,7 +51,7 @@ didRegisterForRemoteNotificationsWithDeviceToken
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"Received remote notification! %@", userInfo);
+//    NSLog(@"Received remote notification! %@", userInfo);
     if ([[GPGManager sharedInstance] tryHandleRemoteNotification:userInfo]) {
         // The payload looks like it's from Google Play Games. A
         // didReceiveTurnBasedInviteForMatch method is being
