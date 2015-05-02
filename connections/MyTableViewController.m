@@ -283,6 +283,8 @@ static NSString * const matchEnded = @"Match has ended!";
     if( [object isKindOfClass:[GPGTurnBasedMatch class]] ){
         GPGTurnBasedMatch *match = (GPGTurnBasedMatch *)object;
         
+//        [match cancelWithCompletionHandler:nil];
+//        [match dismissWithCompletionHandler:nil];
         [self turnBasedMatchListLauncherDidSelectMatch:match];
     }
     else{

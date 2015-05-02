@@ -12,7 +12,7 @@
 @interface Model : NSObject
 
 @property (strong, nonatomic) NSMutableArray *deck;
-@property (strong, nonatomic) NSMutableArray *participants;
+//@property (strong, nonatomic) NSMutableArray *participants;
 @property (nonatomic) NSInteger ownersTurn;
 @property (strong, nonatomic) GPGTurnBasedMatch* match;
 

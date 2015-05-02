@@ -92,99 +92,287 @@ int owner2Cards[6];
     }
     
     GPGTurnBasedParticipant *participant = nil;
-    if( _match.myTurn || _match.userMatchStatus == GPGTurnBasedUserMatchStatusTurn )
-    {
-        switch ( _ownersTurn ) {
-            case 1:
-                participant = [_participants objectAtIndex:1];
-                
-                return participant;
-                break;
-            case 2:
-                participant = [_participants objectAtIndex:0];
-                
-                return participant;
-                break;
-        }
-    }
-    else
-    {
-        switch ( _ownersTurn ) {
-            case 1:
-                participant = [_participants objectAtIndex:0];
-                
-                return participant;
-                break;
-            case 2:
-                participant = [_participants objectAtIndex:1];
-                
-                return participant;
-                break;
-        }
-    }
+//    if( _match.myTurn || _match.userMatchStatus == GPGTurnBasedUserMatchStatusTurn )
+//    {
+//        switch ( _ownersTurn ) {
+//            case 1:
+//                participant = [_participants objectAtIndex:1];
+//                
+//                return participant;
+//                break;
+//            case 2:
+//                participant = [_participants objectAtIndex:0];
+//                
+//                return participant;
+//                break;
+//        }
+//    }
+//    else
+//    {
+//        switch ( _ownersTurn ) {
+//            case 1:
+//                participant = [_participants objectAtIndex:0];
+//                
+//                return participant;
+//                break;
+//            case 2:
+//                participant = [_participants objectAtIndex:1];
+//                
+//                return participant;
+//                break;
+//        }
+//    }
     
     return participant;
 }
 
 -(void)loadFromData:(GPGTurnBasedMatch*)match
 {
+    [self loadFromCompatibleData:match];
+//    _match = match;
+//    
+//    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:match.data];
+//    
+//    if( array.count < 7 ){
+//        return;
+//    }
+//    
+//    NSArray *gameboard = [array objectAtIndex:0];
+//    NSArray *owners = [array objectAtIndex:1];
+//    NSArray *p1 = [array objectAtIndex:2];
+//    NSArray *p2 = [array objectAtIndex:3];
+//    NSArray *unshuffled = [array objectAtIndex:4];
+//    NSString *ownersTurnString = [array objectAtIndex:5];
+//    _ownersTurn = [ownersTurnString integerValue];
+//    _participants = [array objectAtIndex:6];
+//    
+//    [self loadFromArray:gameboard owners:owners player1:p1 player2:p2 deck:unshuffled];
+}
+
+-(void)loadFromCompatibleData:(GPGTurnBasedMatch*)match
+{
     _match = match;
+    NSString* newStr = [[NSString alloc] initWithData:match.data encoding:NSUTF8StringEncoding];
     
-    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:match.data];
+    NSRange start = [newStr rangeOfString:@"["];
+    NSRange end = [newStr rangeOfString:@"]"];
+    NSRange range = {start.location, (end.location - start.location) + end.length};
+    NSString *gameboard = [newStr substringWithRange:range];
+    NSArray *gameboard_arr = [self load2DArrayFromString:gameboard];
     
-    if( array.count < 7 ){
-        return;
+    newStr = [newStr substringFromIndex:(end.location + end.length)];
+    start = [newStr rangeOfString:@"["];
+    end = [newStr rangeOfString:@"]"];
+    range.location = start.location;
+    range.length = (end.location - start.location) + end.length;
+    NSString *owners = [newStr substringWithRange:range];
+    NSArray *owners_arr = [self load2DArrayFromString:owners];
+    
+    newStr = [newStr substringFromIndex:(end.location + end.length)];
+    start = [newStr rangeOfString:@"["];
+    end = [newStr rangeOfString:@"]"];
+    range.location = start.location;
+    range.length = (end.location - start.location) + end.length;
+    NSString *p1 = [newStr substringWithRange:range];
+    NSArray *p1_arr = [self load1DArrayFromString:p1];
+    
+    newStr = [newStr substringFromIndex:(end.location + end.length)];
+    start = [newStr rangeOfString:@"["];
+    end = [newStr rangeOfString:@"]"];
+    range.location = start.location;
+    range.length = (end.location - start.location) + end.length;
+    NSString *p2 = [newStr substringWithRange:range];
+    NSArray *p2_arr = [self load1DArrayFromString:p2];
+    
+    newStr = [newStr substringFromIndex:(end.location + end.length)];
+    start = [newStr rangeOfString:@"["];
+    end = [newStr rangeOfString:@"]"];
+    range.location = start.location;
+    range.length = (end.location - start.location) + end.length;
+    NSString *unshuffled = [newStr substringWithRange:range];
+    NSArray *deck_arr = [self load1DArrayFromString:unshuffled];
+    
+    newStr = [newStr substringFromIndex:(end.location + end.length)];
+    start = [newStr rangeOfString:@"("];
+    end = [newStr rangeOfString:@")"];
+    range.location = start.location + start.length;
+    range.length = end.location - start.location;
+    NSString *ownersTurnString = [newStr substringWithRange:range];
+    
+//    newStr = [newStr substringFromIndex:(end.location + end.length)];
+//    start = [newStr rangeOfString:@"["];
+//    end = [newStr rangeOfString:@"]"];
+//    range.location = start.location;
+//    range.length = (end.location - start.location) + end.length;
+//    NSString *participants = [newStr substringWithRange:range];
+//    NSLog(participants);
+    
+    _ownersTurn = [ownersTurnString integerValue];
+    [self loadFromArray:gameboard_arr owners:owners_arr player1:p1_arr player2:p2_arr deck:deck_arr];
+}
+
+-(NSArray*)load1DArrayFromString:(NSString*)string
+{
+    NSMutableArray* array = [[NSMutableArray alloc] init];
+    NSRange range = [string rangeOfString:@"["];
+    NSInteger start = range.location + range.length;
+    NSInteger end = [string rangeOfString:@","].location;
+    while( end > 0 ){
+        range.location = start;
+        range.length = end - start;
+        NSString *value = [string substringWithRange:range];
+        
+        [array addObject:value];
+        string = [string substringFromIndex:end + 1];
+        
+        start = 0;
+        end = [string rangeOfString:@","].location;
+        
+        if( ![string containsString:@","] ){
+            end = -1;
+            break;
+        }
     }
     
-    NSArray *gameboard = [array objectAtIndex:0];
-    NSArray *owners = [array objectAtIndex:1];
-    NSArray *p1 = [array objectAtIndex:2];
-    NSArray *p2 = [array objectAtIndex:3];
-    NSArray *unshuffled = [array objectAtIndex:4];
-    NSString *ownersTurnString = [array objectAtIndex:5];
-    _ownersTurn = [ownersTurnString integerValue];
-    _participants = [array objectAtIndex:6];
+    end = [string rangeOfString:@"]"].location;
+    range.location = start;
+    range.length = end - start;
+    NSString *value = [string substringWithRange:range];
     
-    [self loadFromArray:gameboard owners:owners player1:p1 player2:p2 deck:unshuffled];
+    [array addObject:value];
+    string = [string substringFromIndex:end + 1];
+    
+    return array;
+}
+
+-(NSArray*)load2DArrayFromString:(NSString*)string
+{
+    NSMutableArray* array = [[NSMutableArray alloc] init];
+    NSMutableArray *row = [[NSMutableArray alloc] init];
+    [array addObject:row];
+    NSRange range = [string rangeOfString:@"["];
+    NSInteger start = range.location + range.length;
+    NSInteger end = [string rangeOfString:@","].location;
+    while( end > 0 ){
+        range.location = start;
+        range.length = end - start;
+        NSString *value = [string substringWithRange:range];
+        
+        [row addObject:value];
+        string = [string substringFromIndex:end + 1];
+        
+        if( ![string containsString:@","] ){
+            end = -1;
+            break;
+        }
+        
+        start = 0;
+        end = [string rangeOfString:@","].location;
+        
+        NSInteger semCol = [string rangeOfString:@";"].location;
+        if( semCol < end ){
+            range.location = start;
+            range.length = semCol - start;
+            NSString *value = [string substringWithRange:range];
+            
+            [row addObject:value];
+            string = [string substringFromIndex:semCol + 1];
+            
+            start = 0;
+            end = [string rangeOfString:@","].location;
+            
+            row = [[NSMutableArray alloc] init];
+            [array addObject:row];
+        }
+    }
+    
+    end = [string rangeOfString:@"]"].location;
+    range.location = start;
+    range.length = end - start;
+    NSString *value = [string substringWithRange:range];
+    
+    [row addObject:value];
+    string = [string substringFromIndex:end + 1];
+    
+    return array;
+}
+
+-(NSData*)storeToCompatibleData
+{
+    NSString *dataString = [self storeGameboardToString];
+    if( dataString == nil )
+        return nil;
+    
+    NSString *temp = [self storeOwnersToString];
+    if( temp == nil )
+        return nil;
+    dataString = [dataString stringByAppendingString:temp];
+    
+    temp = [self storeP1CardsToString];
+    if( temp == nil )
+        return nil;
+    dataString = [dataString stringByAppendingString:temp];
+    
+    temp = [self storeP2CardsToString];
+    if( temp == nil )
+        return nil;
+    dataString = [dataString stringByAppendingString:temp];
+    
+    temp = [self storeDeckToString];
+    if( temp == nil )
+        return nil;
+    dataString = [dataString stringByAppendingString:temp];
+    
+    NSString *ownersTurnString = [NSString stringWithFormat:@"(%ld)", (long)_ownersTurn];
+    dataString = [dataString stringByAppendingString:ownersTurnString];
+    
+//    temp = [self storeParticipantsToString];
+//    if( temp == nil )
+//        return nil;
+//    dataString = [dataString stringByAppendingString:temp];
+
+    NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+    return data;
 }
 
 -(NSData*)storeToData
 {
-    NSMutableArray *array = [[NSMutableArray alloc] init];
-    NSArray *temp = [self storeGameboardToArray];
-    if( temp == nil )
-        return nil;
-    [array addObject:temp];
-    
-    temp = [self storeOwnersToArray];
-    if( temp == nil )
-        return nil;
-    [array addObject:temp];
-    
-    temp = [self storeP1CardsToArray];
-    if( temp == nil )
-        return nil;
-    [array addObject:temp];
-    
-    temp = [self storeP2CardsToArray];
-    if( temp == nil )
-        return nil;
-    [array addObject:temp];
-
-    if( _deck == nil)
-        return nil;
-    [array addObject:_deck];
-    
-    NSString *ownersTurnString = [NSString stringWithFormat:@"%ld", (long)_ownersTurn];
-    [array addObject:ownersTurnString];
-    
-    if( _participants == nil )
-        return nil;
-    [array addObject:_participants];
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
-    
-    return data;
+    return [self storeToCompatibleData];
+//    NSMutableArray *array = [[NSMutableArray alloc] init];
+//    NSArray *temp = [self storeGameboardToArray];
+//    if( temp == nil )
+//        return nil;
+//    [array addObject:temp];
+//    
+//    temp = [self storeOwnersToArray];
+//    if( temp == nil )
+//        return nil;
+//    [array addObject:temp];
+//    
+//    temp = [self storeP1CardsToArray];
+//    if( temp == nil )
+//        return nil;
+//    [array addObject:temp];
+//    
+//    temp = [self storeP2CardsToArray];
+//    if( temp == nil )
+//        return nil;
+//    [array addObject:temp];
+//
+//    if( _deck == nil)
+//        return nil;
+//    [array addObject:_deck];
+//    
+//    NSString *ownersTurnString = [NSString stringWithFormat:@"%ld", (long)_ownersTurn];
+//    [array addObject:ownersTurnString];
+//    
+//    if( _participants == nil )
+//        return nil;
+//    [array addObject:_participants];
+//    
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
+//    
+//    return data;
 }
 
 -(void)loadNewGame:(GPGTurnBasedMatch*)match
@@ -194,9 +382,9 @@ int owner2Cards[6];
     
     _match = match;
     
-    _participants = [[NSMutableArray alloc]init];
-    [_participants addObject:me];
-    [_participants addObject:[self getOpponentFromMatch:match]];
+//    _participants = [[NSMutableArray alloc]init];
+//    [_participants addObject:me];
+//    [_participants addObject:[self getOpponentFromMatch:match]];
     
     NSMutableArray *values = [[NSMutableArray alloc]init];
     NSMutableArray *unshuffled = [[NSMutableArray alloc]init];
@@ -382,6 +570,29 @@ int owner2Cards[6];
     return array;
 }
 
+-(NSString *)storeGameboardToString
+{
+    NSString *string = @"[";
+    for( int i=0; i<[self getSections]; i++ ){
+        for( int j=0; j<[self getItems]; j++ ){
+            NSInteger val = [self getValueAt:i column:j];
+            NSString *str_val;
+            if( j == [self getItems] - 1 ){
+                str_val = [NSString stringWithFormat:@"%ld",(long)val];
+            }
+            else{
+                str_val = [NSString stringWithFormat:@"%ld,",(long)val];
+            }
+            string = [string stringByAppendingString:str_val];
+        }
+        if( i < [self getSections] - 1 ){
+            string = [string stringByAppendingString:@";"];
+        }
+    }
+    string = [string stringByAppendingString:@"]"];
+    return string;
+}
+
 -(NSMutableArray *)storeOwnersToArray
 {
     NSMutableArray* array = [[NSMutableArray alloc] init];
@@ -399,6 +610,29 @@ int owner2Cards[6];
     return array;
 }
 
+-(NSString *)storeOwnersToString
+{
+    NSString *string = @"[";
+    for( int i=0; i<[self getSections]; i++ ){
+        for( int j=0; j<[self getItems]; j++ ){
+            NSInteger val = [self getOwnerAt:i column:j];
+            NSString *str_val;
+            if( j == [self getItems] - 1 ){
+                str_val = [NSString stringWithFormat:@"%ld",(long)val];
+            }
+            else{
+                str_val = [NSString stringWithFormat:@"%ld,",(long)val];
+            }
+            string = [string stringByAppendingString:str_val];
+        }
+        if( i < [self getSections] - 1 ){
+            string = [string stringByAppendingString:@";"];
+        }
+    }
+    string = [string stringByAppendingString:@"]"];
+    return string;
+}
+
 -(NSMutableArray *)storeP1CardsToArray
 {
     NSMutableArray* array = [[NSMutableArray alloc] init];
@@ -410,6 +644,25 @@ int owner2Cards[6];
     }
     
     return array;
+}
+
+-(NSString *)storeP1CardsToString
+{
+    NSString *string = @"[";
+    for( int j=0; j<[self getPlayerCards]; j++ ){
+        NSInteger val = [self getPlayerOption:j owner:1];
+        NSString *str_val;
+        if( j == [self getPlayerCards] - 1 ){
+            str_val = [NSString stringWithFormat:@"%ld",(long)val];
+        }
+        else{
+            str_val = [NSString stringWithFormat:@"%ld,",(long)val];
+        }
+        string = [string stringByAppendingString:str_val];
+    }
+    
+    string = [string stringByAppendingString:@"]"];
+    return string;
 }
 
 -(NSMutableArray *)storeP2CardsToArray
@@ -424,6 +677,55 @@ int owner2Cards[6];
     
     return array;
 }
+
+-(NSString *)storeP2CardsToString
+{
+    NSString *string = @"[";
+    for( int j=0; j<[self getPlayerCards]; j++ ){
+        NSInteger val = [self getPlayerOption:j owner:2];
+        NSString *str_val;
+        if( j == [self getPlayerCards] - 1 ){
+            str_val = [NSString stringWithFormat:@"%ld",(long)val];
+        }
+        else{
+            str_val = [NSString stringWithFormat:@"%ld,",(long)val];
+        }
+        string = [string stringByAppendingString:str_val];
+    }
+    
+    string = [string stringByAppendingString:@"]"];
+    return string;
+}
+
+-(NSString *)storeDeckToString
+{
+    NSString *string = @"[";
+    for( int j=0; j<[self.deck count]; j++ ){
+        NSString *val = [self.deck objectAtIndex:j];
+        if( j < [self.deck count] - 1 ){
+            val = [NSString stringWithFormat:@"%@,", val];
+        }
+        string = [string stringByAppendingString:val];
+    }
+    
+    string = [string stringByAppendingString:@"]"];
+    return string;
+}
+
+//-(NSString *)storeParticipantsToString
+//{
+//    NSString *string = @"[";
+//    for( int j=0; j<[self.participants count]; j++ ){
+//        NSString *val = [self.participants objectAtIndex:j];
+//        if( j < [self.participants count] - 1 ){
+//            val = [NSString stringWithFormat:@"%@,", val];
+//        }
+//        string = [string stringByAppendingString:val];
+//    }
+//    
+//    string = [string stringByAppendingString:@"]"];
+//    return string;
+//}
 
 -(Boolean)checkForWinner:(NSInteger)owner
                      row:(NSInteger)row
