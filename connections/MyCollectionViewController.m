@@ -20,6 +20,13 @@ static NSString * const BannerIdentifier = @"BannerCell";
 
 static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/2150010457";
 
+static NSString * const win1Id = @"CgkI7oCyj54JEAIQBQ";
+static NSString * const win5Id = @"CgkI7oCyj54JEAIQBg";
+static NSString * const win20Id = @"CgkI7oCyj54JEAIQBw";
+static NSString * const win100Id = @"CgkI7oCyj54JEAIQCA";
+static NSString * const win1000Id = @"CgkI7oCyj54JEAIQCQ";
+static NSString * const win10000Id = @"CgkI7oCyj54JEAIQCg";
+
 static NSString * const youLost = @"You Lost";
 static NSString * const youWon = @"You Win!";
 
@@ -172,6 +179,43 @@ static NSString * const youWon = @"You Win!";
     return currentOwner;
 }
 
+- (void)unlockAchievement:(NSString *)achievementId
+{
+    GPGAchievement *unlockMe = [GPGAchievement achievementWithId:achievementId];
+    
+    [unlockMe unlockAchievementWithCompletionHandler:^(BOOL newlyUnlocked, NSError *error) {
+        if (error) {
+            // Handle the error
+        } else if (!newlyUnlocked) {
+            // Achievement was already unlocked
+        } else {
+            // NSLog(@"Hooray! Achievement unlocked!");
+        }
+    }];
+}
+
+- (void)incrementAchievement:(NSString *)achievementId
+{
+    [self incrementAchievement:achievementId steps:1];
+}
+
+- (void)incrementAchievement:(NSString *)achievementId
+                       steps:(NSInteger)numSteps
+{
+    GPGAchievement *incrementMe = [GPGAchievement achievementWithId:achievementId];
+    
+    [incrementMe incrementAchievementNumSteps:numSteps
+                            completionHandler:^(BOOL newlyUnlocked, int currentSteps, NSError *error) {
+                                if (error) {
+                                    // Handle the error
+                                } else if (newlyUnlocked) {
+                                    // NSLog(@"Incremental achievement unlocked!");
+                                } else {
+                                    // NSLog(@"User has completed %i steps total", currentSteps);
+                                }
+                            }];
+}
+
 - (void)submitMove:(Boolean)winner
 {
     // submit the updated model to google play and set it to the other player's turn
@@ -210,6 +254,12 @@ static NSString * const youWon = @"You Win!";
                                    otherButtonTitles:nil] show];
              } else {
 //                 NSLog(@"Successfully submitted move!");
+                 [self unlockAchievement:win1Id];
+                 [self incrementAchievement:win5Id];
+                 [self incrementAchievement:win20Id];
+                 [self incrementAchievement:win100Id];
+                 [self incrementAchievement:win1000Id];
+                 [self incrementAchievement:win10000Id];
              }
          }];
     }

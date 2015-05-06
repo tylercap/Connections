@@ -134,6 +134,7 @@ static NSString * const matchEnded = @"Match has ended!";
 
 - (void)doLoadOpenGames
 {
+    //[GPGTurnBasedMatch allMatchesFromDataSource:GPGDataSourceNetwork completionHandler:
     [GPGTurnBasedMatch allMatchesWithCompletionHandler:^(NSArray *matches, NSError *error)
      {
         _openGames = [[NSMutableArray alloc] init];
