@@ -223,7 +223,7 @@ static NSString * const youWon = @"You Win!";
     NSInteger value = [self.model getValueAt:row column:column];
     NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self myTurn:YES];
+    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self myTurn:!self.gameOver];
     
     return myCell;
 }
@@ -286,7 +286,7 @@ static NSString * const youWon = @"You Win!";
         
         NSInteger value = [self.model getPlayerOption:item owner:self.owner];
         
-        [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self myTurn:YES];
+        [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self myTurn:!self.gameOver];
         cell = myCell;
         
         [_playerCards insertObject:myCell atIndex:item];
