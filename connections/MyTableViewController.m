@@ -8,14 +8,19 @@
 
 #import "MyTableViewController.h"
 #import "MyCollectionViewController.h"
+#import "MyOfflineCollectionViewController.h"
 
 static NSString * const GoogleClientId = @"317322985582-t01dgsg9toha0l71e18udc6nu9ae1b73";
 //static NSString * const GoogleClientId = @"317322985582-t01dgsg9toha0l71e18udc6nu9ae1b73.apps.googleusercontent.com";
 
 static NSString * const noGames = @"Sign in to access your games";
-static NSString * const quickMatch = @"Quick Match";
-static NSString * const chooseOpponent = @"Choose Opponent";
+static NSString * const playOffline = @"Play Offline";
+//static NSString * const quickMatch = @"Quick Match";
+//static NSString * const chooseOpponent = @"Choose Opponent";
+static NSString * const gamesInbox = @"Games Inbox/Refresh Games";
+static NSString * const newGame = @"New Game";
 static NSString * const openGame = @"openGame";
+static NSString * const openOfflineGame = @"openOfflineGame";
 static NSString * const invited = @"You've been invited!";
 static NSString * const yourTurn = @"It's your turn!";
 static NSString * const matchEnded = @"Match has ended!";
@@ -27,6 +32,8 @@ static NSString * const matchEnded = @"Match has ended!";
     [super viewDidLoad];
     _openGames = [[NSMutableArray alloc] init];
     [_openGames addObject:noGames];
+    [_openGames addObject:playOffline];
+    _matchesToTrack = [[NSMutableArray alloc] init];
     
     [GPGManager sharedInstance].statusDelegate = self;
     [GPGManager sharedInstance].turnBasedMatchDelegate = self;
@@ -108,6 +115,7 @@ static NSString * const matchEnded = @"Match has ended!";
         [self.signInItem setTitle:@"Sign In"];
         _openGames = [[NSMutableArray alloc] init];
         [_openGames addObject:noGames];
+        [_openGames addObject:playOffline];
         [self.tableView reloadData];
     }
 }
@@ -138,8 +146,8 @@ static NSString * const matchEnded = @"Match has ended!";
     [GPGTurnBasedMatch allMatchesWithCompletionHandler:^(NSArray *matches, NSError *error)
      {
         _openGames = [[NSMutableArray alloc] init];
-        [_openGames addObject:quickMatch];
-        [_openGames addObject:chooseOpponent];
+        [_openGames addObject:gamesInbox];
+        [_openGames addObject:newGame];
          
         for (GPGTurnBasedMatch* match in matches)
         {
@@ -291,14 +299,31 @@ static NSString * const matchEnded = @"Match has ended!";
     else{
         NSString *gameSelected = (NSString *)object;
         
-        if( [gameSelected isEqualToString:quickMatch] ){
+        if( [gameSelected isEqualToString:gamesInbox] ){
             // set up quick match
-            [self startQuickMatchGame];
+            [self openGamesInbox];
         }
-        else if( [gameSelected isEqualToString:chooseOpponent] ){
+        else if( [gameSelected isEqualToString:newGame] ){
             // allow the user to choose their opponent
             [self inviteMyFriends];
         }
+        else if( [gameSelected isEqualToString:playOffline] ){
+            [self openOfflineGame];
+        }
+    }
+}
+
+- (GPGTurnBasedMatch*) getTrackedMatch
+{
+    @synchronized(_matchesToTrack){
+        if( [_matchesToTrack count] <= 0 ){
+            return nil;
+        }
+        
+        GPGTurnBasedMatch *match = [_matchesToTrack objectAtIndex:0];
+        [_matchesToTrack removeObjectAtIndex:0];
+        
+        return match;
     }
 }
 
@@ -307,36 +332,48 @@ static NSString * const matchEnded = @"Match has ended!";
     if( [alertView.title isEqualToString:matchEnded] ){
         if( buttonIndex == 0 ){
             // cancel
+            [self loadOpenGames];
         }
         else{
             // go to match
-            [self performSegueWithIdentifier:openGame sender:self.matchToTrack];
+            GPGTurnBasedMatch *match = [self getTrackedMatch];
+            if( match != nil )
+                [self performSegueWithIdentifier:openGame sender:match];
         }
     }
     else if( [alertView.title isEqualToString:invited] ){
         if( buttonIndex == 0 ){
             if( self.shouldDeclineMatch ){
                 // decline the match
-                [self.matchToTrack declineWithCompletionHandler:nil];
+                GPGTurnBasedMatch *match = [self getTrackedMatch];
+                if( match != nil )
+                    [match declineWithCompletionHandler:nil];
                 [self loadOpenGames];
             }
             else{
                 // don't cancel match, just save it for later
+                [self loadOpenGames];
             }
         }
         else{
             // accept match
-            [self.matchToTrack joinWithCompletionHandler:nil];
-            [self performSegueWithIdentifier:openGame sender:self.matchToTrack];
+            GPGTurnBasedMatch *match = [self getTrackedMatch];
+            if( match != nil ){
+                [match joinWithCompletionHandler:nil];
+                [self performSegueWithIdentifier:openGame sender:match];
+            }
         }
     }
     else if( [alertView.title isEqualToString:yourTurn] ){
         if( buttonIndex == 0 ){
             // cancel
+            [self loadOpenGames];
         }
         else{
             // go to match
-            [self performSegueWithIdentifier:openGame sender:self.matchToTrack];
+            GPGTurnBasedMatch *match = [self getTrackedMatch];
+            if( match != nil )
+                [self performSegueWithIdentifier:openGame sender:match];
         }
     }
 }
@@ -349,7 +386,9 @@ fromPushNotification:(BOOL)fromPushNotification
 {
     // Only show an alert if you received this from a push notification
     if (fromPushNotification) {
-        self.matchToTrack = match;
+        @synchronized(_matchesToTrack){
+            [self.matchesToTrack addObject:match];
+        }
 
         NSString *messageToShow = [NSString
                                    stringWithFormat:@"%@ just finished a match. "
@@ -383,7 +422,9 @@ fromPushNotification:(BOOL)fromPushNotification
         GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
         // This should always be true
     //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
-            self.matchToTrack = match;
+            @synchronized(_matchesToTrack){
+                [self.matchesToTrack addObject:match];
+            }
             self.shouldDeclineMatch = decline;
             NSString *messageToShow =
             [NSString stringWithFormat:@"%@ just invited you to a game. Would you like to play now?",
@@ -408,7 +449,9 @@ fromPushNotification:(BOOL)fromPushNotification
     // Only show an alert if you received this from a push notification
 //    if (fromPushNotification) {
     //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
-            self.matchToTrack = match;
+            @synchronized(_matchesToTrack){
+                [self.matchesToTrack addObject:match];
+            }
             NSString *messageToShow = [NSString stringWithFormat:
                                        @"%@ just took their turn in a match. "
                                        @"Would you like to jump to that game now?",
@@ -448,17 +491,17 @@ fromPushNotification:(BOOL)fromPushNotification
               
 - (void) turnBasedMatchListLauncherDidJoinMatch:(GPGTurnBasedMatch *) match
 {
-//    NSLog( @"DID JOIN" );
+    [self performSegueWithIdentifier:openGame sender:match];
 }
 
 - (void) turnBasedMatchListLauncherDidDeclineMatch:(GPGTurnBasedMatch *) match
 {
-//    NSLog( @"DID DECLINE" );
+    [self loadOpenGames];
 }
 
 - (void) turnBasedMatchListLauncherDidRematch:(GPGTurnBasedMatch *) match
 {
-//    NSLog( @"DID REMATCH" );
+    [self loadOpenGames];
 }
 
 #pragma mark - GPGPlayerPickerLauncherDelegate methods
@@ -506,9 +549,14 @@ fromPushNotification:(BOOL)fromPushNotification
     }
 }
 
-- (void)startQuickMatchGame
+- (void)openGamesInbox
 {
-//    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
+    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
+    [self loadOpenGames];
+}
+
+- (void) startQuickMatchGame
+{
     GPGMultiplayerConfig *gameConfigForAutoMatch = [[GPGMultiplayerConfig alloc] init];
     // We will automatically match with one other player
     gameConfigForAutoMatch.minAutoMatchingPlayers = 1;
@@ -592,25 +640,33 @@ fromPushNotification:(BOOL)fromPushNotification
              [self performSegueWithIdentifier:openGame sender:match];
          }
      }];
-    
+}
+
+- (void)openOfflineGame{
+    [self performSegueWithIdentifier:openOfflineGame sender:nil];
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    if( ![sender isKindOfClass:[GPGTurnBasedMatch class]] ){
-        return NO;
+    if( [sender isKindOfClass:[GPGTurnBasedMatch class]] ){
+        GPGTurnBasedMatch *match = (GPGTurnBasedMatch*)sender;
+        return (match.data != nil);
     }
+//    else if( [identifier isEqualToString:openOfflineGame] ){
+//        return YES;
+//    }
     
-    GPGTurnBasedMatch *match = (GPGTurnBasedMatch*)sender;
-    return (match.data != nil);
+    return NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    MyCollectionViewController *destViewController = segue.destinationViewController;
-    
-    destViewController.match = (GPGTurnBasedMatch*)sender;
-    destViewController.lobby = self;
+    if( [sender isKindOfClass:[GPGTurnBasedMatch class]] ){
+        MyCollectionViewController *destViewController = segue.destinationViewController;
+        
+        destViewController.match = (GPGTurnBasedMatch*)sender;
+        destViewController.lobby = self;
+    }
 }
 
 @end

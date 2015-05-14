@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4TS-mj-b6c">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4TS-mj-b6c">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -200,6 +200,9 @@
                     <navigationItem key="navigationItem" title="Connections" id="CtX-uh-Kgz">
                         <barButtonItem key="backBarButtonItem" title="Back" id="ljS-4g-55U"/>
                     </navigationItem>
+                    <connections>
+                        <segue destination="FA5-QM-plv" kind="show" identifier="openOfflineGame" id="fr2-YY-gnp"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CIu-mN-knT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -250,6 +253,138 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Si5-TS-6Be" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-601" y="1007"/>
+        </scene>
+        <!--My Offline Collection View Controller-->
+        <scene sceneID="GTG-CO-RAs">
+            <objects>
+                <collectionViewController id="FA5-QM-plv" customClass="MyOfflineCollectionViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" id="lX5-Bb-znX">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.19853533609999999" green="0.19853533609999999" blue="0.19853533609999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="6fc-2h-kKF" customClass="MyCollectionViewLayout">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" contentMode="center" reuseIdentifier="TileCell" id="eFJ-CP-gEQ" customClass="MyCollectionViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IdH-TF-ANl">
+                                            <rect key="frame" x="17" y="11" width="16" height="29"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" none="YES" button="YES" staticText="YES"/>
+                                            </accessibility>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="IdH-TF-ANl" secondAttribute="centerY" id="4b9-gm-oXy"/>
+                                    <constraint firstAttribute="centerX" secondItem="IdH-TF-ANl" secondAttribute="centerX" id="PDp-9R-eI6"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="title" destination="IdH-TF-ANl" id="M5A-x1-gdp"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" contentMode="center" reuseIdentifier="ButtonCell" id="QYv-nr-NvX" customClass="MyButtonCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kT-LJ-7WC">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                            <state key="normal" title="Button">
+                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="bottomMargin" secondItem="6kT-LJ-7WC" secondAttribute="bottom" constant="-8" id="KB4-xD-oMl"/>
+                                    <constraint firstItem="6kT-LJ-7WC" firstAttribute="leading" secondItem="QYv-nr-NvX" secondAttribute="leadingMargin" constant="-8" id="iAA-gB-mx0"/>
+                                    <constraint firstItem="6kT-LJ-7WC" firstAttribute="top" secondItem="QYv-nr-NvX" secondAttribute="topMargin" constant="-8" id="lpj-jU-tUL"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="6kT-LJ-7WC" secondAttribute="trailing" constant="-8" id="mg7-Ly-HNS"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="button" destination="6kT-LJ-7WC" id="9gm-VP-6eL"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" reuseIdentifier="LabelCell" id="m26-nh-jW2" customClass="MyLabelCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hS3-jy-Dkm">
+                                            <rect key="frame" x="12" y="18" width="27" height="14"/>
+                                            <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="10"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="hS3-jy-Dkm" secondAttribute="centerY" id="hVV-at-1f0"/>
+                                    <constraint firstAttribute="centerX" secondItem="hS3-jy-Dkm" secondAttribute="centerX" id="nso-f8-UEv"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="label" destination="hS3-jy-Dkm" id="4Y7-PC-Ufw"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" contentMode="center" reuseIdentifier="BannerCell" id="qiJ-qD-ErU" customClass="MyBannerCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zGe-p8-B7a" customClass="GADBannerView">
+                                            <rect key="frame" x="-135" y="0.0" width="320" height="50"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="320" id="3QW-Gf-65u"/>
+                                                <constraint firstAttribute="height" constant="50" id="Bku-ZZ-qr0"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="zGe-p8-B7a" secondAttribute="centerX" id="5ZB-Jg-5Qz"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="zGe-p8-B7a" secondAttribute="bottom" constant="-8" id="IT1-2D-4Ju"/>
+                                    <constraint firstItem="zGe-p8-B7a" firstAttribute="top" secondItem="qiJ-qD-ErU" secondAttribute="topMargin" constant="-8" id="YGp-77-m8k"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="bannerAd" destination="zGe-p8-B7a" id="Tuz-HN-0nV"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="FA5-QM-plv" id="dGz-Ev-DNS"/>
+                            <outlet property="delegate" destination="FA5-QM-plv" id="8RZ-gj-LUQ"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xtP-IM-sql" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="90" y="1021"/>
         </scene>
     </scenes>
 </document>
