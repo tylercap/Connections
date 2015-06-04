@@ -19,6 +19,7 @@
 -(NSInteger)getSections;
 -(NSInteger)getItems;
 
++(GPGTurnBasedParticipant*)getOpponentFromMatch:(GPGTurnBasedMatch*)match;
 -(GPGTurnBasedParticipant*)getOpponent;
 -(NSString*)getOpponentDisplayName;
 

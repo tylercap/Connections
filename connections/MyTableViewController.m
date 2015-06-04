@@ -390,6 +390,7 @@ fromPushNotification:(BOOL)fromPushNotification
             [self.matchesToTrack addObject:match];
         }
 
+        participant = [Model getOpponentFromMatch:match];
         NSString *messageToShow = [NSString
                                    stringWithFormat:@"%@ just finished a match. "
                                    @"Would you like to view the results now?",
@@ -452,6 +453,8 @@ fromPushNotification:(BOOL)fromPushNotification
             @synchronized(_matchesToTrack){
                 [self.matchesToTrack addObject:match];
             }
+    
+            participant = [Model getOpponentFromMatch:match];
             NSString *messageToShow = [NSString stringWithFormat:
                                        @"%@ just took their turn in a match. "
                                        @"Would you like to jump to that game now?",

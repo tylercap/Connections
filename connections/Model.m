@@ -39,7 +39,7 @@ int owner2Cards[6];
     return 6;
 }
 
--(GPGTurnBasedParticipant*)getOpponentFromMatch:(GPGTurnBasedMatch*)match
++(GPGTurnBasedParticipant*)getOpponentFromMatch:(GPGTurnBasedMatch*)match
 {
     NSArray *participants = match.participants;
     GPGTurnBasedParticipant *opponent = [participants objectAtIndex:0];
