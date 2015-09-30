@@ -145,30 +145,49 @@ static NSString * const matchEnded = @"Match has ended!";
     //[GPGTurnBasedMatch allMatchesFromDataSource:GPGDataSourceNetwork completionHandler:
     [GPGTurnBasedMatch allMatchesWithCompletionHandler:^(NSArray *matches, NSError *error)
      {
-        _openGames = [[NSMutableArray alloc] init];
-        [_openGames addObject:gamesInbox];
-        [_openGames addObject:newGame];
+         _openGames = [[NSMutableArray alloc] init];
+         [_openGames addObject:gamesInbox];
+         [_openGames addObject:newGame];
          
-        for (GPGTurnBasedMatch* match in matches)
-        {
-            if (match.status == GPGTurnBasedUserMatchStatusInvited )
-            {
-                [_openGames addObject:match];
-            }
-            else if( match.status == GPGTurnBasedUserMatchStatusTurn )
-            {
-                [_openGames addObject:match];
-            }
-            else if( match.status == GPGTurnBasedUserMatchStatusAwaitingTurn )
-            {
-                [_openGames addObject:match];
-            }
-            else if( match.status == GPGTurnBasedUserMatchStatusMatchCompleted )
-            {
-                [_openGames addObject:match];
-            }
-        }
-        [self.tableView reloadData];
+         NSMutableArray *invited = [[NSMutableArray alloc] init];
+         NSMutableArray *myTurn = [[NSMutableArray alloc] init];
+         NSMutableArray *theirTurn = [[NSMutableArray alloc] init];
+         NSMutableArray *completed = [[NSMutableArray alloc] init];
+         for (GPGTurnBasedMatch* match in matches)
+         {
+             if (match.userMatchStatus == GPGTurnBasedUserMatchStatusInvited )
+             {
+                 [invited addObject:match];
+             }
+             else if( match.userMatchStatus == GPGTurnBasedUserMatchStatusTurn )
+             {
+                 if( match.status == GPGTurnBasedMatchStatusComplete ){
+                     [completed addObject:match];
+                 }
+                 else{
+                     [myTurn addObject:match];
+                 }
+             }
+             else if( match.userMatchStatus == GPGTurnBasedUserMatchStatusAwaitingTurn )
+             {
+                 if( match.status == GPGTurnBasedMatchStatusComplete ){
+                     [completed addObject:match];
+                 }
+                 else{
+                     [theirTurn addObject:match];
+                 }
+             }
+             else if( match.userMatchStatus == GPGTurnBasedUserMatchStatusMatchCompleted )
+             {
+                 [completed addObject:match];
+             }
+         }
+         
+         [_openGames addObjectsFromArray:invited];
+         [_openGames addObjectsFromArray:myTurn];
+         [_openGames addObjectsFromArray:theirTurn];
+         [_openGames addObjectsFromArray:completed];
+         [self.tableView reloadData];
     }];
 }
 
@@ -227,39 +246,96 @@ static NSString * const matchEnded = @"Match has ended!";
         [model loadFromData:match];
         NSString *opponentName = [model getOpponentDisplayName];
         
-        NSString *resultStr = @"Match Expired";
+        NSString *resultStr = @"Expired";
         switch (match.userMatchStatus)
         {
             case GPGTurnBasedUserMatchStatusTurn:         //My turn
-                cell.title.text = [NSString stringWithFormat:@"%@: Your Turn", opponentName];
+                if( match.status == GPGTurnBasedMatchStatusComplete ){
+                    for (GPGTurnBasedParticipantResult *result in match.results)
+                    {
+                        if( [result.participantId isEqualToString:[model getOpponent].participantId] ){
+                            // opponent result
+                            if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                                resultStr = @"You Lost";
+                            }
+                            if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                                resultStr = @"You Won!";
+                            }
+                        }
+                        else{
+                            // my result
+                            if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                                resultStr = @"You Won!";
+                            }
+                            if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                                resultStr = @"You Lost";
+                            }
+                        }
+                    }
+                    cell.title.text = [NSString stringWithFormat:@"%@: %@", opponentName, resultStr];
+                }
+                else{
+                    cell.title.text = [NSString stringWithFormat:@"%@: Your Turn", opponentName];
+                }
                 break;
             case GPGTurnBasedUserMatchStatusAwaitingTurn: //Their turn
-                cell.title.text = [NSString stringWithFormat:@"%@: Their Turn", opponentName];
+                if( match.status == GPGTurnBasedMatchStatusComplete ){
+                    for (GPGTurnBasedParticipantResult *result in match.results)
+                    {
+                        if( [result.participantId isEqualToString:[model getOpponent].participantId] ){
+                            // opponent result
+                            if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                                resultStr = @"You Lost";
+                            }
+                            if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                                resultStr = @"You Won!";
+                            }
+                        }
+                        else{
+                            // my result
+                            if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                                resultStr = @"You Won!";
+                            }
+                            if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                                resultStr = @"You Lost";
+                            }
+                        }
+                    }
+                    cell.title.text = [NSString stringWithFormat:@"%@: %@", opponentName, resultStr];
+                }
+                else{
+                    cell.title.text = [NSString stringWithFormat:@"%@: Their Turn", opponentName];
+                }
                 break;
             case GPGTurnBasedUserMatchStatusInvited:
                 cell.title.text = [NSString stringWithFormat:@"%@: You're Invited", opponentName];
                 break;
             case GPGTurnBasedUserMatchStatusMatchCompleted: //Completed match
-                for (GPGTurnBasedParticipantResult *result in match.results)
-                {
-                    if( [result.participantId isEqualToString:[model getOpponent].participantId] ){
-                        // opponent result
-                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
-                            resultStr = @"You Lost";
+                if( match.status == GPGTurnBasedMatchStatusComplete ){
+                    for (GPGTurnBasedParticipantResult *result in match.results)
+                    {
+                        if( [result.participantId isEqualToString:[model getOpponent].participantId] ){
+                            // opponent result
+                            if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                                resultStr = @"You Lost";
+                            }
+                            if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                                resultStr = @"You Won!";
+                            }
                         }
-                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
-                            resultStr = @"You Won!";
+                        else{
+                            // my result
+                            if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                                resultStr = @"You Won!";
+                            }
+                            if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                                resultStr = @"You Lost";
+                            }
                         }
                     }
-                    else{
-                        // my result
-                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
-                            resultStr = @"You Won!";
-                        }
-                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
-                            resultStr = @"You Lost";
-                        }
-                    }
+                }
+                else{
+                    resultStr = @"Expired";
                 }
                 
                 cell.title.text = [NSString stringWithFormat:@"%@: %@", opponentName, resultStr];

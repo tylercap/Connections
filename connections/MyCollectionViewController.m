@@ -29,6 +29,7 @@ static NSString * const win10000Id = @"CgkI7oCyj54JEAIQCg";
 
 static NSString * const youLost = @"You Lost";
 static NSString * const youWon = @"You Win!";
+static NSString * const resignConfirmation = @"Resign";
 
 @implementation MyCollectionViewController
 
@@ -283,7 +284,7 @@ static NSString * const youWon = @"You Win!";
     [self.collectionView reloadData];
 }
 
-- (void)resign
+- (void)doResign
 {
     NSData *data = [self.model storeToData];
     GPGTurnBasedParticipant *opponent = [_model getOpponent];
@@ -323,8 +324,27 @@ static NSString * const youWon = @"You Win!";
     [self.collectionView reloadData];
 }
 
+- (void)resign
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:resignConfirmation
+                                                    message:@"Are you sure you would like to resign?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if( [alertView.title isEqualToString:resignConfirmation] ){
+        if( buttonIndex == 0 ){
+            // cancel
+        }
+        if( buttonIndex == 1 ){
+            // resign
+            [self doResign];
+        }
+    }
     if( [alertView.title isEqualToString:youWon] || [alertView.title isEqualToString:youLost] )
     {
         if( buttonIndex == 0 ){
