@@ -34,8 +34,8 @@
 		D456B16D1ADEF2E7004EED3C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD751AAF80DE007025A6 /* Main.storyboard */; };
 		D456B1711ADEFE95004EED3C /* GooglePlayGames.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D456B16F1ADEFE95004EED3C /* GooglePlayGames.bundle */; };
 		D489547B1ADEF16400FD1027 /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D4154A991ADD642A001A2188 /* GooglePlus.bundle */; };
-		D4CC9B881BBC5C2100A85F47 /* GooglePlayGames.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CC9B871BBC5C2100A85F47 /* GooglePlayGames.framework */; settings = {ASSET_TAGS = (); }; };
-		D4CC9B8C1BBC5D9200A85F47 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CC9B8B1BBC5D9200A85F47 /* GoogleMobileAds.framework */; settings = {ASSET_TAGS = (); }; };
+		D4CC9B881BBC5C2100A85F47 /* GooglePlayGames.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CC9B871BBC5C2100A85F47 /* GooglePlayGames.framework */; };
+		D4CC9B8C1BBC5D9200A85F47 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CC9B8B1BBC5D9200A85F47 /* GoogleMobileAds.framework */; };
 		D4E3CD6E1AAF80DE007025A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD6D1AAF80DE007025A6 /* main.m */; };
 		D4E3CD711AAF80DE007025A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD701AAF80DE007025A6 /* AppDelegate.m */; };
 		D4E3CD791AAF80DE007025A6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD781AAF80DE007025A6 /* Images.xcassets */; };
@@ -546,7 +546,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ff0deec0-6972-49c2-ae04-a5eb5c14699e";
+				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -570,7 +570,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ff0deec0-6972-49c2-ae04-a5eb5c14699e";
+				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
