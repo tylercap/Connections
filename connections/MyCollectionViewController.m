@@ -15,9 +15,7 @@ static NSString * const ButtonIdentifier = @"ButtonCell";
 static NSString * const LabelIdentifier = @"LabelCell";
 static NSString * const BannerIdentifier = @"BannerCell";
 
-//static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
-//static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/8955584856";
-
+static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/9946105651";
 static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/2150010457";
 
 static NSString * const win1Id = @"CgkI7oCyj54JEAIQBQ";
@@ -50,7 +48,7 @@ static NSString * const resignConfirmation = @"Resign";
         [self.tiles addObject:items];
     }
     
-//    [self loadInterstitial];
+    [self loadInterstitial];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,6 +72,28 @@ static NSString * const resignConfirmation = @"Resign";
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)loadInterstitial
+{
+    self.interstitial = [[GADInterstitial alloc] init];
+    self.interstitial.adUnitID = InterstitialAdId;
+    
+    GADRequest *request = [GADRequest request];
+    self.interstitial.delegate = self;
+    [self.interstitial loadRequest:request];
+}
+
+- (void)interstitialDidDismissScreen:(GADInterstitial *)interstitial {
+    [self loadInterstitial];
+}
+
+- (void) showInterstitial
+{
+    int random = arc4random_uniform(9);
+    if ( random < 2 && [self.interstitial isReady]) {
+        [self.interstitial presentFromRootViewController:self];
+    }
 }
 
 //- (NSString *)determineWhoGoesNext:(GPGTurnBasedMatch *)match {
@@ -282,6 +302,8 @@ static NSString * const resignConfirmation = @"Resign";
     self.myTurn = NO;
     [_resignButton setEnabled:NO];
     [self.collectionView reloadData];
+    
+    [self showInterstitial];
 }
 
 - (void)doResign

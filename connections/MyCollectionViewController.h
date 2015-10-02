@@ -16,7 +16,7 @@
 #import "MyBannerCell.h"
 #import "Model.h"
 
-@interface MyCollectionViewController : UICollectionViewController <UICollectionViewDataSource>
+@interface MyCollectionViewController : UICollectionViewController <UICollectionViewDataSource,GADInterstitialDelegate>
 
 @property (strong, nonatomic) MyTableViewController *lobby;
 
@@ -28,6 +28,8 @@
 @property (nonatomic) Boolean removeClicked;
 
 @property (strong, nonatomic) GPGTurnBasedMatch *match;
+
+@property (strong, nonatomic) GADInterstitial *interstitial;
 
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSMutableArray *openGames;
 @property (nonatomic, strong) NSMutableArray *matchesToTrack;
 @property (nonatomic) Boolean shouldDeclineMatch;
+@property (nonatomic) double lastLoad;
 
 @property (nonatomic) Boolean signedIn;
 @property (nonatomic) Boolean silentlySigningIn;

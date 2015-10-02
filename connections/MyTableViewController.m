@@ -109,6 +109,7 @@ static NSString * const matchEnded = @"Match has ended!";
     
     if( _signedIn ){
         [self.signInItem setTitle:@"Sign Out"];
+        [self openInbox]; // Possible Remove this call
         [self loadOpenGames];
     }
     else{
@@ -377,7 +378,7 @@ static NSString * const matchEnded = @"Match has ended!";
         
         if( [gameSelected isEqualToString:gamesInbox] ){
             // set up quick match
-            [self openGamesInbox];
+            [self openInbox];
         }
         else if( [gameSelected isEqualToString:newGame] ){
             // allow the user to choose their opponent
@@ -454,6 +455,41 @@ static NSString * const matchEnded = @"Match has ended!";
     }
 }
 
+-(void)openInbox
+{
+//    [self loadOpenGames];
+//    NSArray *matches = [[NSArray alloc] initWithObjects:match, nil];
+//    [[GPGLauncherController sharedInstance] presentTurnBasedMatchListWithMatches:matches];
+    
+    UIWindow *topWindow = [[UIApplication sharedApplication] keyWindow];
+    UIView *topView = [[topWindow subviews] lastObject];
+    
+//    UIWindow *topWindow2 = [[[UIApplication sharedApplication].windows sortedArrayUsingComparator:^NSComparisonResult(UIWindow *win1, UIWindow *win2) {
+//        return win1.windowLevel - win2.windowLevel;
+//    }] lastObject];
+//    
+//    UIView *topView2 = [[topWindow2 subviews] lastObject];
+//    
+//    UIWindow *topWindow3 = [[[UIApplication sharedApplication] windows] lastObject];
+//    UIView *topView3 = [[topWindow3 subviews] lastObject];
+    
+//    if( [topView isKindOfClass:[GPGWelcomeBackToastView class]] ){
+//        
+//    }
+    
+    // GPGWelcomeBackToastView is semi transparent
+    double currTime = [[NSDate date] timeIntervalSince1970];
+    if( _lastLoad <= 0 ){
+        _lastLoad = currTime - 60;
+    }
+    if( topView.alpha == 1.0f && (currTime - _lastLoad) > 1 ){
+        [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
+        _lastLoad = currTime;
+    }
+
+    [self loadOpenGames];
+}
+
 #pragma mark - GPGTurnBasedMatchListLauncherDelegate methods
 
 - (void)matchEnded:(GPGTurnBasedMatch *)match
@@ -462,22 +498,25 @@ fromPushNotification:(BOOL)fromPushNotification
 {
     // Only show an alert if you received this from a push notification
     if (fromPushNotification) {
-        @synchronized(_matchesToTrack){
-            [self.matchesToTrack addObject:match];
-        }
-
-        participant = [Model getOpponentFromMatch:match];
-        NSString *messageToShow = [NSString
-                                   stringWithFormat:@"%@ just finished a match. "
-                                   @"Would you like to view the results now?",
-                                   participant.displayName];
-        [[[UIAlertView alloc] initWithTitle:matchEnded
-                                    message:messageToShow
-                                   delegate:self
-                          cancelButtonTitle:@"No"
-                          otherButtonTitles:@"Sure!",  nil] show];
+//        @synchronized(_matchesToTrack){
+//            [self.matchesToTrack addObject:match];
+//        }
+//
+//        participant = [Model getOpponentFromMatch:match];
+//        NSString *messageToShow = [NSString
+//                                   stringWithFormat:@"%@ just finished a match. "
+//                                   @"Would you like to view the results now?",
+//                                   participant.displayName];
+//        [[[UIAlertView alloc] initWithTitle:matchEnded
+//                                    message:messageToShow
+//                                   delegate:self
+//                          cancelButtonTitle:@"No"
+        //                          otherButtonTitles:@"Sure!",  nil] show];
+        [self openInbox];
     }
-    [self loadOpenGames];
+    else{
+        [self loadOpenGames];
+    }
 }
 
 - (void)didReceiveTurnBasedInviteForMatch:(GPGTurnBasedMatch *)match
@@ -490,60 +529,72 @@ fromPushNotification:(BOOL)fromPushNotification
                      fromPushNotification:(BOOL)fromPushNotification
                           declineOnCancel:(BOOL)decline
 {
-    NSString *cancelTitle = @"Not now";
-    if( decline ){
-        cancelTitle = @"Decline";
+    if( fromPushNotification ){
+        [self openInbox];
     }
-    
-//    if (fromPushNotification) {
-        GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
-        // This should always be true
-    //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
-            @synchronized(_matchesToTrack){
-                [self.matchesToTrack addObject:match];
-            }
-            self.shouldDeclineMatch = decline;
-            NSString *messageToShow =
-            [NSString stringWithFormat:@"%@ just invited you to a game. Would you like to play now?",
-             invitingParticipant.displayName];
-            [[[UIAlertView alloc] initWithTitle:invited
-                                        message:messageToShow
-                                       delegate:self
-                              cancelButtonTitle:cancelTitle
-                              otherButtonTitles:@"Sure!",
-              nil] show];
-//        }
+    else{
+        [self loadOpenGames];
+    }
+//    NSString *cancelTitle = @"Not now";
+//    if( decline ){
+//        cancelTitle = @"Decline";
 //    }
-    // Tell users they have matches that might need their attention,
-    // no matter how your app reaches this method.
-    [self loadOpenGames];
+//    
+////    if (fromPushNotification) {
+//        GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
+//        // This should always be true
+//    //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+//            @synchronized(_matchesToTrack){
+//                [self.matchesToTrack addObject:match];
+//            }
+//            self.shouldDeclineMatch = decline;
+//            NSString *messageToShow =
+//            [NSString stringWithFormat:@"%@ just invited you to a game. Would you like to play now?",
+//             invitingParticipant.displayName];
+//            [[[UIAlertView alloc] initWithTitle:invited
+//                                        message:messageToShow
+//                                       delegate:self
+//                              cancelButtonTitle:cancelTitle
+//                              otherButtonTitles:@"Sure!",
+//              nil] show];
+////        }
+////    }
+//    // Tell users they have matches that might need their attention,
+//    // no matter how your app reaches this method.
+//    [self loadOpenGames];
 }
 
 - (void)didReceiveTurnEventForMatch:(GPGTurnBasedMatch *)match
                         participant:(GPGTurnBasedParticipant *)participant
                fromPushNotification:(BOOL)fromPushNotification
 {
-    // Only show an alert if you received this from a push notification
-//    if (fromPushNotification) {
-    //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
-            @synchronized(_matchesToTrack){
-                [self.matchesToTrack addObject:match];
-            }
-    
-            participant = [Model getOpponentFromMatch:match];
-            NSString *messageToShow = [NSString stringWithFormat:
-                                       @"%@ just took their turn in a match. "
-                                       @"Would you like to jump to that game now?",
-                                       participant.displayName];
-            [[[UIAlertView alloc] initWithTitle:yourTurn
-                                        message:messageToShow
-                                       delegate:self
-                              cancelButtonTitle:@"No"
-                              otherButtonTitles:@"Sure!",
-              nil] show];
-//        }
-//    }
-    [self loadOpenGames];
+    if( fromPushNotification ){
+        [self openInbox];
+    }
+    else{
+        [self loadOpenGames];
+    }
+    //    // Only show an alert if you received this from a push notification
+////    if (fromPushNotification) {
+//    //        if ([match.pendingParticipant.participantId isEqualToString:match.localParticipantId]) {
+//            @synchronized(_matchesToTrack){
+//                [self.matchesToTrack addObject:match];
+//            }
+//    
+//            participant = [Model getOpponentFromMatch:match];
+//            NSString *messageToShow = [NSString stringWithFormat:
+//                                       @"%@ just took their turn in a match. "
+//                                       @"Would you like to jump to that game now?",
+//                                       participant.displayName];
+//            [[[UIAlertView alloc] initWithTitle:yourTurn
+//                                        message:messageToShow
+//                                       delegate:self
+//                              cancelButtonTitle:@"No"
+//                              otherButtonTitles:@"Sure!",
+//              nil] show];
+////        }
+////    }
+//    [self loadOpenGames];
 }
 
 - (void)turnBasedMatchListLauncherDidSelectMatch:(GPGTurnBasedMatch *) match
@@ -626,12 +677,6 @@ fromPushNotification:(BOOL)fromPushNotification
     else{
         [self startQuickMatchGame];
     }
-}
-
-- (void)openGamesInbox
-{
-    [[GPGLauncherController sharedInstance] presentTurnBasedMatchList];
-    [self loadOpenGames];
 }
 
 - (void) startQuickMatchGame
