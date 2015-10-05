@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Tyler Cap. All rights reserved.
 //
 
-@import GoogleMobileAds;
-
 #import "MyOfflineCollectionViewController.h"
 
 static NSString * const CellIdentifier = @"TileCell";
@@ -15,10 +13,7 @@ static NSString * const ButtonIdentifier = @"ButtonCell";
 static NSString * const LabelIdentifier = @"LabelCell";
 static NSString * const BannerIdentifier = @"BannerCell";
 
-//static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/7478851650";
-//static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/8955584856";
-
-static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/2150010457";
+static NSString * const intAdName = @"CONNECT_IOS_INTERSTITIAL";
 
 static NSString * const youLost = @"You Lost";
 static NSString * const youWon = @"You Win!";
@@ -27,11 +22,11 @@ static NSString * const youWon = @"You Win!";
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];    
+    [super viewDidLoad];
     
     self.model = [[OfflineModel alloc]init];
     [self loadGame];
-     
+    
     _headerSections = 1;
     _footerSections = 2;
     
@@ -42,7 +37,7 @@ static NSString * const youWon = @"You Win!";
         [self.tiles addObject:items];
     }
     
-//    [self loadInterstitial];
+    [self loadInterstitial];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -56,6 +51,8 @@ static NSString * const youWon = @"You Win!";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [_bannerAdCell loadAd:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -63,9 +60,56 @@ static NSString * const youWon = @"You Win!";
     [super viewWillDisappear:animated];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)loadInterstitial
+{
+    _adInterstitial = [[FlurryAdInterstitial alloc] initWithSpace:intAdName];
+    _adInterstitial.adDelegate = self;
+    
+    [_adInterstitial fetchAd];
+}
+
+// Invoked when an ad is received for the specified interstitialAd object.
+- (void) adInterstitialDidFetchAd:(FlurryAdInterstitial*)interstitialAd
+{
+    // you can choose to present the ad as soon as it is received
+    [interstitialAd presentWithViewController:self];
+}
+
+// Invoked when the interstitial ad is rendered.
+- (void) adInterstitialDidRender:(FlurryAdInterstitial *)interstitialAd
+{
+}
+
+// Informs the app that a video associated with this ad has finished playing.
+// Only present for rewarded & client-side rewarded ad spaces
+- (void) adInterstitialVideoDidFinish:(FlurryAdInterstitial *)interstitialAd
+{
+}
+
+// Informational callback invoked when there is an ad error
+- (void) adInterstitial:(FlurryAdInterstitial*)interstitialAd
+                adError:(FlurryAdError) adError
+       errorDescription:(NSError*) errorDescription
+{
+    // @param interstitialAd The interstitial ad object associated with the error
+    // @param adError an enum that gives the reason for the error.
+    // @param errorDescription An error object that gives additional information on the cause of the ad error.
+}
+
+- (void) showInterstitial
+{
+    int random = arc4random_uniform(9);
+    if ( random < 2 && [_adInterstitial ready] ){
+        [_adInterstitial presentWithViewController:self];
+    } else {
+        [_adInterstitial fetchAd];
+    }
 }
 
 - (void)loadGame
@@ -143,16 +187,16 @@ static NSString * const youWon = @"You Win!";
         for( int col = 0; col < rowArr.count; col++ ){
             MyCollectionViewCell *cell = [rowArr objectAtIndex:col];
             
-            if( value >= 0 && cell.value == value && cell.owner == 0 ){
+            if( value >= 0 && cell.value == value && cell.cardOwner == 0 ){
                 _removeClicked = NO;
                 [cell highlightTile:highlight];
             }
-            else if( value == -2 && cell.owner != 0 && cell.owner != self.owner ){
+            else if( value == -2 && cell.cardOwner != 0 && cell.cardOwner != self.owner ){
                 // can remove other players card
                 _removeClicked = YES;
                 [cell highlightTile:highlight];
             }
-            else if( value == -1 && cell.owner == 0 ){
+            else if( value == -1 && cell.cardOwner == 0 ){
                 // can be played in any open space
                 _removeClicked = NO;
                 [cell highlightTile:highlight];
@@ -223,7 +267,7 @@ static NSString * const youWon = @"You Win!";
     NSInteger value = [self.model getValueAt:row column:column];
     NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self myTurn:!self.gameOver];
+    [myCell setLabel:value row:row column:column cardOwner:owner deviceOwner:self.owner players:NO parent:self myTurn:!self.gameOver];
     
     return myCell;
 }
@@ -237,20 +281,20 @@ static NSString * const youWon = @"You Win!";
     UICollectionViewCell *cell = nil;
     if( section == 0 ){
         /*if( _bannerAdCell != nil ){
-            cell = _bannerAdCell;
-        }
-        else{*/
-            MyBannerCell *bannerCell = [collectionView
-                                        dequeueReusableCellWithReuseIdentifier:BannerIdentifier
-                                        forIndexPath:indexPath];
-            
-            
-            bannerCell.bannerAd.adUnitID = BannerAdId;
-            bannerCell.bannerAd.rootViewController = self;
-            [bannerCell.bannerAd loadRequest:[GADRequest request]];
-            
-            _bannerAdCell = bannerCell;
-            cell = bannerCell;
+         cell = _bannerAdCell;
+         }
+         else{*/
+        MyBannerCell *bannerCell = [collectionView
+                                    dequeueReusableCellWithReuseIdentifier:BannerIdentifier
+                                    forIndexPath:indexPath];
+        
+        //            [bannerCell loadAd:self];
+        //            bannerCell.bannerAd.adUnitID = BannerAdId;
+        //            bannerCell.bannerAd.rootViewController = self;
+        //            [bannerCell.bannerAd loadRequest:[GADRequest request]];
+        
+        _bannerAdCell = bannerCell;
+        cell = bannerCell;
         //}
     }
     else if(section == (_headerSections + [self.model getSections])){
@@ -286,12 +330,12 @@ static NSString * const youWon = @"You Win!";
         
         NSInteger value = [self.model getPlayerOption:item owner:self.owner];
         
-        [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self myTurn:!self.gameOver];
+        [myCell setLabel:value row:-1 column:item cardOwner:self.owner deviceOwner:self.owner players:YES parent:self myTurn:!self.gameOver];
         cell = myCell;
         
         [_playerCards insertObject:myCell atIndex:item];
     }
-
+    
     return cell;
 }
 

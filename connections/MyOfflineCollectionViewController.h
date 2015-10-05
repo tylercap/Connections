@@ -15,7 +15,9 @@
 #import "MyBannerCell.h"
 #import "OfflineModel.h"
 
-@interface MyOfflineCollectionViewController : UICollectionViewController <UICollectionViewDataSource>
+@interface MyOfflineCollectionViewController : UICollectionViewController <UICollectionViewDataSource, FlurryAdInterstitialDelegate>
+
+@property (nonatomic, strong) FlurryAdInterstitial* adInterstitial;
 
 @property (strong, nonatomic) NSMutableArray *tiles;
 @property (strong, nonatomic) NSMutableArray *playerCards;

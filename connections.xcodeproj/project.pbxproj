@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC2063BE54BCFA3819ED5B78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA88B471959BE34B1FA8B0BC /* libPods.a */; };
+		D407CEB31BC2ED660077E2E5 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D407CEB21BC2ED660077E2E5 /* AdSupport.framework */; };
+		D407CEB51BC2ED6B0077E2E5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D407CEB41BC2ED6B0077E2E5 /* AVFoundation.framework */; };
+		D407CEB71BC2ED7F0077E2E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D407CEB61BC2ED7F0077E2E5 /* CoreGraphics.framework */; };
+		D407CEB91BC2ED860077E2E5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D407CEB81BC2ED860077E2E5 /* CoreMedia.framework */; };
+		D407CEBD1BC2EFC70077E2E5 /* Flurry_7.2.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D407CEBC1BC2EFC70077E2E5 /* Flurry_7.2.1.a */; };
+		D407CEBF1BC2EFD40077E2E5 /* FlurryAds_7.2.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D407CEBE1BC2EFD40077E2E5 /* FlurryAds_7.2.1.a */; };
 		D4154A9A1ADD642A001A2188 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4154A871ADD642A001A2188 /* GoogleOpenSource.framework */; };
 		D4154A9B1ADD642A001A2188 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4154A881ADD642A001A2188 /* GooglePlus.framework */; };
 		D4154A9C1ADD642A001A2188 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4154A891ADD642A001A2188 /* SystemConfiguration.framework */; };
@@ -27,15 +34,12 @@
 		D41602151AB604F800CC905F /* MyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D41602131AB604F800CC905F /* MyTableViewCell.m */; };
 		D416021B1AB6050F00CC905F /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = D41602181AB6050F00CC905F /* Application.m */; };
 		D416021C1AB6050F00CC905F /* MyWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D416021A1AB6050F00CC905F /* MyWebViewController.m */; };
-		D417218B1BBC5EE20039C91C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D417218A1BBC5EE20039C91C /* libc++.tbd */; };
-		D417218D1BBC5EE70039C91C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D417218C1BBC5EE70039C91C /* libz.tbd */; };
 		D41F69031B0543D3008BA111 /* OfflineModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D41F69021B0543D3008BA111 /* OfflineModel.m */; };
 		D41F69061B0543DD008BA111 /* MyOfflineCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41F69051B0543DD008BA111 /* MyOfflineCollectionViewController.m */; };
 		D456B16D1ADEF2E7004EED3C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD751AAF80DE007025A6 /* Main.storyboard */; };
 		D456B1711ADEFE95004EED3C /* GooglePlayGames.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D456B16F1ADEFE95004EED3C /* GooglePlayGames.bundle */; };
 		D489547B1ADEF16400FD1027 /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D4154A991ADD642A001A2188 /* GooglePlus.bundle */; };
 		D4CC9B881BBC5C2100A85F47 /* GooglePlayGames.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CC9B871BBC5C2100A85F47 /* GooglePlayGames.framework */; };
-		D4CC9B8C1BBC5D9200A85F47 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CC9B8B1BBC5D9200A85F47 /* GoogleMobileAds.framework */; };
 		D4E3CD6E1AAF80DE007025A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD6D1AAF80DE007025A6 /* main.m */; };
 		D4E3CD711AAF80DE007025A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E3CD701AAF80DE007025A6 /* AppDelegate.m */; };
 		D4E3CD791AAF80DE007025A6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4E3CD781AAF80DE007025A6 /* Images.xcassets */; };
@@ -60,6 +64,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		17117E9DE3CD73AD08338781 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		CA88B471959BE34B1FA8B0BC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2971CA6D3BA032334FADB4F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		D407CEB21BC2ED660077E2E5 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		D407CEB41BC2ED6B0077E2E5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		D407CEB61BC2ED7F0077E2E5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		D407CEB81BC2ED860077E2E5 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		D407CEBC1BC2EFC70077E2E5 /* Flurry_7.2.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = Flurry_7.2.1.a; path = "Pods/Flurry-iOS-SDK/Flurry/Flurry_7.2.1.a"; sourceTree = "<group>"; };
+		D407CEBE1BC2EFD40077E2E5 /* FlurryAds_7.2.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FlurryAds_7.2.1.a; path = "Pods/Flurry-iOS-SDK/FlurryAds/FlurryAds_7.2.1.a"; sourceTree = "<group>"; };
 		D4154A871ADD642A001A2188 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = ../../Libs/js/GoogleOpenSource.framework; sourceTree = "<group>"; };
 		D4154A881ADD642A001A2188 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = ../../Libs/js/GooglePlus.framework; sourceTree = "<group>"; };
 		D4154A891ADD642A001A2188 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -85,15 +98,12 @@
 		D41602181AB6050F00CC905F /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
 		D41602191AB6050F00CC905F /* MyWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWebViewController.h; sourceTree = "<group>"; };
 		D416021A1AB6050F00CC905F /* MyWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyWebViewController.m; sourceTree = "<group>"; };
-		D417218A1BBC5EE20039C91C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		D417218C1BBC5EE70039C91C /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		D41F69011B0543D3008BA111 /* OfflineModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineModel.h; sourceTree = "<group>"; };
 		D41F69021B0543D3008BA111 /* OfflineModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineModel.m; sourceTree = "<group>"; };
 		D41F69041B0543DD008BA111 /* MyOfflineCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfflineCollectionViewController.h; sourceTree = "<group>"; };
 		D41F69051B0543DD008BA111 /* MyOfflineCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOfflineCollectionViewController.m; sourceTree = "<group>"; };
 		D456B16F1ADEFE95004EED3C /* GooglePlayGames.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlayGames.bundle; path = "../../../../Downloads/GooglePlayGames-iOS-SDK.v3.1.1 2/GooglePlayGames.bundle"; sourceTree = "<group>"; };
 		D4CC9B871BBC5C2100A85F47 /* GooglePlayGames.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlayGames.framework; sourceTree = "<group>"; };
-		D4CC9B8B1BBC5D9200A85F47 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		D4E3CD681AAF80DE007025A6 /* connections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = connections.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E3CD6C1AAF80DE007025A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4E3CD6D1AAF80DE007025A6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -125,9 +135,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D417218D1BBC5EE70039C91C /* libz.tbd in Frameworks */,
-				D417218B1BBC5EE20039C91C /* libc++.tbd in Frameworks */,
-				D4CC9B8C1BBC5D9200A85F47 /* GoogleMobileAds.framework in Frameworks */,
+				D407CEBF1BC2EFD40077E2E5 /* FlurryAds_7.2.1.a in Frameworks */,
+				D407CEBD1BC2EFC70077E2E5 /* Flurry_7.2.1.a in Frameworks */,
+				D407CEB91BC2ED860077E2E5 /* CoreMedia.framework in Frameworks */,
+				D407CEB71BC2ED7F0077E2E5 /* CoreGraphics.framework in Frameworks */,
+				D407CEB51BC2ED6B0077E2E5 /* AVFoundation.framework in Frameworks */,
+				D407CEB31BC2ED660077E2E5 /* AdSupport.framework in Frameworks */,
 				D4154AA81ADD642A001A2188 /* libz.dylib in Frameworks */,
 				D4154AA91ADD642A001A2188 /* libc++.dylib in Frameworks */,
 				D4154A9C1ADD642A001A2188 /* SystemConfiguration.framework in Frameworks */,
@@ -145,6 +158,7 @@
 				D4CC9B881BBC5C2100A85F47 /* GooglePlayGames.framework in Frameworks */,
 				D4154AA51ADD642A001A2188 /* AssetsLibrary.framework in Frameworks */,
 				D4154AA61ADD642A001A2188 /* AddressBook.framework in Frameworks */,
+				BC2063BE54BCFA3819ED5B78 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +172,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D3D80A6BA5420F6C408A23A9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D407CEBE1BC2EFD40077E2E5 /* FlurryAds_7.2.1.a */,
+				D407CEBC1BC2EFC70077E2E5 /* Flurry_7.2.1.a */,
+				D407CEB81BC2ED860077E2E5 /* CoreMedia.framework */,
+				D407CEB61BC2ED7F0077E2E5 /* CoreGraphics.framework */,
+				D407CEB41BC2ED6B0077E2E5 /* AVFoundation.framework */,
+				D407CEB21BC2ED660077E2E5 /* AdSupport.framework */,
+				CA88B471959BE34B1FA8B0BC /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D41602161AB6050300CC905F /* WebView */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +214,8 @@
 				D4E3CD6A1AAF80DE007025A6 /* connections */,
 				D4E3CD841AAF80DE007025A6 /* connectionsTests */,
 				D4E3CD691AAF80DE007025A6 /* Products */,
+				F64E790DED4B58517095D207 /* Pods */,
+				D3D80A6BA5420F6C408A23A9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -276,9 +306,6 @@
 		D4E3CDA51AAF81B7007025A6 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				D417218C1BBC5EE70039C91C /* libz.tbd */,
-				D417218A1BBC5EE20039C91C /* libc++.tbd */,
-				D4CC9B8B1BBC5D9200A85F47 /* GoogleMobileAds.framework */,
 				D4CC9B871BBC5C2100A85F47 /* GooglePlayGames.framework */,
 				D456B16F1ADEFE95004EED3C /* GooglePlayGames.bundle */,
 				D4154A871ADD642A001A2188 /* GoogleOpenSource.framework */,
@@ -302,6 +329,15 @@
 			name = Libs;
 			sourceTree = "<group>";
 		};
+		F64E790DED4B58517095D207 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				17117E9DE3CD73AD08338781 /* Pods.debug.xcconfig */,
+				D2971CA6D3BA032334FADB4F /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -309,9 +345,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4E3CD8B1AAF80DE007025A6 /* Build configuration list for PBXNativeTarget "connections" */;
 			buildPhases = (
+				B2EC403FBBB377AD3BF9BB8C /* Check Pods Manifest.lock */,
 				D4E3CD641AAF80DE007025A6 /* Sources */,
 				D4E3CD651AAF80DE007025A6 /* Frameworks */,
 				D4E3CD661AAF80DE007025A6 /* Resources */,
+				1DFED5EC6122CA338198CEAE /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -346,7 +384,7 @@
 		D4E3CD601AAF80DE007025A6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Tyler Cap";
 				TargetAttributes = {
 					D4E3CD671AAF80DE007025A6 = {
@@ -397,6 +435,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1DFED5EC6122CA338198CEAE /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2EC403FBBB377AD3BF9BB8C /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D4E3CD641AAF80DE007025A6 /* Sources */ = {
@@ -471,6 +542,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -529,6 +601,7 @@
 		};
 		D4E3CD8C1AAF80DE007025A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 17117E9DE3CD73AD08338781 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -543,8 +616,15 @@
 				INFOPLIST_FILE = connections/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Pods/Flurry-iOS-SDK/Flurry",
+					"$(PROJECT_DIR)/Pods/Flurry-iOS-SDK/FlurryAds",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.gmail.tylercap4.connections;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -553,6 +633,7 @@
 		};
 		D4E3CD8D1AAF80DE007025A6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2971CA6D3BA032334FADB4F /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -567,8 +648,15 @@
 				INFOPLIST_FILE = connections/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Pods/Flurry-iOS-SDK/Flurry",
+					"$(PROJECT_DIR)/Pods/Flurry-iOS-SDK/FlurryAds",
+				);
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.gmail.tylercap4.connections;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -589,6 +677,7 @@
 				);
 				INFOPLIST_FILE = connectionsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gmail.tylercap4.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/connections.app/connections";
 			};
@@ -604,6 +693,7 @@
 				);
 				INFOPLIST_FILE = connectionsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gmail.tylercap4.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/connections.app/connections";
 			};

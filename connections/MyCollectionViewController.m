@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Tyler Cap. All rights reserved.
 //
 
-@import GoogleMobileAds;
-
 #import "MyCollectionViewController.h"
 
 static NSString * const CellIdentifier = @"TileCell";
@@ -15,8 +13,9 @@ static NSString * const ButtonIdentifier = @"ButtonCell";
 static NSString * const LabelIdentifier = @"LabelCell";
 static NSString * const BannerIdentifier = @"BannerCell";
 
-static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/9946105651";
-static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/2150010457";
+//static NSString * const InterstitialAdId = @"ca-app-pub-8484316959485082/9946105651";
+//static NSString * const BannerAdId = @"ca-app-pub-8484316959485082/2150010457";
+static NSString * const intAdName = @"CONNECT_IOS_INTERSTITIAL";
 
 static NSString * const win1Id = @"CgkI7oCyj54JEAIQBQ";
 static NSString * const win5Id = @"CgkI7oCyj54JEAIQBg";
@@ -33,11 +32,11 @@ static NSString * const resignConfirmation = @"Resign";
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];    
+    [super viewDidLoad];
     
     self.model = [[Model alloc]init];
     [self loadGame];
-     
+    
     _headerSections = 1;
     _footerSections = 2;
     
@@ -62,6 +61,10 @@ static NSString * const resignConfirmation = @"Resign";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    if( _bannerAdCell != nil ){
+        [_bannerAdCell loadAd:self];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -69,30 +72,55 @@ static NSString * const resignConfirmation = @"Resign";
     [super viewWillDisappear:animated];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (void)loadInterstitial
 {
-    self.interstitial = [[GADInterstitial alloc] init];
-    self.interstitial.adUnitID = InterstitialAdId;
+    _adInterstitial = [[FlurryAdInterstitial alloc] initWithSpace:intAdName];
+    _adInterstitial.adDelegate = self;
     
-    GADRequest *request = [GADRequest request];
-    self.interstitial.delegate = self;
-    [self.interstitial loadRequest:request];
+    [_adInterstitial fetchAd];
 }
 
-- (void)interstitialDidDismissScreen:(GADInterstitial *)interstitial {
-    [self loadInterstitial];
+// Invoked when an ad is received for the specified interstitialAd object.
+- (void) adInterstitialDidFetchAd:(FlurryAdInterstitial*)interstitialAd
+{
+    // you can choose to present the ad as soon as it is received
+    //    [interstitialAd presentWithViewController:self];
+}
+
+// Invoked when the interstitial ad is rendered.
+- (void) adInterstitialDidRender:(FlurryAdInterstitial *)interstitialAd
+{
+}
+
+// Informs the app that a video associated with this ad has finished playing.
+// Only present for rewarded & client-side rewarded ad spaces
+- (void) adInterstitialVideoDidFinish:(FlurryAdInterstitial *)interstitialAd
+{
+}
+
+// Informational callback invoked when there is an ad error
+- (void) adInterstitial:(FlurryAdInterstitial*)interstitialAd
+                adError:(FlurryAdError) adError
+       errorDescription:(NSError*) errorDescription
+{
+    // @param interstitialAd The interstitial ad object associated with the error
+    // @param adError an enum that gives the reason for the error.
+    // @param errorDescription An error object that gives additional information on the cause of the ad error.
 }
 
 - (void) showInterstitial
 {
     int random = arc4random_uniform(9);
-    if ( random < 2 && [self.interstitial isReady]) {
-        [self.interstitial presentFromRootViewController:self];
+    if ( random < 2 && [_adInterstitial ready] ){
+        [_adInterstitial presentWithViewController:self];
+    } else {
+        [_adInterstitial fetchAd];
     }
 }
 
@@ -102,19 +130,19 @@ static NSString * const resignConfirmation = @"Resign";
 //        // Probably raise an exception here.
 //        return nil;
 //    }
-//    
+//
 //    // First, we can look at where I am in the
 //    // deterministically-ordered participants array.
 //    NSUInteger myIndex = [match.participants indexOfObject:match.localParticipant];
 //    if (myIndex == NSNotFound) {
 //        return nil;
 //    }
-//    
+//
 //    // Next, let's look at how many people in total are in the
 //    // round-robin match. This includes participants as well as
 //    // players for auto-match.
 //    NSInteger totalPlayers = match.participants.count + match.matchConfig.minAutoMatchingPlayers;
-//    
+//
 //    if (totalPlayers == 1) {
 //        // You're the only one left! You shouldn't really get to
 //        // this state normally because the
@@ -123,9 +151,9 @@ static NSString * const resignConfirmation = @"Resign";
 //        // the current player again.
 //        return match.localParticipantId;
 //    }
-//    
+//
 //    NSUInteger playerToGoNext = (myIndex + 1) % totalPlayers;
-//    
+//
 //    // Remember, this number might be larger than the participant
 //    // array. If it is, that means we're
 //    // ready to invite our next automatch player
@@ -145,7 +173,7 @@ static NSString * const resignConfirmation = @"Resign";
 {
     // load the game from google play
     [self.model loadFromData:_match];
-        
+    
     self.myTurn = self.match.myTurn;
     if( self.myTurn ){
         self.owner = self.model.ownersTurn;
@@ -246,11 +274,12 @@ static NSString * const resignConfirmation = @"Resign";
     else{
         self.model.ownersTurn = 1;
     }
+    
     NSData *data = [self.model storeToData];
-
+    
     GPGTurnBasedParticipant *opponent = [_model getOpponent];
     
-//    NSString *nextPlayer = [self determineWhoGoesNext:_match];
+    //    NSString *nextPlayer = [self determineWhoGoesNext:_match];
     
     if( winner ){
         NSMutableArray *results = [[NSMutableArray alloc] init];
@@ -274,7 +303,7 @@ static NSString * const resignConfirmation = @"Resign";
                                    cancelButtonTitle:@"Okay"
                                    otherButtonTitles:nil] show];
              } else {
-//                 NSLog(@"Successfully submitted move!");
+                 //                 NSLog(@"Successfully submitted move!");
                  [self unlockAchievement:win1Id];
                  [self incrementAchievement:win5Id];
                  [self incrementAchievement:win20Id];
@@ -294,7 +323,7 @@ static NSString * const resignConfirmation = @"Resign";
                                    cancelButtonTitle:@"Okay"
                                    otherButtonTitles:nil] show];
              } else {
-//                 NSLog(@"Successfully submitted move!");
+                 //                 NSLog(@"Successfully submitted move!");
              }
          }];
     }
@@ -324,22 +353,22 @@ static NSString * const resignConfirmation = @"Resign";
     [results addObject:oppResult];
     
     [self.match finishWithData:data results:results completionHandler:^(NSError *error)
-    {
-          if (error) {
-              [[[UIAlertView alloc] initWithTitle:@"Unable To Submit Move"
-                                          message:@"Check you internet connection, or try again later."
-                                         delegate:self
-                                cancelButtonTitle:@"Okay"
-                                otherButtonTitles:nil] show];
-          } else {
-              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:youLost
-                                                              message:@"Would you like to challenge your opponent to a rematch?"
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Close"
-                                                    otherButtonTitles:@"Rematch", nil];
-              [alert show];
-          }
-    }];
+     {
+         if (error) {
+             [[[UIAlertView alloc] initWithTitle:@"Unable To Submit Move"
+                                         message:@"Check you internet connection, or try again later."
+                                        delegate:self
+                               cancelButtonTitle:@"Okay"
+                               otherButtonTitles:nil] show];
+         } else {
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:youLost
+                                                             message:@"Would you like to challenge your opponent to a rematch?"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Close"
+                                                   otherButtonTitles:@"Rematch", nil];
+             [alert show];
+         }
+     }];
     
     self.myTurn = NO;
     [_resignButton setEnabled:NO];
@@ -395,16 +424,16 @@ static NSString * const resignConfirmation = @"Resign";
         for( int col = 0; col < rowArr.count; col++ ){
             MyCollectionViewCell *cell = [rowArr objectAtIndex:col];
             
-            if( value >= 0 && cell.value == value && cell.owner == 0 ){
+            if( value >= 0 && cell.value == value && cell.cardOwner == 0 ){
                 _removeClicked = NO;
                 [cell highlightTile:highlight];
             }
-            else if( value == -2 && cell.owner != 0 && cell.owner != self.owner ){
+            else if( value == -2 && cell.cardOwner != 0 && cell.cardOwner != self.owner ){
                 // can remove other players card
                 _removeClicked = YES;
                 [cell highlightTile:highlight];
             }
-            else if( value == -1 && cell.owner == 0 ){
+            else if( value == -1 && cell.cardOwner == 0 ){
                 // can be played in any open space
                 _removeClicked = NO;
                 [cell highlightTile:highlight];
@@ -475,7 +504,7 @@ static NSString * const resignConfirmation = @"Resign";
     NSInteger value = [self.model getValueAt:row column:column];
     NSInteger owner = [self.model getOwnerAt:row column:column];
     
-    [myCell setLabel:value row:row column:column owner:owner players:NO parent:self myTurn:self.myTurn];
+    [myCell setLabel:value row:row column:column cardOwner:owner deviceOwner:self.owner players:NO parent:self myTurn:self.myTurn];
     
     return myCell;
 }
@@ -489,20 +518,20 @@ static NSString * const resignConfirmation = @"Resign";
     UICollectionViewCell *cell = nil;
     if( section == 0 ){
         /*if( _bannerAdCell != nil ){
-            cell = _bannerAdCell;
-        }
-        else{*/
-            MyBannerCell *bannerCell = [collectionView
-                                        dequeueReusableCellWithReuseIdentifier:BannerIdentifier
-                                        forIndexPath:indexPath];
-            
-            
-            bannerCell.bannerAd.adUnitID = BannerAdId;
-            bannerCell.bannerAd.rootViewController = self;
-            [bannerCell.bannerAd loadRequest:[GADRequest request]];
-            
-            _bannerAdCell = bannerCell;
-            cell = bannerCell;
+         cell = _bannerAdCell;
+         }
+         else{*/
+        MyBannerCell *bannerCell = [collectionView
+                                    dequeueReusableCellWithReuseIdentifier:BannerIdentifier
+                                    forIndexPath:indexPath];
+        
+        //            [bannerCell loadAd:self];
+        //            bannerCell.bannerAd.adUnitID = BannerAdId;
+        //            bannerCell.bannerAd.rootViewController = self;
+        //            [bannerCell.bannerAd loadRequest:[GADRequest request]];
+        
+        _bannerAdCell = bannerCell;
+        cell = bannerCell;
         //}
     }
     else if(section == (_headerSections + [self.model getSections])){
@@ -543,7 +572,7 @@ static NSString * const resignConfirmation = @"Resign";
             
             NSInteger value = [self.model getPlayerOption:item owner:self.owner];
             
-            [myCell setLabel:value row:-1 column:item owner:self.owner players:YES parent:self myTurn:self.myTurn];
+            [myCell setLabel:value row:-1 column:item cardOwner:self.owner deviceOwner:self.owner players:YES parent:self myTurn:self.myTurn];
             cell = myCell;
             
             [_playerCards insertObject:myCell atIndex:item];

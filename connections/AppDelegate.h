@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <GooglePlus/GooglePlus.h>
 #import "MyTableViewController.h"
+#import "Flurry.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

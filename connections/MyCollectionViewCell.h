@@ -16,7 +16,8 @@
 @property (nonatomic) NSInteger row;
 @property (nonatomic) NSInteger column;
 @property (nonatomic, weak) UIViewController *parentController;
-@property (atomic) NSInteger owner;
+@property (atomic) NSInteger cardOwner;
+@property (atomic) NSInteger deviceOwner;
 @property (atomic) Boolean myTurn;
 @property (atomic) Boolean playerCard;
 @property (atomic) Boolean isHighlighted;
@@ -24,7 +25,8 @@
 -(void)setLabel:(NSInteger)value
             row:(NSInteger)row
          column:(NSInteger)column
-          owner:(NSInteger)owner
+      cardOwner:(NSInteger)cardOwner
+    deviceOwner:(NSInteger)deviceOwner
         players:(Boolean)playerCard
          parent:(UIViewController *)parent
          myTurn:(Boolean)myTurn;

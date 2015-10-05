@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <GooglePlayGames/GooglePlayGames.h>
+#import "FlurryAdInterstitial.h"
+#import "FlurryAdInterstitialDelegate.h"
 #import "MyTableViewController.h"
 #import "MyCollectionViewCell.h"
 #import "MyCollectionViewLayout.h"
@@ -16,7 +18,9 @@
 #import "MyBannerCell.h"
 #import "Model.h"
 
-@interface MyCollectionViewController : UICollectionViewController <UICollectionViewDataSource,GADInterstitialDelegate>
+@interface MyCollectionViewController : UICollectionViewController <UICollectionViewDataSource, FlurryAdInterstitialDelegate>
+
+@property (nonatomic, strong) FlurryAdInterstitial* adInterstitial;
 
 @property (strong, nonatomic) MyTableViewController *lobby;
 
@@ -28,8 +32,6 @@
 @property (nonatomic) Boolean removeClicked;
 
 @property (strong, nonatomic) GPGTurnBasedMatch *match;
-
-@property (strong, nonatomic) GADInterstitial *interstitial;
 
 @property (nonatomic) NSInteger headerSections;
 @property (nonatomic) NSInteger footerSections;

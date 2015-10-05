@@ -18,19 +18,21 @@
     self.title.text = [self getEmoji:value];
 }
 
-- (void)setLabel:(NSInteger)value
-             row:(NSInteger)row
-          column:(NSInteger)column
-           owner:(NSInteger)owner
-         players:(Boolean)playerCard
-          parent:(UIViewController *)parent
-          myTurn:(Boolean)myTurn
+-(void)setLabel:(NSInteger)value
+            row:(NSInteger)row
+         column:(NSInteger)column
+      cardOwner:(NSInteger)cardOwner
+    deviceOwner:(NSInteger)deviceOwner
+        players:(Boolean)playerCard
+         parent:(UIViewController *)parent
+         myTurn:(Boolean)myTurn;
 {
     self.value = value;
     self.row = row;
     self.column = column;
     self.parentController = parent;
-    self.owner = owner;
+    self.cardOwner = cardOwner;
+    self.deviceOwner = deviceOwner;
     self.playerCard = playerCard;
     self.myTurn = myTurn;
     
@@ -38,7 +40,7 @@
     {
         [self.title setFont:[UIFont systemFontOfSize:24]];
     }
-        
+    
     self.title.text = [self getEmoji:value];
     
     self.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:1.0].CGColor;
@@ -67,21 +69,32 @@
 
 - (void)setBackground
 {
-    
     if( _isHighlighted ){
         self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
     }
     else{
-        switch( _owner ){
-            case 1:
+        //        switch( _owner ){
+        //            case 1:
+        //                self.backgroundColor = [UIColor colorWithRed:0.3 green:0.5 blue:1 alpha:0.5];
+        //                break;
+        //            case 2:
+        //                self.backgroundColor = [UIColor colorWithRed:1 green:0.35 blue:0.3 alpha:0.5];
+        //                break;
+        //            default:
+        //                self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        //                break;
+        //        }
+        
+        if( _cardOwner == 1 || _cardOwner == 2 ){
+            if( _cardOwner == _deviceOwner ){
                 self.backgroundColor = [UIColor colorWithRed:0.3 green:0.5 blue:1 alpha:0.5];
-                break;
-            case 2:
+            }
+            else{
                 self.backgroundColor = [UIColor colorWithRed:1 green:0.35 blue:0.3 alpha:0.5];
-                break;
-            default:
-                self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-                break;
+            }
+        }
+        else{
+            self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         }
     }
 }
@@ -91,8 +104,8 @@
     if(_isHighlighted){
         MyCollectionViewController *mcvc = (MyCollectionViewController*)_parentController;
         
-        _owner = [mcvc highlightedTileClicked:_value row:_row column:_column];
-
+        _cardOwner = [mcvc highlightedTileClicked:_value row:_row column:_column];
+        
         [self setBackground];
     }
 }
@@ -114,7 +127,7 @@
     
     if(highlight){
         [mcvc highlightOptions:YES forValue:_value];
-//        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
+        //        self.backgroundColor = [UIColor colorWithRed:0.9 green:1.0 blue:0.2 alpha:1.0];
     }
     else{
         [mcvc highlightOptions:NO forValue:_value];
@@ -243,27 +256,27 @@
         case 35:
             str = @"\U0001F35F";
             break;
-//        case 36:
-//            str = @"\U0001F6B6";
-//            break;
-//        case 37:
-//            str = @"\U0001F64F";
-//            break;
-//        case 38:
-//            str = @"\U0001F30F";
-//            break;
-//        case 39:
-//            str = @"\U0001F308";
-//            break;
-//        case 40:
-//            str = @"\U000026C4";
-//            break;
-//        case 41:
-//            str = @"\U0001F6B2";
-//            break;
-//        case 42:
-//            str = @"\U0001F691";
-//            break;
+            //        case 36:
+            //            str = @"\U0001F6B6";
+            //            break;
+            //        case 37:
+            //            str = @"\U0001F64F";
+            //            break;
+            //        case 38:
+            //            str = @"\U0001F30F";
+            //            break;
+            //        case 39:
+            //            str = @"\U0001F308";
+            //            break;
+            //        case 40:
+            //            str = @"\U000026C4";
+            //            break;
+            //        case 41:
+            //            str = @"\U0001F6B2";
+            //            break;
+            //        case 42:
+            //            str = @"\U0001F691";
+            //            break;
         default:
             str = @"";
     }
