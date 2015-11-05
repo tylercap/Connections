@@ -14,7 +14,6 @@
 @interface MyBannerCell : UICollectionViewCell <FlurryAdBannerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *childView;
-@property (nonatomic, strong) FlurryAdBanner *adBanner;
 @property (nonatomic, strong) UIViewController *parent;
 
 - (void)loadAd:(UIViewController*)parent;

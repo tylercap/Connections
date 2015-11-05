@@ -11,6 +11,7 @@
 static NSString * const adSpaceName = @"CONNECT_IOS_BANNER";
 
 @implementation MyBannerCell
+FlurryAdBanner *adBanner = nil;
 
 - (id)init
 {
@@ -41,11 +42,11 @@ static NSString * const adSpaceName = @"CONNECT_IOS_BANNER";
     self.parent = parent;
     // Fetch and display banner ad for a given ad space. Note: Choose an adspace name that
     // will uniquely identifiy the ad's placement within your app
-    FlurryAdBanner *adBanner = [[FlurryAdBanner alloc] initWithSpace:adSpaceName];
+    adBanner = [[FlurryAdBanner alloc] initWithSpace:adSpaceName];
     adBanner.adDelegate = self;
     
-    //    [adBanner fetchAdForFrame:self.childView.frame];
-    [adBanner fetchAndDisplayAdInView:self.childView viewControllerForPresentation:parent];
+    [adBanner fetchAdForFrame:self.childView.frame];
+//    [adBanner fetchAndDisplayAdInView:self.childView viewControllerForPresentation:parent];
 }
 
 // Show whenever delegate is invoked
@@ -63,7 +64,9 @@ static NSString * const adSpaceName = @"CONNECT_IOS_BANNER";
 
 //Informational callback invoked when an ad is clicked for the specified @c bannerAd object.
 - (void) adBannerDidReceiveClick:(FlurryAdBanner*)bannerAd;
-{}
+{
+    NSLog(@"Did Receive Click");
+}
 
 //Informational callback invoked when there is an ad error
 - (void) adBanner:(FlurryAdBanner*) bannerAd adError:(FlurryAdError) adError errorDescription:(NSError*) errorDescription

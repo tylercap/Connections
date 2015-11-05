@@ -186,6 +186,77 @@ static NSString * const resignConfirmation = @"Resign";
             self.owner = 1;
         }
     }
+    
+    BOOL lost = NO;
+    switch (_match.userMatchStatus)
+    {
+        case GPGTurnBasedUserMatchStatusTurn:         //My turn
+            if( _match.status == GPGTurnBasedMatchStatusComplete ){
+                for (GPGTurnBasedParticipantResult *result in _match.results)
+                {
+                    if( [result.participantId isEqualToString:[_model getOpponent].participantId] ){
+                        // opponent result
+                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                            lost = YES;
+                        }
+                    }
+                    else{
+                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                            lost = YES;
+                        }
+                    }
+                }
+            }
+            break;
+        case GPGTurnBasedUserMatchStatusAwaitingTurn: //Their turn
+            if( _match.status == GPGTurnBasedMatchStatusComplete ){
+                for (GPGTurnBasedParticipantResult *result in _match.results)
+                {
+                    if( [result.participantId isEqualToString:[_model getOpponent].participantId] ){
+                        // opponent result
+                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                            lost = YES;
+                        }
+                    }
+                    else{
+                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                            lost = YES;
+                        }
+                    }
+                }
+            }
+            break;
+        case GPGTurnBasedUserMatchStatusMatchCompleted: //Completed match
+            if( _match.status == GPGTurnBasedMatchStatusComplete ){
+                for (GPGTurnBasedParticipantResult *result in _match.results)
+                {
+                    if( [result.participantId isEqualToString:[_model getOpponent].participantId] ){
+                        // opponent result
+                        if( result.result == GPGTurnBasedParticipantResultStatusWin ){
+                            lost = YES;
+                        }
+                    }
+                    else{
+                        // my result
+                        if( result.result == GPGTurnBasedParticipantResultStatusLoss ){
+                            lost = YES;
+                        }
+                    }
+                }
+            }
+        default:
+            break;
+    }
+
+    if( lost )
+    {
+        if( self.owner == 1 ){
+            self.owner = 2;
+        }
+        else{
+            self.owner = 1;
+        }
+    }
 }
 
 -(NSInteger)highlightedTileClicked:(NSInteger)value

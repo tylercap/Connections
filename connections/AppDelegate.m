@@ -38,6 +38,9 @@
     
     [Flurry startSession:@"WVCHR6WVFDRG2FD6GFVF"];
     
+    [Flurry setDebugLogEnabled:YES];
+    [Flurry setLogLevel:FlurryLogLevelAll];
+    
     return YES;
 }
 

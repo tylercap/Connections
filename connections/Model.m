@@ -216,7 +216,13 @@ int owner2Cards[6];
     NSMutableArray* array = [[NSMutableArray alloc] init];
     NSRange range = [string rangeOfString:@"["];
     NSInteger start = range.location + range.length;
-    NSInteger end = [string rangeOfString:@","].location;
+    NSRange end_range = [string rangeOfString:@","];
+    NSInteger end = end_range.location;
+    
+    if( end_range.length <= 0 ){
+        end = -1;
+    }
+    
     while( end > 0 ){
         range.location = start;
         range.length = end - start;

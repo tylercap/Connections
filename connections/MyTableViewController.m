@@ -109,7 +109,7 @@ static NSString * const matchEnded = @"Match has ended!";
     
     if( _signedIn ){
         [self.signInItem setTitle:@"Sign Out"];
-        [self openInbox]; // Possible Remove this call
+//        [self openInbox]; // Possible Remove this call
         [self loadOpenGames];
     }
     else{
@@ -611,14 +611,35 @@ fromPushNotification:(BOOL)fromPushNotification
             break;
         case GPGTurnBasedUserMatchStatusInvited:
             // the game brings up a UIAlert about the match
-            [self didReceiveTurnBasedInviteForMatch:match fromPushNotification:NO declineOnCancel:YES];
+//            [self didReceiveTurnBasedInviteForMatch:match fromPushNotification:NO declineOnCancel:YES];
+            [self showInviteDialog:match];
             break;
         case GPGTurnBasedUserMatchStatusMatchCompleted: //Completed match
             [self performSegueWithIdentifier:openGame sender:match];
             break;
     }
 }
-              
+
+- (void)showInviteDialog:(GPGTurnBasedMatch *) match
+{
+    @synchronized(_matchesToTrack){
+        [self.matchesToTrack addObject:match];
+    }
+    
+    GPGTurnBasedParticipant *invitingParticipant = match.lastUpdateParticipant;
+    self.shouldDeclineMatch = YES;
+//    GPGTurnBasedParticipant *participant = [Model getOpponentFromMatch:match];
+    NSString *messageToShow =
+    [NSString stringWithFormat:@"%@ just invited you to a game. Would you like to play now?",
+     invitingParticipant.displayName];
+    [[[UIAlertView alloc] initWithTitle:invited
+                                message:messageToShow
+                               delegate:self
+                      cancelButtonTitle:@"Decline"
+                      otherButtonTitles:@"Sure!",
+      nil] show];
+}
+
 - (void) turnBasedMatchListLauncherDidJoinMatch:(GPGTurnBasedMatch *) match
 {
     [self performSegueWithIdentifier:openGame sender:match];
