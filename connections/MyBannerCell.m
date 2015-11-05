@@ -59,19 +59,19 @@ FlurryAdBanner *adBanner = nil;
 //Invoked when the banner ad is rendered.
 - (void) adBannerDidRender:(FlurryAdBanner*)bannerAd
 {
-    NSLog(@"Rendered Banner");
+//    NSLog(@"Rendered Banner");
 }
 
 //Informational callback invoked when an ad is clicked for the specified @c bannerAd object.
 - (void) adBannerDidReceiveClick:(FlurryAdBanner*)bannerAd;
 {
-    NSLog(@"Did Receive Click");
+//    NSLog(@"Did Receive Click");
 }
 
 //Informational callback invoked when there is an ad error
 - (void) adBanner:(FlurryAdBanner*) bannerAd adError:(FlurryAdError) adError errorDescription:(NSError*) errorDescription
 {
-    NSLog(@"Error Banner");
+//    NSLog(@"Error Banner");
     //  @param bannerAd The banner ad object associated with the error
     //  @param adError an enum that specifies the reason for the error.
     //  @param errorDescription An error object that gives additional information on the cause of the ad error.

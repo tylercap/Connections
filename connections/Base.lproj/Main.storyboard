@@ -109,14 +109,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6yo-M0-66z">
-                                            <rect key="frame" x="-2" y="-4" width="54" height="56"/>
+                                            <rect key="frame" x="-2" y="-4" width="54" height="58"/>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
                                     <constraint firstItem="6yo-M0-66z" firstAttribute="leading" secondItem="QcO-xJ-fGM" secondAttribute="leadingMargin" constant="-10" id="0Pa-5z-76d"/>
-                                    <constraint firstAttribute="bottomMargin" secondItem="6yo-M0-66z" secondAttribute="bottom" constant="-10" id="HrR-cJ-bJ3"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="6yo-M0-66z" secondAttribute="bottom" constant="-12" id="HrR-cJ-bJ3"/>
                                     <constraint firstItem="6yo-M0-66z" firstAttribute="top" secondItem="QcO-xJ-fGM" secondAttribute="topMargin" constant="-12" id="KoI-PR-AbM"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="6yo-M0-66z" secondAttribute="trailing" constant="-10" id="mtf-wU-yxv"/>
                                 </constraints>
