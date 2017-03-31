@@ -389,6 +389,7 @@
 				TargetAttributes = {
 					D4E3CD671AAF80DE007025A6 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = Q3PDFLW7B6;
 					};
 					D4E3CD801AAF80DE007025A6 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -605,7 +606,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -626,7 +627,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gmail.tylercap4.connections;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ff0deec0-6972-49c2-ae04-a5eb5c14699e";
+				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -637,7 +638,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Tyler Cap (Q3PDFLW7B6)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -658,7 +659,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gmail.tylercap4.connections;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ff0deec0-6972-49c2-ae04-a5eb5c14699e";
+				PROVISIONING_PROFILE = "3fa07d11-868e-4de9-a524-73807be8e46e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
